@@ -287,7 +287,37 @@
     <Text Include="..\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\ControlSystem.cpp" />
+    <ClCompile Include="..\src\ControlSystemTuner.cpp" />
+    <ClCompile Include="..\src\Course.cpp" />
+    <ClCompile Include="..\src\DragModel.cpp" />
+    <ClCompile Include="..\src\ForceApplication.cpp" />
+    <ClCompile Include="..\src\Kinematics.cpp" />
+    <ClCompile Include="..\src\MotionCommand.cpp" />
+    <ClCompile Include="..\src\MotionControlSystem.cpp" />
     <ClCompile Include="..\src\my_example.cpp" />
+    <ClCompile Include="..\src\ObjectKinematics.cpp" />
+    <ClCompile Include="..\src\RocketModel.cpp" />
+    <ClCompile Include="..\src\RocketModelWithDrag.cpp" />
+    <ClCompile Include="..\src\Simulator.cpp" />
+    <ClCompile Include="..\src\ThrustParameters.cpp" />
+    <ClCompile Include="..\src\TunableControlSystem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\ControlSystem.h" />
+    <ClInclude Include="..\src\ControlSystemTuner.h" />
+    <ClInclude Include="..\src\Course.h" />
+    <ClInclude Include="..\src\DragModel.h" />
+    <ClInclude Include="..\src\ForceApplication.h" />
+    <ClInclude Include="..\src\Kinematics.h" />
+    <ClInclude Include="..\src\MotionCommand.h" />
+    <ClInclude Include="..\src\MotionControlSystem.h" />
+    <ClInclude Include="..\src\ObjectKinematics.h" />
+    <ClInclude Include="..\src\RocketModel.h" />
+    <ClInclude Include="..\src\RocketModelWithDrag.h" />
+    <ClInclude Include="..\src\Simulator.h" />
+    <ClInclude Include="..\src\ThrustParameters.h" />
+    <ClInclude Include="..\src\TunableControlSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
