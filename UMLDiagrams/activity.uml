@@ -1,0 +1,49 @@
+@startuml
+
+skin rose
+
+title TVC Rocket Simulator Flow \n
+
+start
+
+:Read in Config;
+
+:Read in control system parameters;
+
+:Construct Model;
+
+:Initialize Control System;
+
+:Autotune Control System;
+
+:Save control parameters;
+
+:Reset Simulation;
+
+:Initialize tracking algorithm;
+
+:Load in course;
+
+while (at end?) is (no)
+  :generate target point;
+  :auto-adjust control system if applicable;
+  :generate motion control variables;
+  :generate thrust angles;
+  :compute drag force;
+  :apply torques from thrust and drag;
+  :run one step;
+  :update visualizaiton
+  :retrieve new kinematics;
+  :record all parameters;
+  :graph selected parameters;
+endwhile
+
+:Save Data Files;
+
+:Display final graphs;
+
+:Close visualizaiton;
+
+stop
+
+@enduml

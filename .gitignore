@@ -1,6 +1,6 @@
 .vs
 chrono_build
 CMakeFiles
-my_demo.dir\Release
+out
+Debug
 Release
-x64\Release
