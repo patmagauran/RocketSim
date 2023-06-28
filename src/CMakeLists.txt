@@ -126,7 +126,7 @@ endif()
 # files in your project. 
 #--------------------------------------------------------------
 
-add_executable(RocketTVCSim my_example.cpp)
+add_executable(RocketTVCSim ForceApplication.cpp RocketModel.cpp ThrustParameters.cpp Simulator.cpp RocketTVCSimulation.cpp)
 
 #--------------------------------------------------------------
 # Set properties for your executable target

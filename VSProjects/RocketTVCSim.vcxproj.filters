@@ -16,12 +16,14 @@
       <Filter>UMLDiagrams</Filter>
     </None>
     <None Include="..\.gitignore" />
+    <None Include="..\points.csv" />
+    <None Include="..\points2.csv" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\my_example.cpp">
+    <ClCompile Include="..\src\RocketTVCSimuation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ControlSystem.cpp">

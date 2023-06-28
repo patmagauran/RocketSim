@@ -281,6 +281,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="..\points.csv" />
+    <None Include="..\points2.csv" />
     <None Include="activity.uml" />
   </ItemGroup>
   <ItemGroup>
@@ -295,7 +297,7 @@
     <ClCompile Include="..\src\Kinematics.cpp" />
     <ClCompile Include="..\src\MotionCommand.cpp" />
     <ClCompile Include="..\src\MotionControlSystem.cpp" />
-    <ClCompile Include="..\src\my_example.cpp" />
+    <ClCompile Include="..\src\RocketTVCSimuation.cpp" />
     <ClCompile Include="..\src\ObjectKinematics.cpp" />
     <ClCompile Include="..\src\RocketModel.cpp" />
     <ClCompile Include="..\src\RocketModelWithDrag.cpp" />
