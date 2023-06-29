@@ -23,5 +23,7 @@ class RocketModel
 	void addRocketModelToSystem(chrono::ChSystem &system);
 	void accumulateForces(ChVector<> thrust_force);
 	std::list<ForceApplication> getDisplayedForces();
+	ChVector<> getGLocation();
+	std::shared_ptr<ChBody> getRocketUpper();
 };
 

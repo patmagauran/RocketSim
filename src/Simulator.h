@@ -12,6 +12,18 @@
 #include "ThrustParameters.h"
 
 #include "Course.h"
+
+#include "ControlSystem.h"
+
+#include "ControlSystemTuner.h"
+
+#include "MotionCommand.h"
+
+#include "MotionControlSystem.h"
+
+#include "TunableControlSystem.h"
+
+#include "PIDParams.h"
 // Use the namespace of Chrono
 using namespace chrono;
 using namespace chrono::irrlicht;

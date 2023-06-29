@@ -83,3 +83,13 @@ std::list<ForceApplication> RocketModel::getDisplayedForces()
 	return this->forces;
 }
 
+ChVector<> RocketModel::getGLocation()
+{
+	return this->fixed_link->GetLinkAbsoluteCoords().pos;
+}
+
+std::shared_ptr<ChBody> RocketModel::getRocketUpper()
+{
+	return this->rocket_upper;
+}
+

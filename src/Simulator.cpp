@@ -3,6 +3,10 @@
 void Simulator::runSimulation()
 {
     ChSystemNSC sys;
+    bool autoTune = false;
+
+    PIDParams pidParamsRate = PIDParams(0.1, 0.1, 0.1);
+    PIDParams pidParamsAngle = PIDParams(0.1, 0.1, 0.1);
 
 
 
@@ -13,7 +17,12 @@ void Simulator::runSimulation()
     sys.Set_G_acc(ChVector<>(0, 0, 0));
 
 
-    //Setup Motion COntroller
+    //Setup Motion Controller
+    ControlSystemTuner controlSystemTuner;
+
+    TunableControlSystem tunableControlSystem = TunableControlSystem(controlSystemTuner, pidParamsRate, pidParamsAngle);
+    MotionControlSystem motionController = MotionControlSystem(tunableControlSystem);
+
 
 // 3 - Create the Irrlicht application and set-up the camera.
 
@@ -30,12 +39,15 @@ void Simulator::runSimulation()
     vis.ShowInfoPanel(true);
 
 
+    if (autoTune) {
+        tunableControlSystem.tune();
+    }
 
     // 5 - Simulation loop
     ChRealtimeStepTimer realtime_timer;
     double step_size = 5e-3;
-    ThrustParameters thrustParameters = ThrustParameters(0.1, 0, 5);
-
+    ThrustParameters thrustParameters = ThrustParameters(0, 0, 5);
+    MotionCommand motionCommand;
     Course course = Course("C:\\Users\\patma\\source\\repos\\RocketSim\\RocketSimTemplate\\points.csv");
 
     while (vis.Run()) {
@@ -50,6 +62,7 @@ void Simulator::runSimulation()
         for (ForceApplication force : rocket.getDisplayedForces()) {
             tools::drawSegment(&vis, force.point, force.point - (force.force * 10));
         }
+        //Draw Path
 
         std::vector<ChVector<>> waypoints = course.getWaypoints();
         ChVector<> waypoint, nextWaypoint;
@@ -64,7 +77,6 @@ void Simulator::runSimulation()
                
 			tools::drawSegment(&vis, waypoint, nextWaypoint);
 		}
-        //Draw Path
 
         //Draw Coordinate System
         //drawCoordsys(vis, chrono.ChCoordsysD(chrono.ChVectorD(0, 0, 0)), 100)
@@ -76,7 +88,8 @@ void Simulator::runSimulation()
         sys.DoStepDynamics(step_size);
 
         //Advance Motion Controller
-
+        motionCommand = motionController.getNextMotionCommand(rocket.getGLocation(), rocket.getRocketUpper());
+        thrustParameters = motionCommand.getThrustParameters();
         //Save Debug Data
 
         // Spin in place to maintain soft real-time
