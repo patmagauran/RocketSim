@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{315C7A4A-5F77-32E1-A020-76BBE435748C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UMLDiagrams">
+      <UniqueIdentifier>{cb9c2741-fff6-4e5d-8a16-16660ca7b87c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitignore" />
+    <None Include="points.csv" />
+    <None Include="points2.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Control\Thrust\PID\PID.cpp" />
+    <ClCompile Include="src\Control\Thrust\PID\PIDParams.cpp" />
+    <ClCompile Include="src\Control\Thrust\ControlSystem.cpp" />
+    <ClCompile Include="src\Control\Thrust\ControlSystemTuner.cpp" />
+    <ClCompile Include="src\Control\Thrust\ThrustParameters.cpp" />
+    <ClCompile Include="src\Control\Thrust\TunableControlSystem.cpp" />
+    <ClCompile Include="src\Control\Trajectory\Course.cpp" />
+    <ClCompile Include="src\Control\Trajectory\MotionCommand.cpp" />
+    <ClCompile Include="src\Control\Trajectory\MotionControlSystem.cpp" />
+    <ClCompile Include="src\Control\Trajectory\TrajectoryCommand.cpp" />
+    <ClCompile Include="src\Model\DragModel.cpp" />
+    <ClCompile Include="src\Model\RocketModel.cpp" />
+    <ClCompile Include="src\Model\RocketModelWithDrag.cpp" />
+    <ClCompile Include="src\Util\ForceApplication.cpp" />
+    <ClCompile Include="src\Util\Kinematics.cpp" />
+    <ClCompile Include="src\Util\ObjectKinematics.cpp" />
+    <ClCompile Include="src\RocketTVCSimuation.cpp" />
+    <ClCompile Include="src\Simulator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Control\Thrust\PID\PID.h" />
+    <ClInclude Include="src\Control\Thrust\PID\PIDParams.h" />
+    <ClInclude Include="src\Control\Thrust\ControlSystem.h" />
+    <ClInclude Include="src\Control\Thrust\ControlSystemTuner.h" />
+    <ClInclude Include="src\Control\Thrust\ThrustParameters.h" />
+    <ClInclude Include="src\Control\Thrust\TunableControlSystem.h" />
+    <ClInclude Include="src\Control\Trajectory\Course.h" />
+    <ClInclude Include="src\Control\Trajectory\MotionCommand.h" />
+    <ClInclude Include="src\Control\Trajectory\MotionControlSystem.h" />
+    <ClInclude Include="src\Control\Trajectory\TrajectoryCommand.h" />
+    <ClInclude Include="src\Model\DragModel.h" />
+    <ClInclude Include="src\Model\RocketModel.h" />
+    <ClInclude Include="src\Model\RocketModelWithDrag.h" />
+    <ClInclude Include="src\Util\ForceApplication.h" />
+    <ClInclude Include="src\Util\Kinematics.h" />
+    <ClInclude Include="src\Util\ObjectKinematics.h" />
+    <ClInclude Include="src\Simulator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\CMakeLists.txt" />
+  </ItemGroup>
+</Project>

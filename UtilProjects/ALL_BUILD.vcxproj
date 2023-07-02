@@ -123,21 +123,14 @@
     <Text Include="..\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\patma\source\repos\RocketSim\RocketSimTemplate\ZERO_CHECK.vcxproj">
-      <Project>{139E511C-8A8A-35F8-A6EA-A66FD0053A64}</Project>
-      <Name>ZERO_CHECK</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    <ProjectReference Include="..\RocketTVCSim\RocketTVCSim.vcxproj">
+      <Project>{3e05b7f4-4462-3113-8ec6-d7b5cc161e02}</Project>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\patma\source\repos\RocketSim\RocketSimTemplate\COPY_DLLS.vcxproj">
-      <Project>{E4D6FAB1-F18B-34D2-BEC1-3BAC618AE7CD}</Project>
-      <Name>COPY_DLLS</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    <ProjectReference Include="COPY_DLLS.vcxproj">
+      <Project>{e4d6fab1-f18b-34d2-bec1-3bac618ae7cd}</Project>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\patma\source\repos\RocketSim\RocketSimTemplate\my_demo.vcxproj">
-      <Project>{3E05B7F4-4462-3113-8EC6-D7B5CC161E02}</Project>
-      <Name>my_demo</Name>
+    <ProjectReference Include="ZERO_CHECK.vcxproj">
+      <Project>{139e511c-8a8a-35f8-a6ea-a66fd0053a64}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

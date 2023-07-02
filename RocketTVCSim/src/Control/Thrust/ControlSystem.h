@@ -1,6 +1,6 @@
 #pragma once
-#include "PIDParams.h"
-#include "PID.h"
+#include "pid/PIDParams.h"
+#include "pid/PID.h"
 class ControlSystem
 {
 protected:

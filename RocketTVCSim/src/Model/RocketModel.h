@@ -5,7 +5,7 @@
 #include "chrono_irrlicht/ChVisualSystemIrrlicht.h"
 #include "chrono/physics/ChBody.h"
 #include "chrono/physics/ChLinkMate.h"
-#include "ForceApplication.h"
+#include "../Util/ForceApplication.h"
 
 using namespace chrono;
 using namespace chrono::irrlicht;

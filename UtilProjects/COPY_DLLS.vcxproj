@@ -352,11 +352,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <Text Include="..\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\patma\source\repos\RocketSim\RocketSimTemplate/out\ZERO_CHECK.vcxproj">
-      <Project>{139E511C-8A8A-35F8-A6EA-A66FD0053A64}</Project>
-      <Name>ZERO_CHECK</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    <ProjectReference Include="ZERO_CHECK.vcxproj">
+      <Project>{139e511c-8a8a-35f8-a6ea-a66fd0053a64}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

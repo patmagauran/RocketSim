@@ -1,4 +1,3 @@
-#pragma once
 #include "chrono/physics/ChSystemNSC.h"
 #include "chrono/physics/ChBodyEasy.h"
 #include "chrono/physics/ChLinkMate.h"
@@ -7,30 +6,22 @@
 
 #include "chrono_irrlicht/ChVisualSystemIrrlicht.h"
 
-#include "RocketModel.h"
+#include "Model/RocketModel.h"
 
-#include "ThrustParameters.h"
+#include "Control/Thrust/ThrustParameters.h"
 
-#include "Course.h"
-
-#include "ControlSystem.h"
-
-#include "ControlSystemTuner.h"
-
-#include "MotionCommand.h"
-
-#include "MotionControlSystem.h"
-
-#include "TunableControlSystem.h"
-
-#include "PIDParams.h"
+#include "Simulator.h"
 // Use the namespace of Chrono
 using namespace chrono;
 using namespace chrono::irrlicht;
-class Simulator
-{
-public:
-	void runSimulation();
-	Simulator();
-};
 
+int main(int argc, char* argv[]) {
+    // Set path to Chrono data directory
+    SetChronoDataPath(CHRONO_DATA_DIR);
+    
+    // Create a Chrono physical system
+    Simulator sim;
+    sim.runSimulation();
+
+    return 0;
+}

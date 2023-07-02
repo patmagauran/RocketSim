@@ -281,51 +281,50 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
-    <None Include="..\points.csv" />
-    <None Include="..\points2.csv" />
-    <None Include="activity.uml" />
+    <None Include="points.csv" />
+    <None Include="points2.csv" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\src\CMakeLists.txt" />
+    <ClCompile Include="src\Control\Thrust\ControlSystem.cpp" />
+    <ClCompile Include="src\Control\Thrust\ControlSystemTuner.cpp" />
+    <ClCompile Include="src\Control\Thrust\PID\PID.cpp" />
+    <ClCompile Include="src\Control\Thrust\PID\PIDParams.cpp" />
+    <ClCompile Include="src\Control\Thrust\ThrustParameters.cpp" />
+    <ClCompile Include="src\Control\Thrust\TunableControlSystem.cpp" />
+    <ClCompile Include="src\Control\Trajectory\Course.cpp" />
+    <ClCompile Include="src\Control\Trajectory\MotionCommand.cpp" />
+    <ClCompile Include="src\Control\Trajectory\MotionControlSystem.cpp" />
+    <ClCompile Include="src\Control\Trajectory\TrajectoryCommand.cpp" />
+    <ClCompile Include="src\Model\DragModel.cpp" />
+    <ClCompile Include="src\Model\RocketModel.cpp" />
+    <ClCompile Include="src\Model\RocketModelWithDrag.cpp" />
+    <ClCompile Include="src\RocketTVCSimuation.cpp" />
+    <ClCompile Include="src\Simulator.cpp" />
+    <ClCompile Include="src\Util\ForceApplication.cpp" />
+    <ClCompile Include="src\Util\Kinematics.cpp" />
+    <ClCompile Include="src\Util\ObjectKinematics.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\ControlSystem.cpp" />
-    <ClCompile Include="..\src\ControlSystemTuner.cpp" />
-    <ClCompile Include="..\src\Course.cpp" />
-    <ClCompile Include="..\src\DragModel.cpp" />
-    <ClCompile Include="..\src\ForceApplication.cpp" />
-    <ClCompile Include="..\src\Kinematics.cpp" />
-    <ClCompile Include="..\src\MotionCommand.cpp" />
-    <ClCompile Include="..\src\MotionControlSystem.cpp" />
-    <ClCompile Include="..\src\PID.cpp" />
-    <ClCompile Include="..\src\PIDParams.cpp" />
-    <ClCompile Include="..\src\RocketTVCSimuation.cpp" />
-    <ClCompile Include="..\src\ObjectKinematics.cpp" />
-    <ClCompile Include="..\src\RocketModel.cpp" />
-    <ClCompile Include="..\src\RocketModelWithDrag.cpp" />
-    <ClCompile Include="..\src\Simulator.cpp" />
-    <ClCompile Include="..\src\ThrustParameters.cpp" />
-    <ClCompile Include="..\src\TrajectoryCommand.cpp" />
-    <ClCompile Include="..\src\TunableControlSystem.cpp" />
+    <ClInclude Include="src\Control\Thrust\ControlSystem.h" />
+    <ClInclude Include="src\Control\Thrust\ControlSystemTuner.h" />
+    <ClInclude Include="src\Control\Thrust\PID\PID.h" />
+    <ClInclude Include="src\Control\Thrust\PID\PIDParams.h" />
+    <ClInclude Include="src\Control\Thrust\ThrustParameters.h" />
+    <ClInclude Include="src\Control\Thrust\TunableControlSystem.h" />
+    <ClInclude Include="src\Control\Trajectory\Course.h" />
+    <ClInclude Include="src\Control\Trajectory\MotionCommand.h" />
+    <ClInclude Include="src\Control\Trajectory\MotionControlSystem.h" />
+    <ClInclude Include="src\Control\Trajectory\TrajectoryCommand.h" />
+    <ClInclude Include="src\Model\DragModel.h" />
+    <ClInclude Include="src\Model\RocketModel.h" />
+    <ClInclude Include="src\Model\RocketModelWithDrag.h" />
+    <ClInclude Include="src\Simulator.h" />
+    <ClInclude Include="src\Util\ForceApplication.h" />
+    <ClInclude Include="src\Util\Kinematics.h" />
+    <ClInclude Include="src\Util\ObjectKinematics.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\ControlSystem.h" />
-    <ClInclude Include="..\src\ControlSystemTuner.h" />
-    <ClInclude Include="..\src\Course.h" />
-    <ClInclude Include="..\src\DragModel.h" />
-    <ClInclude Include="..\src\ForceApplication.h" />
-    <ClInclude Include="..\src\Kinematics.h" />
-    <ClInclude Include="..\src\MotionCommand.h" />
-    <ClInclude Include="..\src\MotionControlSystem.h" />
-    <ClInclude Include="..\src\ObjectKinematics.h" />
-    <ClInclude Include="..\src\PID.h" />
-    <ClInclude Include="..\src\PIDParams.h" />
-    <ClInclude Include="..\src\RocketModel.h" />
-    <ClInclude Include="..\src\RocketModelWithDrag.h" />
-    <ClInclude Include="..\src\Simulator.h" />
-    <ClInclude Include="..\src\ThrustParameters.h" />
-    <ClInclude Include="..\src\TrajectoryCommand.h" />
-    <ClInclude Include="..\src\TunableControlSystem.h" />
+    <Text Include="src\CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

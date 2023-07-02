@@ -1,5 +1,5 @@
 #pragma once
-#include "ThrustParameters.h"
+#include "../Thrust/ThrustParameters.h"
 class MotionCommand
 {
 	ThrustParameters thrustParameters;

@@ -48,7 +48,7 @@ void Simulator::runSimulation()
     double step_size = 5e-3;
     ThrustParameters thrustParameters = ThrustParameters(0, 0, 5);
     MotionCommand motionCommand;
-    Course course = Course("C:\\Users\\patma\\source\\repos\\RocketSim\\RocketSimTemplate\\points.csv");
+    Course course = Course("C:\\Users\\patma\\source\\repos\\RocketSim\\RocketSimTemplate\\RocketTVCSim\\points.csv");
 
     while (vis.Run()) {
         //Accumulate Forces

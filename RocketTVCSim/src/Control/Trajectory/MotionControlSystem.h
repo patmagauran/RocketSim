@@ -1,5 +1,5 @@
 #pragma once
-#include "ControlSystem.h"
+#include "../Thrust/ControlSystem.h"
 #include "chrono/core/ChVector.h"
 #include "chrono/physics/ChBody.h"
 #include "MotionCommand.h"
