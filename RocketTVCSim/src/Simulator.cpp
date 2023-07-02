@@ -1,27 +1,34 @@
 #include "Simulator.h"
 
+
+float degreesToRad(float degrees) {
+    //converts degrees to radians
+return degrees * (3.14159265358979323846 / 180);
+}
+
 void Simulator::runSimulation()
 {
     ChSystemNSC sys;
     bool autoTune = false;
 
-    PIDParams pidParamsRate = PIDParams(0.1, 0.1, 0.1);
-    PIDParams pidParamsAngle = PIDParams(0.1, 0.1, 0.1);
+    PIDParams pidParamsRate = PIDParams(0.014043886485137819, 0.21359523171311495, 0.0002308463840994613, 0.1, degreesToRad(10));
+    PIDParams pidParamsAngle = PIDParams(0.0058871452048812065, 0.04113289226112847, 0.00021064941436241307, 0.1, degreesToRad(20));
 
 
 
 
-    RocketModel rocket = RocketModel(0.5, 1, 1, 10);
+    RocketModel rocket = RocketModel(1, 2, 8, 20);
 
     rocket.addRocketModelToSystem(sys);
     sys.Set_G_acc(ChVector<>(0, 0, 0));
 
+    Course course = Course("C:\\Users\\patma\\source\\repos\\RocketSim\\RocketSimTemplate\\RocketTVCSim\\points.csv");
 
     //Setup Motion Controller
     ControlSystemTuner controlSystemTuner;
 
     TunableControlSystem tunableControlSystem = TunableControlSystem(controlSystemTuner, pidParamsRate, pidParamsAngle);
-    MotionControlSystem motionController = MotionControlSystem(tunableControlSystem);
+    MotionControlSystem motionController = MotionControlSystem(tunableControlSystem, course, 50);
 
 
 // 3 - Create the Irrlicht application and set-up the camera.
@@ -44,11 +51,10 @@ void Simulator::runSimulation()
     }
 
     // 5 - Simulation loop
-    ChRealtimeStepTimer realtime_timer;
+   // ChRealtimeStepTimer realtime_timer;
     double step_size = 5e-3;
-    ThrustParameters thrustParameters = ThrustParameters(0, 0, 5);
+    ThrustParameters thrustParameters = ThrustParameters(0, 0, 25);
     MotionCommand motionCommand;
-    Course course = Course("C:\\Users\\patma\\source\\repos\\RocketSim\\RocketSimTemplate\\RocketTVCSim\\points.csv");
 
     while (vis.Run()) {
         //Accumulate Forces
@@ -88,12 +94,12 @@ void Simulator::runSimulation()
         sys.DoStepDynamics(step_size);
 
         //Advance Motion Controller
-        motionCommand = motionController.getNextMotionCommand(rocket.getGLocation(), rocket.getRocketUpper());
+        motionCommand = motionController.getNextMotionCommand(rocket.getGLocation(), rocket.getRocketUpper(), sys.GetChTime());
         thrustParameters = motionCommand.getThrustParameters();
         //Save Debug Data
 
         // Spin in place to maintain soft real-time
-        realtime_timer.Spin(step_size);
+        //realtime_timer.Spin(step_size);
     }
 }
 

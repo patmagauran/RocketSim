@@ -1,14 +1,15 @@
 #pragma once
 #include "pid/PIDParams.h"
-#include "pid/PID.h"
+#include "pid/PIDNew.h"
+#include "chrono/physics/ChSystemNSC.h"
+
 class ControlSystem
 {
 protected:
 	PIDParams paramsRate, paramsAngle;
-	PID yawAnglePID, yawRatePID, pitchAnglePID, pitchRatePID;
-
+	PIDNew yawAnglePID, yawRatePID, pitchAnglePID, pitchRatePID;
 public:
-	ControlSystem(PIDParams rateParams, PIDParams angleParams, float maxDeflection = 0.1);
+	ControlSystem(PIDParams rateParams, PIDParams angleParams);
 
 	void setParamsRate(PIDParams params);
 	void setParamsAngle(PIDParams params);
@@ -16,9 +17,9 @@ public:
 	PIDParams getParamsRate();
 	PIDParams getParamsAngle();
 
-	float getYawAngle(float target, float current);
-float getYawRate(float target, float current);
-float getPitchAngle(float target, float current);
-float getPitchRate(float target, float current);
+	float getYawAngle(float target, float current, float currentTime);
+float getYawRate(float target, float current, float currentTime);
+float getPitchAngle(float target, float current, float currentTime);
+float getPitchRate(float target, float current, float currentTime);
 };
 

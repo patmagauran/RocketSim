@@ -285,6 +285,7 @@
     <None Include="points2.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Control\Thrust\PID\PIDNew.cpp" />
     <ClCompile Include="src\Control\Thrust\ControlSystem.cpp" />
     <ClCompile Include="src\Control\Thrust\ControlSystemTuner.cpp" />
     <ClCompile Include="src\Control\Thrust\PID\PID.cpp" />
@@ -305,6 +306,7 @@
     <ClCompile Include="src\Util\ObjectKinematics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Control\Thrust\PID\PIDNew.h" />
     <ClInclude Include="src\Control\Thrust\ControlSystem.h" />
     <ClInclude Include="src\Control\Thrust\ControlSystemTuner.h" />
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />

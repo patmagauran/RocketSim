@@ -32,6 +32,7 @@
     <ClCompile Include="src\Util\ObjectKinematics.cpp" />
     <ClCompile Include="src\RocketTVCSimuation.cpp" />
     <ClCompile Include="src\Simulator.cpp" />
+    <ClCompile Include="src\Control\Thrust\PID\PIDNew.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="src\Util\Kinematics.h" />
     <ClInclude Include="src\Util\ObjectKinematics.h" />
     <ClInclude Include="src\Simulator.h" />
+    <ClInclude Include="src\Control\Thrust\PID\PIDNew.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

@@ -9,8 +9,10 @@ using namespace chrono;
 class Course
 {
 	std::vector <ChVector<>> waypoints;
+	int waypointIndex = 0;
 public:
 	Course(std::string fileName);
 	std::vector <ChVector<>> getWaypoints();
+	ChVector<> getLookaheadPoint(ChVector<> currentPosition, float lookahead);
 };
 
