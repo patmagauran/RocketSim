@@ -1,7 +1,8 @@
 #include "PIDAutoTuner.h"
 #include <stdexcept>
+#include <iostream>
 
-PIDAutoTuner::PIDAutoTuner(float setPoint, float outStep, float sampleTime, float lookback, float out_min, float out_max, float noiseband, float kp, float ki, float kd, bool ratePid, float maxDeflection) : setPoint(setPoint), outStep(outStep), sampleTime(sampleTime), outMin(out_min), outMax(out_max), noiseBand(noiseband), innerParams(PIDParams(kp, ki, kd)), useInnerPID(ratePid), outerParams(0, 0, 0), state(PIDState::STATE_OFF)
+PIDAutoTuner::PIDAutoTuner(float setPoint, float outStep, float sampleTime, float lookback, float out_min, float out_max, float noiseband, float kp, float ki, float kd, bool ratePid, float maxDeflection) : setPoint(setPoint), outStep(outStep), sampleTime(sampleTime), outMin(out_min), outMax(out_max), noiseBand(noiseband), innerParams(PIDParams(kp, ki, kd)), useInnerPID(ratePid), outerParams(0, 0, 0), state(PIDState::STATE_OFF), maxInputs(std::round(lookback / sampleTime))
 {
 	/*
 	 if setPoint is None:
@@ -15,7 +16,7 @@ PIDAutoTuner::PIDAutoTuner(float setPoint, float outStep, float sampleTime, floa
 		if out_min >= out_max:
 			raise ValueError('out_min must be less than out_max')
 	*/
-	if (setPoint == 0.0f)
+	/*if (setPoint == 0.0f)
 	{
 		throw std::invalid_argument("setPoint must be specified");
 	}
@@ -34,7 +35,7 @@ PIDAutoTuner::PIDAutoTuner(float setPoint, float outStep, float sampleTime, floa
 	if (outMin >= outMax)
 	{
 		throw std::invalid_argument("out_min must be less than out_max");
-	}
+	}*/
 
 }
 
@@ -161,7 +162,7 @@ bool PIDAutoTuner::run(float input, float currentTime)
 	*/
 
 	// rotation = rocketUpper.GetRot().Q_to_Euler123()
-	float now = currentTime;
+	float now = currentTime *1000;
 	if (this->state == PIDState::STATE_OFF
 		|| this->state == PIDState::STATE_SUCCEEDED
 		|| this->state == PIDState::STATE_FAILED)
@@ -206,9 +207,9 @@ bool PIDAutoTuner::run(float input, float currentTime)
 	}
 	this->inputs.push_back(input);
 	// we don't want to trust the maxes or mins until the input array is full
-	if (this->inputs.size() < this->inputs.max_size())
+	if (this->inputs.size() < maxInputs)
 	{
-		return;
+		return false;
 	}
 	// increment peak count and record peak time for maxima and minima
 	bool inflection = false;
@@ -221,7 +222,7 @@ bool PIDAutoTuner::run(float input, float currentTime)
 		{
 			inflection = true;
 		}
-		this->peakType;
+		this->peakType = 1;
 	}
 	else if (isMin)
 	{
@@ -239,6 +240,8 @@ bool PIDAutoTuner::run(float input, float currentTime)
 		this->peakTimestamps.push_back(now);
 		/*this->logger->debug("found peak: {0}", input);
 		this->logger->debug("peak count: {0}", this->peakCount);*/
+		std::cout << "Found peak: " << input << "\n";
+		std::cout << "Peak count: " << this->peakCount << "\n";
 	}
 	// check for convergence of induced oscillation
 	// convergence of amplitude assessed on last 4 peaks (1.5 cycles)
@@ -321,7 +324,7 @@ void PIDAutoTuner::initTuner(float inputVal, float timestamp) {
 	this->state = PIDState::STATE_RELAY_STEP_UP;
 }
 
-std::map<std::string, PIDParams> PIDAutoTuner::getTuningRules()
+std::vector<std::string> PIDAutoTuner::getTuningRules()
 {
 	return TUNING_RULES;
 }
@@ -341,7 +344,7 @@ PIDState PIDAutoTuner::getState()
 	return this->state;
 }
 
-PIDParams PIDAutoTuner::getPidParams(std::string tuningRule = "ziegler-nichols")
+PIDParams PIDAutoTuner::getPidParams(std::string tuningRule)
 {
-	return TUNING_RULES.at(tuningRule);
+	return TUNING_RULES_MAP.at(tuningRule);
 }

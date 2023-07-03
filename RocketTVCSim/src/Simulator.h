@@ -29,7 +29,12 @@ using namespace chrono;
 using namespace chrono::irrlicht;
 class Simulator
 {
+private:
+	ChSystemNSC sys;
+	ThrustParameters thrustParameters;
+	RocketModel rocket;
 public:
+	void resetSimulator();
 	void runSimulation();
 	Simulator();
 };
