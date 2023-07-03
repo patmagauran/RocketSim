@@ -99,12 +99,12 @@ float PIDNew::update(float input, float currentTime)
 	}
 
 	if (!this->proportional_on_measurement)
-	{
+	*/ //{
 		this->proportional = this->kp * error;
-	}
-	else
-	{*/
-		this->proportional -= this->kp * d_input;
+//}
+	//else
+	//{
+		//this->proportional -= this->kp * d_input;
 	//}
 
 	this->integral += this->ki * error * dt;

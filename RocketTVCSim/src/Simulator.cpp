@@ -47,6 +47,80 @@ void Simulator::runSimulation()
 
 
     if (autoTune) {
+
+        /*
+        if (autoTune):
+    print("Press Enter to Start Rate Tuning")
+    input()
+    resetSystem()
+    autoTuneController = AutoTuneController(degreesToRad(-20), chSys.GetChTime, out_step=maxDeflectionAngle,sampletime=10, lookback=80)
+
+    while not done:
+        thrust_angle_yaw = autoTuneController.output
+        accumulate_Forces()
+        done = autoTuneController.run(rocket_upper.GetWvel_loc().z)
+        chSys.DoStepDynamics(1e-3)
+        plt.pause(1e-6)
+
+      
+
+    def errorMap(error):
+        if (np.absolute(error) < 0.000001):
+            return 0
+        return error
+    if autoTuneController.state == AutoTuneController.STATE_SUCCEEDED:
+        for rule in autoTuneController.tuning_rules:
+            params = autoTuneController.get_pid_parameters(rule)
+            print('rule: {0}'.format(rule))
+            print('Kp: {0}'.format(params.Kp))
+            print('Ki: {0}'.format(params.Ki))
+            print('Kd: {0}'.format(params.Kd))
+            print()
+          
+            
+    paramsRate = autoTuneController.get_pid_parameters("ziegler-nichols")
+    print("Rate Tuning complete. Press Enter to Start Angle Tuning")
+    resetSystem()
+    input()
+    resetSystem()
+    autoTuneController = AutoTuneController(degreesToRad(-20), chSys.GetChTime, out_step=degreesToRad(5),sampletime=50, lookback=1000,  noiseband=degreesToRad(0.5))
+
+    done = False
+    i = 0
+    yawRatePID = pid.PID(paramsRate.Kp,paramsRate.Ki, paramsRate.Kd, setpoint=degreesToRad(0), sample_time=0.1, output_limits=(-maxDeflectionAngle,maxDeflectionAngle), error_map=errorMap)
+    yawRatePID.time_func = chSys.GetChTime
+    while not done:
+        yawRatePID.setpoint = autoTuneController.output
+        thrust_angle_yaw = yawRatePID(rocket_upper.GetWvel_loc().z)
+        setpt = yawRatePID.setpoint
+        accumulate_Forces()
+        done = autoTuneController.run(rocket_upper.GetRot().Q_to_Euler123().z)
+        chSys.DoStepDynamics(1e-3)
+        plt.pause(1e-6)
+  
+    if autoTuneController.state == AutoTuneController.STATE_SUCCEEDED:
+        for rule in autoTuneController.tuning_rules:
+            params = autoTuneController.get_pid_parameters(rule)
+            print('rule: {0}'.format(rule))
+            print('Kp: {0}'.format(params.Kp))
+            print('Ki: {0}'.format(params.Ki))
+            print('Kd: {0}'.format(params.Kd))
+            print()
+    #Do AutoTune of anglePID
+    paramsAngle = autoTuneController.get_pid_parameters("ziegler-nichols")
+
+    print("Angle Tuning complete. Press Enter to Start Simulation")
+    pidTuneDf = pd.DataFrame({"time": xdata, "yawRate": ydata, "thrustAngle": ydata2, "yawAngle": ydata3, "yawRateGoalAngle": ydata4})
+    pidTuneDf.to_csv("data2.csv")
+    resetSystem()
+    input()
+    resetSystem()
+        
+        */
+
+
+
+
         tunableControlSystem.tune();
     }
 
