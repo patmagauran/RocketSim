@@ -205,6 +205,10 @@ bool PIDAutoTuner::run(float input, float currentTime)
 		isMax = isMax && (input >= this->inputs[i]);
 		isMin = isMin && (input <= this->inputs[i]);
 	}
+	if (this->inputs.size() >= maxInputs)
+	{
+		this->inputs.pop_front();
+	}
 	this->inputs.push_back(input);
 	// we don't want to trust the maxes or mins until the input array is full
 	if (this->inputs.size() < maxInputs)

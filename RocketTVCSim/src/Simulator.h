@@ -24,6 +24,8 @@
 #include "Control/Thrust/TunableControlSystem.h"
 
 #include "Control/Thrust/PID/PIDParams.h"
+
+#include <matplot/matplot.h>
 // Use the namespace of Chrono
 using namespace chrono;
 using namespace chrono::irrlicht;

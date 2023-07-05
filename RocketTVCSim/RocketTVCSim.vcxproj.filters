@@ -55,6 +55,7 @@
     <ClInclude Include="src\Simulator.h" />
     <ClInclude Include="src\Control\Thrust\PID\PIDNew.h" />
     <ClInclude Include="src\Control\Thrust\PID\PIDAutoTuner.h" />
+    <ClInclude Include="src\Util\CircularBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

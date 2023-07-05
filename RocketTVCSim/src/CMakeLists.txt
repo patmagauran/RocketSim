@@ -120,6 +120,8 @@ if(MSVC)
     add_compile_options(/wd4251)                   # class needs to have dll-interface
 endif()
 
+add_subdirectory("C:\Users\patma\source\repos\matplotplusplus")
+
 #--------------------------------------------------------------
 # === 3 ===
 # Add the executable from your project and specify all C++ 
@@ -146,7 +148,7 @@ target_link_options(RocketTVCSim PUBLIC ${CHRONO_LINKER_FLAGS})
 #--------------------------------------------------------------
 
 target_link_libraries(RocketTVCSim ${CHRONO_LIBRARIES})
-
+target_link_directories(RocketTVCSim PUBLIC matplot)
 #--------------------------------------------------------------
 # === 4 (OPTIONAL) ===
 # 

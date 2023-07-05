@@ -84,9 +84,12 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgConfiguration>Debug</VcpkgConfiguration>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\patma\source\repos\chrono\src;C:\Users\patma\source\repos\chrono\src\chrono;C:\Users\patma\source\repos\chrono\src\chrono\collision\bullet;C:\Users\patma\source\repos\chrono\src\chrono\collision\gimpact;C:\Users\patma\source\repos\chrono\src\chrono_thirdparty\HACD;C:\Users\patma\source\repos\chrono\src\chrono_thirdparty\HACDv2;C:\Users\patma\source\repos\chrono\chrono_build;C:\Data\Development\Rocket\eigen-3.4.0;C:\Data\Development\Rocket\irrlicht-1.8.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\patma\source\repos\matplotplusplus;C:\Users\patma\source\repos\chrono\src;C:\Users\patma\source\repos\chrono\src\chrono;C:\Users\patma\source\repos\chrono\src\chrono\collision\bullet;C:\Users\patma\source\repos\chrono\src\chrono\collision\gimpact;C:\Users\patma\source\repos\chrono\src\chrono_thirdparty\HACD;C:\Users\patma\source\repos\chrono\src\chrono_thirdparty\HACDv2;C:\Users\patma\source\repos\chrono\chrono_build;C:\Data\Development\Rocket\eigen-3.4.0;C:\Data\Development\Rocket\irrlicht-1.8.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -104,6 +107,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;CHRONO_DATA_DIR="C:/Users/patma/source/repos/chrono/data/";_ENABLE_EXTENDED_ALIGNED_STORAGE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NOMINMAX;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CHRONO_DATA_DIR=\"C:/Users/patma/source/repos/chrono/data/\";_ENABLE_EXTENDED_ALIGNED_STORAGE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NOMINMAX;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
@@ -118,7 +122,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoEngine_postprocess.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoEngine_irrlicht.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoModels_robot.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoEngine.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoEngine_postprocess.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoEngine_irrlicht.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoModels_robot.lib;C:\Users\patma\source\repos\chrono\chrono_build\lib\Release\ChronoEngine.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;d3d12.lib;dxgi.lib;dxguid.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64 /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -147,10 +151,12 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CHRONO_DATA_DIR="C:/Users/patma/source/repos/chrono/data/";_ENABLE_EXTENDED_ALIGNED_STORAGE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NOMINMAX;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CHRONO_DATA_DIR="C:/Users/patma/source/repos/chrono/data/";_ENABLE_EXTENDED_ALIGNED_STORAGE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NOMINMAX;CMAKE_INTDIR="Release";_ITERATOR_DEBUG_LEVEL=0</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CHRONO_DATA_DIR=\"C:/Users/patma/source/repos/chrono/data/\";_ENABLE_EXTENDED_ALIGNED_STORAGE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NOMINMAX;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
@@ -323,6 +329,7 @@
     <ClInclude Include="src\Model\RocketModel.h" />
     <ClInclude Include="src\Model\RocketModelWithDrag.h" />
     <ClInclude Include="src\Simulator.h" />
+    <ClInclude Include="src\Util\CircularBuffer.h" />
     <ClInclude Include="src\Util\ForceApplication.h" />
     <ClInclude Include="src\Util\Kinematics.h" />
     <ClInclude Include="src\Util\ObjectKinematics.h" />
