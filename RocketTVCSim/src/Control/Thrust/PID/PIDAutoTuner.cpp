@@ -350,5 +350,10 @@ PIDState PIDAutoTuner::getState()
 
 PIDParams PIDAutoTuner::getPidParams(std::string tuningRule)
 {
-	return TUNING_RULES_MAP.at(tuningRule);
+	PIDParams rules = TUNING_RULES_MAP.at(tuningRule);
+	float kp = this->Ku / rules.getKp();
+	float ki = kp / (this->Pu / rules.getKi());
+	float kd = kp * (this->Pu / rules.getKd());
+	return PIDParams(kp, ki, kd);
+
 }

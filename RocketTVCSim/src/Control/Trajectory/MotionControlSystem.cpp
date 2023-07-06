@@ -75,5 +75,5 @@ MotionCommand MotionControlSystem::getNextMotionCommand(ChVector<> g_location, s
 	float pitchThrustAng = this->controlSystem.getPitchRate(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
 
 	//return MotionCommand(ThrustParameters(0,0,0));
-	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, 5));
+	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, 1));
 }
