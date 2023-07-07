@@ -164,13 +164,21 @@ void DataLog::drawPlots() {
 			}
 		}
 	}
+	static ImPlotSubplotFlags flags = ImPlotSubplotFlags_LinkAllX;
+	/*static ImPlotAxisFlags xflags = ImPlotAxisFlags_AutoFit | ImPlot;
+	static ImPlotAxisFlags yflags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;*/
 	//loop through plotData and draw plots
-	for (const auto& [name, data] : plotData) {
-		if (ImPlot::BeginPlot(name.c_str())) {
-			ImPlot::PlotLine(name.c_str(), &data.first[0], &data.second[0], data.first.size());
-			ImPlot::EndPlot();
+	if (ImPlot::BeginSubplots("Data Plots", plotData.size(), 1, ImVec2(-1, -1), flags)) {
+		for (const auto& [name, data] : plotData) {
+			if (ImPlot::BeginPlot(name.c_str())) {
+				//ImPlot::SetupAxes("x", "y", xflags, yflags);
+				ImPlot::SetupAxesLimits(0, 10, -1.5, 1.5, ImPlotCond_Once);
+				ImPlot::PlotLine(name.c_str(), &data.first[0], &data.second[0], data.first.size());
+					ImPlot::EndPlot();
+			}
 		}
 	}
+	ImPlot::EndSubplots();
 
 	//if (ImPlot::BeginPlot("AutoTunePT1")) {
 //	//  ImPlot::PlotBars("My Bar Plot", bar_data, 11);
