@@ -291,6 +291,7 @@
     <None Include="points2.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Util\DataLog\DataLog.cpp" />
     <ClCompile Include="src\Control\Thrust\PID\PIDAutoTuner.cpp" />
     <ClCompile Include="src\Control\Thrust\PID\PIDNew.cpp" />
     <ClCompile Include="src\Control\Thrust\ControlSystem.cpp" />
@@ -308,11 +309,16 @@
     <ClCompile Include="src\Model\RocketModelWithDrag.cpp" />
     <ClCompile Include="src\RocketTVCSimuation.cpp" />
     <ClCompile Include="src\Simulator.cpp" />
+    <ClCompile Include="src\Util\DataLog\IMGuiHelpers.cpp" />
     <ClCompile Include="src\Util\ForceApplication.cpp" />
     <ClCompile Include="src\Util\Kinematics.cpp" />
     <ClCompile Include="src\Util\ObjectKinematics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Util\DataLog\atomicops.h" />
+    <ClInclude Include="src\Util\DataLog\DataRow.h" />
+    <ClInclude Include="src\Util\DataLog\IMGuiHelpers.h" />
+    <ClInclude Include="src\Util\DataLog\DataLog.h" />
     <ClInclude Include="src\Control\Thrust\PID\PIDAutoTuner.h" />
     <ClInclude Include="src\Control\Thrust\PID\PIDNew.h" />
     <ClInclude Include="src\Control\Thrust\ControlSystem.h" />
@@ -330,6 +336,7 @@
     <ClInclude Include="src\Model\RocketModelWithDrag.h" />
     <ClInclude Include="src\Simulator.h" />
     <ClInclude Include="src\Util\CircularBuffer.h" />
+    <ClInclude Include="src\Util\DataLog\readerwriterqueue.h" />
     <ClInclude Include="src\Util\ForceApplication.h" />
     <ClInclude Include="src\Util\Kinematics.h" />
     <ClInclude Include="src\Util\ObjectKinematics.h" />

@@ -26,6 +26,8 @@
 #include "Control/Thrust/PID/PIDParams.h"
 
 #include <matplot/matplot.h>
+#include "Util/DataLog/DataLog.h"
+
 // Use the namespace of Chrono
 using namespace chrono;
 using namespace chrono::irrlicht;
