@@ -23,7 +23,6 @@
     <ClCompile Include="src\Control\Trajectory\Course.cpp" />
     <ClCompile Include="src\Control\Trajectory\MotionCommand.cpp" />
     <ClCompile Include="src\Control\Trajectory\MotionControlSystem.cpp" />
-    <ClCompile Include="src\Control\Trajectory\TrajectoryCommand.cpp" />
     <ClCompile Include="src\Model\DragModel.cpp" />
     <ClCompile Include="src\Model\RocketModel.cpp" />
     <ClCompile Include="src\Model\RocketModelWithDrag.cpp" />

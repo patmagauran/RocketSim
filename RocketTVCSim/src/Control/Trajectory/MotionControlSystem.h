@@ -5,6 +5,7 @@
 #include "MotionCommand.h"
 #include "TrajectoryCommand.h"
 #include "Course.h"
+#include "../../Model/RocketModel.h"
 using namespace chrono;
 class MotionControlSystem
 {
@@ -14,6 +15,6 @@ class MotionControlSystem
 public:
 	MotionControlSystem(ControlSystem controlSystem, Course course, double lookahead);
 	TrajectoryCommand getNextTrajectoryCommand(ChVector<> currentPosition, ChVector<> currentVelocity);
-	MotionCommand getNextMotionCommand(ChVector<> g_location, std::shared_ptr<ChBody> rocket_upper, double currentTime);
+	MotionCommand getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime);
 };
 

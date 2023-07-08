@@ -49,13 +49,13 @@ TrajectoryCommand MotionControlSystem::getNextTrajectoryCommand(ChVector<> curre
 		yawAccel = 0;
 	}
 	pitchAccel = -pitchAccel;
-	return TrajectoryCommand(pitchAccel, yawAccel);
+	return TrajectoryCommand(pitchAccel, yawAccel, lookaheadPoint);
 
 }
 
-MotionCommand MotionControlSystem::getNextMotionCommand(ChVector<> g_location, std::shared_ptr<ChBody> rocket_upper, double currentTime)
+MotionCommand MotionControlSystem::getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime)
 {
-
+	std::shared_ptr<ChBody> rocket_upper = rocket.getRocketUpper();
 	ChVector<> currentVelocity = rocket_upper->GetPos_dt();
 	if (currentVelocity.Length() < 0.05)
 	{
@@ -75,5 +75,5 @@ MotionCommand MotionControlSystem::getNextMotionCommand(ChVector<> g_location, s
 	double pitchThrustAng = this->controlSystem.getPitchRate(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
 
 	//return MotionCommand(ThrustParameters(0,0,0));
-	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, 1));
+	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, rocket.getMaxThrust()), nextCommand);
 }

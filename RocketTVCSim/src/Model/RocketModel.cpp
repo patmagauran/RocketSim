@@ -93,3 +93,8 @@ std::shared_ptr<ChBody> RocketModel::getRocketUpper()
 	return this->rocket_upper;
 }
 
+float RocketModel::getMaxThrust()
+{
+	return maxThrust;
+}
+

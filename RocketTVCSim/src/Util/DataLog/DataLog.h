@@ -19,7 +19,6 @@ class DataLog
 
 	inline static std::thread dataThread = std::thread();
 
-	static void initialize();
 
 
 	static void startDataThread();
@@ -37,6 +36,7 @@ class DataLog
 	inline static PlotDataContainer plotData = PlotDataContainer();
 
 public:
+	static void initialize();
 	static void logData(std::string name, double value);
 	static void pushTimestamp(double timestamp);
 	static void cleanup();

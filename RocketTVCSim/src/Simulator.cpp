@@ -1,7 +1,6 @@
 #include "Simulator.h"
 #include "Control/Thrust/PID/PIDAutoTuner.h"
 
-
 using namespace matplot;
 double degreesToRad(double degrees) {
 	//converts degrees to radians
@@ -22,12 +21,12 @@ double errorMap(double error) {
 void Simulator::runSimulation()
 {
 	//ChSystemNSC sys;
-	bool autoTune = true;
+	bool autoTune = false;
 	double maxDeflection = degreesToRad(10);
 	double maxRotationAngle = degreesToRad(20);
 	PIDParams pidParamsRate = PIDParams(0.0149925, 0.881914, 6.37183e-05, 0.01, maxDeflection);
 	PIDParams pidParamsAngle = PIDParams(0.0328315, 0.820787, 0.000328315, 0.01, maxRotationAngle);
-	
+	DataLog::initialize();
 
 	// Main loop
 	//bool done = false;
@@ -74,17 +73,7 @@ void Simulator::runSimulation()
 
 	// 3 - Create the Irrlicht application and set-up the camera.
 
-	ChVisualSystemIrrlicht vis;
-	vis.AttachSystem(&this->sys);
-	vis.SetWindowSize(1024, 768);
-	vis.SetWindowTitle("Rocket Visualization Demo");
-	vis.Initialize();
-	vis.AddSkyBox();
-	vis.AddCamera(ChVector<>(10, 10, 10));
-	vis.AddTypicalLights();
-	vis.EnableBodyFrameDrawing(true);
-	vis.SetSymbolScale(10);
-	vis.ShowInfoPanel(true);
+
 
 	//ThrustParameters thrustParameters = ThrustParameters(0, 0, 25);
 
@@ -97,7 +86,7 @@ void Simulator::runSimulation()
 		std::vector<double> xAngle = { 0 };
 
 
-		ThrustParameters thrustParameters = ThrustParameters(0, 0, 25);
+		ThrustParameters thrustParameters = ThrustParameters(0, 0, rocket.getMaxThrust());
 		resetSimulator();
 		//    autoTuneController = AutoTuneController(degreesToRad(-20), chSys.GetChTime, out_step=maxDeflectionAngle,sampletime=10, lookback=80)
 		PIDAutoTuner pidAutoTuner = PIDAutoTuner(degreesToRad(-20), maxDeflection, 10, 50, -100000, 100000, 0.5, 0, 0, 0, false, 10);
@@ -110,7 +99,7 @@ void Simulator::runSimulation()
 			if (done)
 				break;
 			
-			ThrustParameters thrustParameters = ThrustParameters(pidAutoTuner.getOutput(), 0, 25);
+			ThrustParameters thrustParameters = ThrustParameters(pidAutoTuner.getOutput(), 0, rocket.getMaxThrust());
 			DataLog::logData("xAngVel", this->rocket.getRocketUpper()->GetWvel_loc().x());
 			DataLog::logData("thrustPitch", thrustParameters.pitchAngle);
 			DataLog::pushTimestamp(this->sys.GetChTime());
@@ -158,7 +147,7 @@ void Simulator::runSimulation()
 
 			yawRatePID.setSetpoint(pidAutoTuner.getOutput());
 			double yaw = yawRatePID.update(rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
-			thrustParameters = ThrustParameters(yaw, 0, 25);
+			thrustParameters = ThrustParameters(yaw, 0, rocket.getMaxThrust());
 
 
 			DataLog::logData("xAngVel", this->rocket.getRocketUpper()->GetWvel_loc().x());
@@ -194,14 +183,33 @@ void Simulator::runSimulation()
 		resetSimulator();
 
 
+		tunableControlSystem.setParamsAngle(pidParamsAngle);
+		tunableControlSystem.setParamsRate(pidParamsRate);
 
 
 		tunableControlSystem.tune();
 	}
-	
 
+	
+	ChVisualSystemIrrlicht vis;
+	vis.AttachSystem(&this->sys);
+	vis.SetWindowSize(1024, 768);
+	vis.SetWindowTitle("Rocket Visualization Demo");
+	vis.Initialize();
+	vis.AddSkyBox();
+	vis.AddCamera(ChVector<>(10, 10, 10));
+	vis.AddTypicalLights();
+	vis.EnableBodyFrameDrawing(true);
+	vis.SetSymbolScale(10);
+	vis.ShowInfoPanel(true);
 	// Cleanup
 	
+	//Make a sphere to represent the lookahead point
+	std::shared_ptr<ChBody> sphere = std::make_shared<ChBodyEasySphere>(1, 0);
+	sphere->SetPos(ChVector<>(0, 0, 0));
+	sphere->SetBodyFixed(true);
+	sphere->SetCollide(false);
+	sys.AddBody(sphere);
 
 	// 5 - Simulation loop
    // ChRealtimeStepTimer realtime_timer;
@@ -211,6 +219,8 @@ void Simulator::runSimulation()
 	while (vis.Run()) {
 		//Accumulate Forces
 		this->rocket.accumulateForces(this->thrustParameters.convertToForceVector());
+		sphere->SetPos(motionCommand.getTrajectoryCommand().lookaheadPoint);
+
 		// Render scene
 		vis.BeginScene();
 		vis.Render();
@@ -235,7 +245,6 @@ void Simulator::runSimulation()
 
 			tools::drawSegment(&vis, waypoint, nextWaypoint);
 		}
-
 		//Draw Coordinate System
 		//drawCoordsys(vis, chrono.ChCoordsysD(chrono.ChVectorD(0, 0, 0)), 100)
 		irrlicht::tools::drawCoordsys(&vis, ChCoordsys<>(ChVector<>(0, 0, 0)), 100);
@@ -246,7 +255,7 @@ void Simulator::runSimulation()
 		this->sys.DoStepDynamics(step_size);
 
 		//Advance Motion Controller
-		motionCommand = motionController.getNextMotionCommand(this->rocket.getGLocation(), this->rocket.getRocketUpper(), sys.GetChTime());
+		motionCommand = motionController.getNextMotionCommand(this->rocket.getGLocation(), this->rocket, sys.GetChTime());
 		this->thrustParameters = motionCommand.getThrustParameters();
 		//Save Debug Data
 

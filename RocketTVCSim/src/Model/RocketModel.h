@@ -17,6 +17,7 @@ class RocketModel
 	std::shared_ptr <ChLinkMateFix> fixed_link;
 	ChVector<> thrust_point;
 	std::list<ForceApplication> forces;
+	float maxThrust = 5;
 	public:
 	RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass);
 	~RocketModel();
@@ -25,5 +26,6 @@ class RocketModel
 	std::list<ForceApplication> getDisplayedForces();
 	ChVector<> getGLocation();
 	std::shared_ptr<ChBody> getRocketUpper();
+	float getMaxThrust();
 };
 

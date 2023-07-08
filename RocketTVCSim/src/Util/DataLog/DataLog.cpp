@@ -18,12 +18,10 @@ void DataLog::startDataThread()
 }
 void DataLog::logData(std::string name, double value)
 {
-	initialize();
 	currentData[name] = value;
 }
 void DataLog::pushTimestamp(double timestamp)
 {
-	initialize();
 	DataRow row(timestamp, currentData);
 	dataQueue.enqueue(row);
 	currentData.clear();
