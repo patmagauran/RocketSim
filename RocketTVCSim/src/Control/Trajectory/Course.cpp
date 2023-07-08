@@ -55,31 +55,31 @@ std::vector<ChVector<>> Course::getWaypoints()
 /*
 Returns the next point along the segment from currentWaypoint to nextWaypoint that is a distance lookahead away from currentPos
 */
-ChVector<> getPathCross(ChVector<> currentWaypoint, ChVector<> nextWaypoint, ChVector<> currentPosition, float lookahead)
+ChVector<> getPathCross(ChVector<> currentWaypoint, ChVector<> nextWaypoint, ChVector<> currentPosition, double lookahead)
 {
 
-	float x0 = currentWaypoint[0];
-	float	y0 = currentWaypoint[1];
-	float	z0 = currentWaypoint[2];
-	float	x1 = nextWaypoint[0];
-	float	y1 = nextWaypoint[1];
-	float	z1 = nextWaypoint[2];
-	float	x = currentPosition[0];
-	float	y = currentPosition[1];
-	float	z = currentPosition[2];
+	double x0 = currentWaypoint[0];
+	double	y0 = currentWaypoint[1];
+	double	z0 = currentWaypoint[2];
+	double	x1 = nextWaypoint[0];
+	double	y1 = nextWaypoint[1];
+	double	z1 = nextWaypoint[2];
+	double	x = currentPosition[0];
+	double	y = currentPosition[1];
+	double	z = currentPosition[2];
 
-	float	A = pow((x0 - x), 2) + pow((y0 - y), 2) + pow((z0 - z), 2) - pow(lookahead, 2);
-	float	C = pow((x0 - x1), 2) + pow((y0 - y1), 2) + pow((z0 - z1), 2);
-	float	B = pow((x1 - x), 2) + pow((y1 - y), 2) + pow((z1 - z), 2) - A - C - pow(lookahead, 2);
+	double	A = pow((x0 - x), 2) + pow((y0 - y), 2) + pow((z0 - z), 2) - pow(lookahead, 2);
+	double	C = pow((x0 - x1), 2) + pow((y0 - y1), 2) + pow((z0 - z1), 2);
+	double	B = pow((x1 - x), 2) + pow((y1 - y), 2) + pow((z1 - z), 2) - A - C - pow(lookahead, 2);
 
-	float determinent = pow(B, 2) - 4 * A * C;
+	double determinent = pow(B, 2) - 4 * A * C;
 	if (determinent < 0)
 	{
 		//No intersection
 		return NULL;
 	}
-	float t1 = (-B + sqrt(determinent)) / (2 * C);
-	float t2 = (-B - sqrt(determinent)) / (2 * C);
+	double t1 = (-B + sqrt(determinent)) / (2 * C);
+	double t2 = (-B - sqrt(determinent)) / (2 * C);
 	if (t1 < 0 && t2 < 0)
 	{
 		//No intersection
@@ -99,18 +99,18 @@ ChVector<> getPathCross(ChVector<> currentWaypoint, ChVector<> nextWaypoint, ChV
 	}
 
 	//There should always be two solutions, but we will pick the one closest to 1
-	float t = max(t1, t2);
+	double t = max(t1, t2);
 	//plug t into the parametric equation of the line to get the point of intersection
-	float xCross = x0 * (1 - t) + t * (x1);
-	float yCross = y0 + t * (y1 - y0);
-	float zCross = z0 + t * (z1 - z0);
+	double xCross = x0 * (1 - t) + t * (x1);
+	double yCross = y0 + t * (y1 - y0);
+	double zCross = z0 + t * (z1 - z0);
 	return ChVector<>(xCross, yCross, zCross);
 
 }
 
 
 
-ChVector<> Course::getLookaheadPoint(ChVector<> currentPosition, float lookahead) {
+ChVector<> Course::getLookaheadPoint(ChVector<> currentPosition, double lookahead) {
 //	intersectionPoint = None
 //		while (intersectionPoint is None) :
 //			if (self.waypointIndex + 2 >= len(self.waypoints)) :

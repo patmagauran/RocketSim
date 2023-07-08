@@ -1,30 +1,30 @@
 #include "PIDParams.h"
 
-PIDParams::PIDParams(float kp, float ki, float kd, float sampleTime, float maxOutput): kp(kp), ki(ki), kd(kd), sampleTime(sampleTime), maxOutput(maxOutput)
+PIDParams::PIDParams(double kp, double ki, double kd, double sampleTime, double maxOutput): kp(kp), ki(ki), kd(kd), sampleTime(sampleTime), maxOutput(maxOutput)
 {
 }
 
-float PIDParams::getKp()
+double PIDParams::getKp()
 {
 	return this->kp;
 }
 
-float PIDParams::getKi()
+double PIDParams::getKi()
 {
 	return this->ki;
 }
 
-float PIDParams::getKd()
+double PIDParams::getKd()
 {
 	return this->kd;
 }
 
-float PIDParams::getSampleTime()
+double PIDParams::getSampleTime()
 {
 	return this->sampleTime;
 }
 
-float PIDParams::getMaxOutput()
+double PIDParams::getMaxOutput()
 {
 	return this->maxOutput;
 }

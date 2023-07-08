@@ -6,8 +6,8 @@ using namespace chrono;
 class ThrustParameters
 {
 public:
-	float pitchAngle, yawAngle, force;
-ThrustParameters(float pitchAngle, float yawAngle, float force);
+	double pitchAngle, yawAngle, force;
+ThrustParameters(double pitchAngle, double yawAngle, double force);
 ChVector<> convertToForceVector();
 };
 

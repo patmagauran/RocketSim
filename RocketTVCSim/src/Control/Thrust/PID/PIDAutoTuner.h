@@ -14,7 +14,7 @@ STATE_SUCCEEDED,
 STATE_FAILED
 };
 
-static const    float PEAK_AMPLITUDE_TOLERANCE = 0.05;
+static const    double PEAK_AMPLITUDE_TOLERANCE = 0.05;
 
 static const std::map<std::string, PIDParams> TUNING_RULES_MAP{ 
 	{"ziegler-nichols", PIDParams(34, 40, 160)},
@@ -45,32 +45,32 @@ class PIDAutoTuner
 	PIDParams outerParams;
 	bool useInnerPID;
 	PIDNew innerPID;
-	std::deque<float> inputs;
-	float sampleTime;
-	float setPoint;
-	float outStep;
-	float noiseBand;
-	float lastTime;
-	float outMin;
-	float outMax;
+	std::deque<double> inputs;
+	double sampleTime;
+	double setPoint;
+	double outStep;
+	double noiseBand;
+	double lastTime;
+	double outMin;
+	double outMax;
 	PIDState state;
-	std::deque<float> peakTimestamps;
-	std::deque<float> peakValues;
-	float output;
-	float peakType;
-	float peakCount;
-	float initialOutput;
-	float inducedAmplitude;
-	float Ku;
-	float Pu;
+	std::deque<double> peakTimestamps;
+	std::deque<double> peakValues;
+	double output;
+	double peakType;
+	double peakCount;
+	double initialOutput;
+	double inducedAmplitude;
+	double Ku;
+	double Pu;
 	int maxInputs;
 public:
-	PIDAutoTuner(float setpoint, float outStep, float sampleTime, float lookback, float out_min, float out_max, float noiseband, float kp, float ki, float kd, bool ratePid, float maxDeflection);
-	bool run(float input, float currentTime);
-	void initTuner(float inputVal, float timestamp);
+	PIDAutoTuner(double setpoint, double outStep, double sampleTime, double lookback, double out_min, double out_max, double noiseband, double kp, double ki, double kd, bool ratePid, double maxDeflection);
+	bool run(double input, double currentTime);
+	void initTuner(double inputVal, double timestamp);
 	std::vector<std::string> getTuningRules();
-	float getPidIn();
-	float getOutput();
+	double getPidIn();
+	double getOutput();
 	PIDState getState();
 	PIDParams getPidParams(std::string tuningRule = "ziegler-nichols");
 };

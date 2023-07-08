@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 
-PIDAutoTuner::PIDAutoTuner(float setPoint, float outStep, float sampleTime, float lookback, float out_min, float out_max, float noiseband, float kp, float ki, float kd, bool ratePid, float maxDeflection) : setPoint(setPoint), outStep(outStep), sampleTime(sampleTime), outMin(out_min), outMax(out_max), noiseBand(noiseband), innerParams(PIDParams(kp, ki, kd)), useInnerPID(ratePid), outerParams(0, 0, 0), state(PIDState::STATE_OFF), maxInputs(std::round(lookback / sampleTime))
+PIDAutoTuner::PIDAutoTuner(double setPoint, double outStep, double sampleTime, double lookback, double out_min, double out_max, double noiseband, double kp, double ki, double kd, bool ratePid, double maxDeflection) : setPoint(setPoint), outStep(outStep), sampleTime(sampleTime), outMin(out_min), outMax(out_max), noiseBand(noiseband), innerParams(PIDParams(kp, ki, kd)), useInnerPID(ratePid), outerParams(0, 0, 0), state(PIDState::STATE_OFF), maxInputs(std::round(lookback / sampleTime))
 {
 	/*
 	 if setPoint is None:
@@ -39,7 +39,7 @@ PIDAutoTuner::PIDAutoTuner(float setPoint, float outStep, float sampleTime, floa
 
 }
 
-bool PIDAutoTuner::run(float input, float currentTime)
+bool PIDAutoTuner::run(double input, double currentTime)
 {
 	/*
 	# rotation = rocketUpper.GetRot().Q_to_Euler123()
@@ -162,7 +162,7 @@ bool PIDAutoTuner::run(float input, float currentTime)
 	*/
 
 	// rotation = rocketUpper.GetRot().Q_to_Euler123()
-	float now = currentTime *1000;
+	double now = currentTime *1000;
 	if (this->state == PIDState::STATE_OFF
 		|| this->state == PIDState::STATE_SUCCEEDED
 		|| this->state == PIDState::STATE_FAILED)
@@ -252,8 +252,8 @@ bool PIDAutoTuner::run(float input, float currentTime)
 	this->inducedAmplitude = 0;
 	if (inflection && (this->peakCount > 4))
 	{
-		float absMax = this->peakValues[this->peakValues.size() - 2];
-		float absMin = this->peakValues[this->peakValues.size() - 2];
+		double absMax = this->peakValues[this->peakValues.size() - 2];
+		double absMin = this->peakValues[this->peakValues.size() - 2];
 		for (int i = 0; i < this->peakValues.size() - 2; i++)
 		{
 			this->inducedAmplitude += abs(this->peakValues[i] - this->peakValues[i + 1]);
@@ -262,7 +262,7 @@ bool PIDAutoTuner::run(float input, float currentTime)
 		}
 		this->inducedAmplitude /= 6.0;
 		// check convergence criterion for amplitude of induced oscillation
-		float amplitudeDev = ((0.5 * (absMax - absMin) - this->inducedAmplitude) / this->inducedAmplitude);
+		double amplitudeDev = ((0.5 * (absMax - absMin) - this->inducedAmplitude) / this->inducedAmplitude);
 		// self._logger.debug('amplitude: {0}'.format(self._induced_amplitude))
 		// self._logger.debug('amplitude deviation: {0}'.format(amplitude_dev))
 		if (amplitudeDev < PEAK_AMPLITUDE_TOLERANCE)
@@ -284,8 +284,8 @@ bool PIDAutoTuner::run(float input, float currentTime)
 		// calculate ultimate gain
 		this->Ku = 4.0 * this->outStep / (this->inducedAmplitude * 3.1415926535);
 		// calculate ultimate period in seconds
-		float period1 = this->peakTimestamps[3] - this->peakTimestamps[1];
-		float period2 = this->peakTimestamps[4] - this->peakTimestamps[2];
+		double period1 = this->peakTimestamps[3] - this->peakTimestamps[1];
+		double period2 = this->peakTimestamps[4] - this->peakTimestamps[2];
 		this->Pu = 0.5 * (period1 + period2) / 1000.0;
 		return true;
 	}
@@ -302,7 +302,7 @@ bool PIDAutoTuner::run(float input, float currentTime)
 
 */
 
-void PIDAutoTuner::initTuner(float inputVal, float timestamp) {
+void PIDAutoTuner::initTuner(double inputVal, double timestamp) {
 	/*        self._peak_type = 0
 		self._peak_count = 0
 		self._output = 0
@@ -333,12 +333,12 @@ std::vector<std::string> PIDAutoTuner::getTuningRules()
 	return TUNING_RULES;
 }
 
-float PIDAutoTuner::getPidIn()
+double PIDAutoTuner::getPidIn()
 {
 	return 0;
 }
 
-float PIDAutoTuner::getOutput()
+double PIDAutoTuner::getOutput()
 {
 	return this->output;
 }
@@ -351,9 +351,9 @@ PIDState PIDAutoTuner::getState()
 PIDParams PIDAutoTuner::getPidParams(std::string tuningRule)
 {
 	PIDParams rules = TUNING_RULES_MAP.at(tuningRule);
-	float kp = this->Ku / rules.getKp();
-	float ki = kp / (this->Pu / rules.getKi());
-	float kd = kp * (this->Pu / rules.getKd());
+	double kp = this->Ku / rules.getKp();
+	double ki = kp / (this->Pu / rules.getKi());
+	double kd = kp * (this->Pu / rules.getKd());
 	return PIDParams(kp, ki, kd);
 
 }

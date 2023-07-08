@@ -1,12 +1,12 @@
 #include "PIDNew.h"
 #include <cstddef>
 
-PIDNew::PIDNew(float kp, float ki, float kd, float sample_time, float maxOut) :
+PIDNew::PIDNew(double kp, double ki, double kd, double sample_time, double maxOut) :
 	kp(kp), ki(ki), kd(kd), sample_time(sample_time), maxOut(maxOut)
 {
 }
 
-float clamp(float inputVal, float maxVal) {
+double clamp(double inputVal, double maxVal) {
 	//Clamps inputVal to between -maxVal and maxVal
 if (inputVal > maxVal) {
 		return maxVal;
@@ -19,7 +19,7 @@ if (inputVal > maxVal) {
 	}
 }
 
-float PIDNew::update(float input, float currentTime)
+double PIDNew::update(double input, double currentTime)
 {
 	/*
 	   """
@@ -81,7 +81,7 @@ float PIDNew::update(float input, float currentTime)
 
 	*/
 
-	float dt = currentTime - this->lastTime;
+	double dt = currentTime - this->lastTime;
 	if (dt <= 0)
 	{
 		dt = 1e-16;
@@ -90,8 +90,8 @@ float PIDNew::update(float input, float currentTime)
 	{
 		return this->lastOutput;
 	}
-	float error = this->setpoint - input;
-	float d_input = input - (this->lastInput != NULL ? this->lastInput : input);
+	double error = this->setpoint - input;
+	double d_input = input - (this->lastInput != NULL ? this->lastInput : input);
 
 	/*if (this->error_map != NULL)
 	{
@@ -112,7 +112,7 @@ float PIDNew::update(float input, float currentTime)
 
 	this->derivative = -this->kd * d_input / dt;
 
-	float output = this->proportional + this->integral + this->derivative;
+	double output = this->proportional + this->integral + this->derivative;
 	output = clamp(output, this->maxOut);
 
 	this->lastOutput = output;
@@ -123,7 +123,7 @@ float PIDNew::update(float input, float currentTime)
 	return 0.0f;
 }
 
-void PIDNew::setSetpoint(float setpoint)
+void PIDNew::setSetpoint(double setpoint)
 {
 	this->setpoint = setpoint;
 }

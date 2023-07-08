@@ -12,13 +12,13 @@ using namespace chrono;
 using namespace chrono::irrlicht;
 
 
-std::shared_ptr < ChBody > RocketModel::makeCylinder(float radius, float length, ChColor color, std::shared_ptr< ChMaterialSurface > material, float mass) {
+std::shared_ptr < ChBody > RocketModel::makeCylinder(double radius, double length, ChColor color, std::shared_ptr< ChMaterialSurface > material, double mass) {
 	auto cylinder = std::make_shared<ChBody>();
 
-	float density = mass / (CH_C_PI * pow(radius, 2) * length);
+	double density = mass / (CH_C_PI * pow(radius, 2) * length);
 	cylinder->SetDensity(density);
 	cylinder->SetMass(mass);
-	cylinder->SetInertiaXX(ChVector<float>((1.0 / 12.0) * mass * (3 * pow(radius, 2) + pow(length, 2)),
+	cylinder->SetInertiaXX(ChVector<double>((1.0 / 12.0) * mass * (3 * pow(radius, 2) + pow(length, 2)),
 		0.5 * mass * pow(radius, 2),
 		(1.0 / 12.0) * mass * (3 * pow(radius, 2) + pow(length, 2))));
 	cylinder->GetCollisionModel()->ClearModel();
@@ -38,11 +38,11 @@ std::shared_ptr < ChBody > RocketModel::makeCylinder(float radius, float length,
 	return cylinder;
 }
 
-RocketModel::RocketModel(float rocket_radius, float lengthAG, float lengthGB, float rocket_mass)
+RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass)
 {
 
 	auto material = std::make_shared<ChMaterialSurfaceNSC>();
-	float comp_mass = rocket_mass / 2;
+	double comp_mass = rocket_mass / 2;
 	this->rocket_lower = makeCylinder(rocket_radius, lengthAG, ChColor(1,1,1), material, comp_mass);
 	this->rocket_upper = makeCylinder(rocket_radius, lengthGB, ChColor(1,1,0.2), material, comp_mass);
 	this->rocket_upper->SetPos(ChVector<>(0, lengthAG/2, 0));

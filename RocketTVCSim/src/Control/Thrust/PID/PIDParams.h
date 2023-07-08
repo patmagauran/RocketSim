@@ -1,13 +1,13 @@
 #pragma once
 class PIDParams
 {
-	float kp, ki, kd, sampleTime, maxOutput;
+	double kp, ki, kd, sampleTime, maxOutput;
 public:
-PIDParams(float kp, float ki, float kd, float sampleTime=0, float maxOutput=0);
-	float getKp();
-	float getKi();
-	float getKd();
-	float getSampleTime();
-	float getMaxOutput();
+PIDParams(double kp, double ki, double kd, double sampleTime=0, double maxOutput=0);
+	double getKp();
+	double getKi();
+	double getKd();
+	double getSampleTime();
+	double getMaxOutput();
 };
 

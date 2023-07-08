@@ -13,6 +13,6 @@ class Course
 public:
 	Course(std::string fileName);
 	std::vector <ChVector<>> getWaypoints();
-	ChVector<> getLookaheadPoint(ChVector<> currentPosition, float lookahead);
+	ChVector<> getLookaheadPoint(ChVector<> currentPosition, double lookahead);
 };
 

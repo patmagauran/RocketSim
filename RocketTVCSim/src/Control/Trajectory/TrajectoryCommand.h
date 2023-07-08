@@ -2,8 +2,8 @@
 class TrajectoryCommand
 {
 public:
-	TrajectoryCommand(float yawAngle, float pitchAngle);
-	float yawAngle, pitchAngle;
+	TrajectoryCommand(double yawAngle, double pitchAngle);
+	double yawAngle, pitchAngle;
 
 };
 

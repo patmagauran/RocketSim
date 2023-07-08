@@ -1,6 +1,6 @@
 #include "ThrustParameters.h"
 
-ThrustParameters::ThrustParameters(float pitchAngle, float yawAngle, float force)
+ThrustParameters::ThrustParameters(double pitchAngle, double yawAngle, double force)
 {
 this->pitchAngle = pitchAngle;
 	this->yawAngle = yawAngle;
@@ -8,7 +8,7 @@ this->pitchAngle = pitchAngle;
 }
 
 
-ChVector<> pitchYawToCartesian(float pitch, float yaw) {
+ChVector<> pitchYawToCartesian(double pitch, double yaw) {
 	return ChVector<>(
 		sin(yaw),
 		pow(cos(yaw),2) - pow(sin(pitch),2),

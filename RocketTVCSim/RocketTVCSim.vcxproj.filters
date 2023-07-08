@@ -36,6 +36,7 @@
     <ClCompile Include="src\Control\Thrust\PID\PIDAutoTuner.cpp" />
     <ClCompile Include="src\Util\DataLog\DataLog.cpp" />
     <ClCompile Include="src\Util\DataLog\IMGuiHelpers.cpp" />
+    <ClCompile Include="src\Util\DataLog\PlotUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -60,9 +61,12 @@
     <ClInclude Include="src\Util\CircularBuffer.h" />
     <ClInclude Include="src\Util\DataLog\DataLog.h" />
     <ClInclude Include="src\Util\DataLog\IMGuiHelpers.h" />
-    <ClInclude Include="src\Util\DataLog\atomicops.h" />
-    <ClInclude Include="src\Util\DataLog\readerwriterqueue.h" />
+    <ClInclude Include="src\Util\DataLog\concurrent\atomicops.h" />
+    <ClInclude Include="src\Util\DataLog\concurrent\readerwriterqueue.h" />
     <ClInclude Include="src\Util\DataLog\DataRow.h" />
+    <ClInclude Include="src\Util\DataLog\concurrent\AppendOnlyVector.h" />
+    <ClInclude Include="src\Util\DataLog\PlotDataContainer.h" />
+    <ClInclude Include="src\Util\DataLog\PlotUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

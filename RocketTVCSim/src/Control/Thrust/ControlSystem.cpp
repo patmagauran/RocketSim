@@ -31,25 +31,25 @@ PIDParams ControlSystem::getParamsAngle()
     return this->paramsAngle;
 }
 
-float ControlSystem::getYawAngle(float target, float current, float currentTime)
+double ControlSystem::getYawAngle(double target, double current, double currentTime)
 {
     yawAnglePID.setSetpoint(target);
     return yawAnglePID.update(current, currentTime);
 }
 
-float ControlSystem::getYawRate(float target, float current, float currentTime)
+double ControlSystem::getYawRate(double target, double current, double currentTime)
 {
 yawRatePID.setSetpoint(target);
 	return yawRatePID.update(current, currentTime);
 }
 
-float ControlSystem::getPitchAngle(float target, float current, float currentTime)
+double ControlSystem::getPitchAngle(double target, double current, double currentTime)
 {
     pitchAnglePID.setSetpoint(target);
 return pitchAnglePID.update(current, currentTime);
 }
 
-float ControlSystem::getPitchRate(float target, float current, float currentTime)
+double ControlSystem::getPitchRate(double target, double current, double currentTime)
 {
 pitchRatePID.setSetpoint(target);
 	return pitchRatePID.update(current, currentTime);

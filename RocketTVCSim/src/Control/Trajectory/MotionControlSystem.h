@@ -10,10 +10,10 @@ class MotionControlSystem
 {
 	ControlSystem controlSystem;
 	Course course;
-	float lookahead;
+	double lookahead;
 public:
-	MotionControlSystem(ControlSystem controlSystem, Course course, float lookahead);
+	MotionControlSystem(ControlSystem controlSystem, Course course, double lookahead);
 	TrajectoryCommand getNextTrajectoryCommand(ChVector<> currentPosition, ChVector<> currentVelocity);
-	MotionCommand getNextMotionCommand(ChVector<> g_location, std::shared_ptr<ChBody> rocket_upper, float currentTime);
+	MotionCommand getNextMotionCommand(ChVector<> g_location, std::shared_ptr<ChBody> rocket_upper, double currentTime);
 };
 

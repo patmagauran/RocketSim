@@ -3,7 +3,7 @@
 
 
 using namespace matplot;
-float degreesToRad(float degrees) {
+double degreesToRad(double degrees) {
 	//converts degrees to radians
 	return degrees * (3.14159265358979323846 / 180);
 }
@@ -16,15 +16,15 @@ void Simulator::resetSimulator() {
 	this->rocket.addRocketModelToSystem(this->sys);
 	this->sys.Set_G_acc(ChVector<>(0, 0, 0));
 }
-float errorMap(float error) {
+double errorMap(double error) {
 	return error;
 }
 void Simulator::runSimulation()
 {
 	//ChSystemNSC sys;
 	bool autoTune = true;
-	float maxDeflection = degreesToRad(10);
-	float maxRotationAngle = degreesToRad(20);
+	double maxDeflection = degreesToRad(10);
+	double maxRotationAngle = degreesToRad(20);
 	PIDParams pidParamsRate = PIDParams(0.0149925, 0.881914, 6.37183e-05, 0.01, maxDeflection);
 	PIDParams pidParamsAngle = PIDParams(0.0328315, 0.820787, 0.000328315, 0.01, maxRotationAngle);
 	
@@ -35,7 +35,7 @@ void Simulator::runSimulation()
 	//{
 
 	//    {
-	//        static float f = 0.0f;
+	//        static double f = 0.0f;
 	//        static int counter = 0;
 
 	//        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
@@ -44,8 +44,8 @@ void Simulator::runSimulation()
 	//        //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
 	//        //ImGui::Checkbox("Another Window", &show_another_window);
 
-	//        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	//        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+	//        ImGui::Sliderdouble("double", &f, 0.0f, 1.0f);            // Edit 1 double using a slider from 0.0f to 1.0f
+	//        ImGui::ColorEdit3("clear color", (double*)&clear_color); // Edit 3 doubles representing a color
 
 	//        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 	//            counter++;
@@ -156,15 +156,8 @@ void Simulator::runSimulation()
 
 
 
-		
-
-			if (done)
-				break;
-		
-
-
 			yawRatePID.setSetpoint(pidAutoTuner.getOutput());
-			float yaw = yawRatePID.update(rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
+			double yaw = yawRatePID.update(rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
 			thrustParameters = ThrustParameters(yaw, 0, 25);
 
 
@@ -173,11 +166,6 @@ void Simulator::runSimulation()
 			DataLog::logData("xAngle", this->rocket.getRocketUpper()->GetRot().Q_to_Euler123().x());
 			DataLog::logData("setPoint", pidAutoTuner.getOutput());
 			DataLog::pushTimestamp(this->sys.GetChTime());
-			/*xAngle.push_back(this->rocket.getRocketUpper()->GetRot().Q_to_Euler123().x());
-			xAngularVelocity.push_back(this->rocket.getRocketUpper()->GetWvel_loc().x());
-			thrustParameter.push_back(thrustParameters.pitchAngle);
-			pid2out.push_back(pidAutoTuner.getOutput());
-			simulationTime.push_back(this->sys.GetChTime());*/
 
 
 			this->rocket.accumulateForces(thrustParameters.convertToForceVector());
@@ -185,25 +173,7 @@ void Simulator::runSimulation()
 			this->sys.DoStepDynamics(1e-3);
 
 
-			//ThrustParameters thrustParameters = ThrustParameters(pidAutoTuner.getOutput(), 0, 25);
-			//
-			//this->rocket.accumulateForces(thrustParameters.convertToForceVector());
-			////	std::cout << "Wvel_loc: " << this->rocket.getRocketUpper()->GetWvel_loc() << std::endl;
-			//done = pidAutoTuner.run(this->rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
-			//this->sys.DoStepDynamics(1e-3);
 
-
-
-
-
-
-
-			//yawRatePID.setSetpoint(pidAutoTuner.getOutput());
-			//float yaw = yawRatePID.update(rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
-			//thrustParameters = ThrustParameters(yaw, 0, 25);
-			//this->rocket.accumulateForces(thrustParameters.convertToForceVector());
-			//done = pidAutoTuner.run(this->rocket.getRocketUpper()->GetRot().Q_to_Euler123().z(), this->sys.GetChTime());
-			//this->sys.DoStepDynamics(1e-3);
 		}
 
 		if (pidAutoTuner.getState() == PIDState::STATE_SUCCEEDED) {

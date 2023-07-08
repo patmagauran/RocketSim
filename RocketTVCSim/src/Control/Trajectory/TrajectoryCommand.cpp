@@ -1,6 +1,6 @@
 #include "TrajectoryCommand.h"
 
-TrajectoryCommand::TrajectoryCommand(float yawAngle, float pitchAngle)
+TrajectoryCommand::TrajectoryCommand(double yawAngle, double pitchAngle)
 {
 this->yawAngle = yawAngle;
 	this->pitchAngle = pitchAngle;

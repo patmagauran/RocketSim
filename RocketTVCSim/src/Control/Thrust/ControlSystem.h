@@ -17,9 +17,9 @@ public:
 	PIDParams getParamsRate();
 	PIDParams getParamsAngle();
 
-	float getYawAngle(float target, float current, float currentTime);
-float getYawRate(float target, float current, float currentTime);
-float getPitchAngle(float target, float current, float currentTime);
-float getPitchRate(float target, float current, float currentTime);
+	double getYawAngle(double target, double current, double currentTime);
+double getYawRate(double target, double current, double currentTime);
+double getPitchAngle(double target, double current, double currentTime);
+double getPitchRate(double target, double current, double currentTime);
 };
 

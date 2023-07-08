@@ -4,9 +4,9 @@
 class DataRow {
 
 public: 
-	float timestamp;
-	std::unordered_map<std::string, float> data;
-	DataRow(float timestamp, std::unordered_map<std::string, float> data) {
+	double timestamp;
+	std::unordered_map<std::string, double> data;
+	DataRow(double timestamp, std::unordered_map<std::string, double> data) {
 		this->timestamp = timestamp;
 		this->data = data;
 	}
