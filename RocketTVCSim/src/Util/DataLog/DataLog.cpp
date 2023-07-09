@@ -2,11 +2,13 @@
 
 
 
-void DataLog::initialize() {
+void DataLog::initialize(std::string filename) {
 	if (initialized) return;
 	DataLog::initialized = true;
 	dataThread = std::thread(DataLog::startDataThread);
 	plotUIInstance = new PlotUI(plotData);
+	csvLoggerInstance = new CSVLogger(filename);
+	
 }
 void DataLog::cleanup() {
 	//dataThread.~thread();
@@ -35,6 +37,7 @@ void DataLog::run() {
 		DataRow currentRow;
 
 		if (dataQueue.try_dequeue(currentRow)) {
+			csvLoggerInstance->addRow(currentRow);
 			for (const auto& [name, value] : currentRow.data) {
 				plotData.putData(name, currentRow.timestamp, value);
 			}

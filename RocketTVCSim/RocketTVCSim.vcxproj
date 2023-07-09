@@ -291,6 +291,7 @@
     <None Include="points2.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Util\DataLog\CSVLogger.cpp" />
     <ClCompile Include="src\Util\DataLog\PlotUI.cpp" />
     <ClCompile Include="src\Util\DataLog\DataLog.cpp" />
     <ClCompile Include="src\Control\Thrust\PID\PIDAutoTuner.cpp" />
@@ -315,6 +316,7 @@
     <ClCompile Include="src\Util\ObjectKinematics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Util\DataLog\CSVLogger.h" />
     <ClInclude Include="src\Util\DataLog\PlotUI.h" />
     <ClInclude Include="src\Util\DataLog\PlotDataContainer.h" />
     <ClInclude Include="src\Util\DataLog\concurrent\AppendOnlyVector.h" />

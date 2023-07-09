@@ -36,6 +36,7 @@
     <ClCompile Include="src\Util\DataLog\DataLog.cpp" />
     <ClCompile Include="src\Util\DataLog\IMGuiHelpers.cpp" />
     <ClCompile Include="src\Util\DataLog\PlotUI.cpp" />
+    <ClCompile Include="src\Util\DataLog\CSVLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -66,6 +67,7 @@
     <ClInclude Include="src\Util\DataLog\concurrent\AppendOnlyVector.h" />
     <ClInclude Include="src\Util\DataLog\PlotDataContainer.h" />
     <ClInclude Include="src\Util\DataLog\PlotUI.h" />
+    <ClInclude Include="src\Util\DataLog\CSVLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

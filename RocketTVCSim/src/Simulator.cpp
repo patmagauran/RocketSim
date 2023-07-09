@@ -21,12 +21,12 @@ double errorMap(double error) {
 void Simulator::runSimulation()
 {
 	//ChSystemNSC sys;
-	bool autoTune = false;
+	bool autoTune = true;
 	double maxDeflection = degreesToRad(10);
 	double maxRotationAngle = degreesToRad(20);
 	PIDParams pidParamsRate = PIDParams(0.0149925, 0.881914, 6.37183e-05, 0.01, maxDeflection);
 	PIDParams pidParamsAngle = PIDParams(0.0328315, 0.820787, 0.000328315, 0.01, maxRotationAngle);
-	DataLog::initialize();
+	DataLog::initialize("data.csv");
 
 	// Main loop
 	//bool done = false;
