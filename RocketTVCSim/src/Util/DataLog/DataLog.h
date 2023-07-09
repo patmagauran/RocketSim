@@ -10,11 +10,13 @@
 #include "PlotUI.h"
 #include <iostream>
 #include <fstream>
+#include <chrono>
 enum class EventType {
 	MESSAGE,
 	STAGE,
 	DONE,
-	PAUSE
+	PAUSE,
+	RESUME
 };
 class DataLog
 {
@@ -29,7 +31,11 @@ class DataLog
 
 	inline static std::thread dataThread = std::thread();
 
-
+	inline static std::atomic_bool paused = false;
+	inline static std::atomic_bool done = false;
+	inline static double lastTsSim = -1.0f;
+	inline static auto lastTsProg = std::chrono::steady_clock::now();
+	inline static auto startTime = std::chrono::steady_clock::now();
 
 	static void startDataThread();
 
@@ -48,7 +54,8 @@ public:
 	static void logData(std::string name, double value);
 	static void pushTimestamp(double timestamp);
 	static void pushEvent(EventType eventType, std::string message); //TODO: Implement
-
+	static bool isDone();
+	static bool isPaused();
 	static void cleanup();
 
 };

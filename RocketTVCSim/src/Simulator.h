@@ -40,6 +40,7 @@ private:
 public:
 	void resetSimulator();
 	void runSimulation();
+	void cleanup();
 	Simulator();
 };
 

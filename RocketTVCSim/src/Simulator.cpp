@@ -93,7 +93,11 @@ void Simulator::runSimulation()
 
 
 		bool done = false;
-		while (!done) {
+		while (!done && !DataLog::isDone()) {
+
+			while (DataLog::isPaused()) {
+
+			}
 		
 
 			if (done)
@@ -114,6 +118,10 @@ void Simulator::runSimulation()
 			done = pidAutoTuner.run(this->rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
 			this->sys.DoStepDynamics(1e-3);
 			
+		}
+		if (DataLog::isDone()) {
+			cleanup();
+return;
 		}
 		//f->show();
 		if (pidAutoTuner.getState() == PIDState::STATE_SUCCEEDED) {
@@ -141,8 +149,11 @@ void Simulator::runSimulation()
 		pidAutoTuner = PIDAutoTuner(degreesToRad(-20), degreesToRad(5), 50, 500, -100000, 10000, degreesToRad(0.5), 0, 0, 0, false, 10);
 		done = false;
 		PIDNew yawRatePID = PIDNew(pidParamsRate.getKp(), pidParamsRate.getKi(), pidParamsRate.getKd(), 0.01, maxDeflection);
-		while (!done) {
+		while (!done && !DataLog::isDone()) {
 
+			while (DataLog::isPaused()) {
+
+			}
 
 
 			yawRatePID.setSetpoint(pidAutoTuner.getOutput());
@@ -173,6 +184,10 @@ void Simulator::runSimulation()
 				std::cout << "Ki: " << pidParams.getKi() << std::endl;
 				std::cout << "Kd: " << pidParams.getKd() << std::endl;
 			}
+		}
+		if (DataLog::isDone()) {
+			cleanup();
+			return;
 		}
 		//Do AutoTune of anglePID
 		pidParamsAngle = pidAutoTuner.getPidParams("ziegler-nichols");
@@ -216,7 +231,11 @@ void Simulator::runSimulation()
 	double step_size = 5e-3;
 	MotionCommand motionCommand;
 
-	while (vis.Run()) {
+	while (vis.Run() && !DataLog::isDone()) {
+
+		while (DataLog::isPaused()) {
+
+		}
 		//Accumulate Forces
 		this->rocket.accumulateForces(this->thrustParameters.convertToForceVector());
 		sphere->SetPos(motionCommand.getTrajectoryCommand().lookaheadPoint);
@@ -262,7 +281,12 @@ void Simulator::runSimulation()
 		// Spin in place to maintain soft real-time
 		//realtime_timer.Spin(step_size);
 	}
+	cleanup();
+}
+
+void Simulator::cleanup() {
 	DataLog::cleanup();
+
 }
 
 

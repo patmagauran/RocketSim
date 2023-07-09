@@ -1,6 +1,7 @@
 #include "PlotUI.h"
+#include "DataLog.h"
 
-PlotUI::PlotUI(const PlotDataContainer& plotData): plotData(plotData)
+PlotUI::PlotUI(const PlotDataContainer& plotData) : plotData(plotData)
 {
 	plotThread = std::thread(&PlotUI::run, this);
 
@@ -8,6 +9,7 @@ PlotUI::PlotUI(const PlotDataContainer& plotData): plotData(plotData)
 
 PlotUI::~PlotUI()
 {
+	plotThread.join();
 }
 
 void PlotUI::run()
@@ -49,7 +51,7 @@ void PlotUI::run()
 		g_pd3dSrvDescHeap->GetGPUDescriptorHandleForHeapStart());
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	bool done = false;
-	while (!done) {
+	while (!DataLog::isDone()) {
 		// Poll and handle messages (inputs, window resize, etc.)
 // See the WndProc() function below for our to dispatch events to the Win32 backend.
 		MSG msg;
@@ -61,15 +63,23 @@ void PlotUI::run()
 				done = true;
 		}
 
-		if (done)
+		if (done) {
+			DataLog::pushEvent(EventType::DONE, "Plot window closed. Exiting.");
 			break;
+		}
 		ImGui_ImplDX12_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
 		ImGui::Begin("My Window");
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-
+		ImGui::Text("Application running for %.0f milliseconds", systemTime);
+		if (ImGui::Button("Pause")) {
+			DataLog::pushEvent(EventType::PAUSE, "Pause button pressed.");
+		}
+		if (ImGui::Button("Resume")) {
+			DataLog::pushEvent(EventType::RESUME, "Resume button pressed.");
+		}
 		//if (ImPlot::BeginPlot("AutoTunePT1")) {
 		//	//  ImPlot::PlotBars("My Bar Plot", bar_data, 11);
 		//	ImPlot::PlotLine("My Line Plot", &simulationTime[0], &xAngularVelocity[0], simulationTime.size());
@@ -132,17 +142,22 @@ void PlotUI::run()
 }
 
 void PlotUI::drawPlots() {
-	
+
 	static ImPlotSubplotFlags flags = ImPlotSubplotFlags_LinkAllX;
 	/*static ImPlotAxisFlags xflags = ImPlotAxisFlags_AutoFit | ImPlot;
 	static ImPlotAxisFlags yflags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;*/
 	//loop through plotData and draw plots
 	if (ImPlot::BeginSubplots("Data Plots", plotData.getIndexMap().size(), 1, ImVec2(-1, -1), flags)) {
 		for (const auto& [name, index] : plotData.getIndexMap()) {
+
 			const auto& data = plotData.getData()[index];
+			if (name == "systemTime") {
+				systemTime = data.y[data.y.size()-1];
+				continue;
+			}
 			if (ImPlot::BeginPlot(name.c_str())) {
 				//ImPlot::SetupAxes("x", "y", xflags, yflags);
-				ImPlot::SetupAxesLimits(0, 10, -1.5, 1.5, ImPlotCond_Once);
+				ImPlot::SetupAxesLimits(0, 10000, -1.5, 1.5, ImPlotCond_Once);
 				ImPlot::PlotLine(name.c_str(), &data.x[0], &data.y[0], data.x.size());
 				ImPlot::EndPlot();
 			}

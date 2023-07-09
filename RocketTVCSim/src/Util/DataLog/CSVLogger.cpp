@@ -1,4 +1,5 @@
 #include "CSVLogger.h"
+#include "DataLog.h"
 //Some code similar to https://github.com/p-ranav/csv2/blob/master/include/csv2/writer.hpp
 
 using namespace std;
@@ -15,7 +16,7 @@ CSVLogger::CSVLogger(std::string filename) : columns(), out_(std::ofstream(filen
 
 CSVLogger::~CSVLogger()
 {
-
+	csvLogThread.join();
 	out_.close();
 }
 
@@ -76,11 +77,11 @@ void CSVLogger::addRow(DataRow row)
 
 void CSVLogger::run()
 {
-	while (true) {
+	while (!DataLog::isDone()) {
 
 		DataRow currentRow;
 
-		if (this->dataQueue.try_dequeue(currentRow)) {
+		while (this->dataQueue.try_dequeue(currentRow)) {
 			this->writeRow(currentRow);
 		}
 	}

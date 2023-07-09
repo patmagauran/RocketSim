@@ -22,6 +22,7 @@ class PlotUI
 {
 
 	std::thread plotThread = std::thread();
+	float systemTime = 0.0f;
 	const PlotDataContainer& plotData;
 	void drawPlots();
 	void run();
