@@ -5,21 +5,17 @@
 
 class ControlSystem
 {
-protected:
-	PIDParams paramsRate, paramsAngle;
-	PIDNew yawAnglePID, yawRatePID, pitchAnglePID, pitchRatePID;
 public:
-	ControlSystem(PIDParams rateParams, PIDParams angleParams);
 
-	void setParamsRate(PIDParams params);
-	void setParamsAngle(PIDParams params);
+	virtual void setParamsRate(PIDParams params) = 0;
+	virtual void setParamsAngle(PIDParams params) = 0;
 
-	PIDParams getParamsRate();
-	PIDParams getParamsAngle();
+	virtual PIDParams getParamsRate() = 0;
+	virtual PIDParams getParamsAngle() = 0;
 
-	double getYawAngle(double target, double current, double currentTime);
-double getYawRate(double target, double current, double currentTime);
-double getPitchAngle(double target, double current, double currentTime);
-double getPitchRate(double target, double current, double currentTime);
+	virtual double getYawAngle(double target, double current, double currentTime) = 0;
+	virtual double getYawRate(double target, double current, double currentTime) = 0;
+	virtual double getPitchAngle(double target, double current, double currentTime) = 0;
+	virtual double getPitchRate(double target, double current, double currentTime) = 0;
 };
 

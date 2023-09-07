@@ -1,0 +1,10 @@
+- Cleanup code and format properly to be OO and inheritance based
+  - Simulation class should be clean
+  - Avoid unenessecary use of static vars or direct data sharing
+- Add all useful parameters to the dataLogger, especially in the main simulation
+- Get the PID working as well as the python version. Figure out what is different
+- Switch to a runner or builder pattern for the simulator
+- Create another for hardcoded (i.e presets) simulations
+- Fix the bug where the sim stops and fails when the lookahead point reaches the end
+- Create a test runner that allows for command line arguments to run the simulation
+- Create one that will read in parameters from a file and run every simulation listed

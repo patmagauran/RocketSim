@@ -1,10 +1,22 @@
 #include "Simulator.h"
 #include "Control/Thrust/PID/PIDAutoTuner.h"
+#include "Util/Utils.h"
+#include "Control/Thrust/TunableControlSystem.h"
 
+#include "Control/Thrust/PIDControl/PIDControlSystem.h"
+
+#include "Control/Thrust/PIDControl/TunablePIDControlSystem.h"
 using namespace matplot;
-double degreesToRad(double degrees) {
-	//converts degrees to radians
-	return degrees * (3.14159265358979323846 / 180);
+
+
+ChSystemNSC* Simulator::getSystem()
+{
+	return &this->sys;
+}
+
+RocketModel* Simulator::getRocket()
+{
+	return &this->rocket;
 }
 
 void Simulator::resetSimulator() {
@@ -28,37 +40,6 @@ void Simulator::runSimulation()
 	PIDParams pidParamsAngle = PIDParams(0.0328315, 0.820787, 0.000328315, 0.01, maxRotationAngle);
 	DataLog::initialize("data.csv");
 
-	// Main loop
-	//bool done = false;
-	//while (!done)
-	//{
-
-	//    {
-	//        static double f = 0.0f;
-	//        static int counter = 0;
-
-	//        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-	//        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-	//        //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-	//        //ImGui::Checkbox("Another Window", &show_another_window);
-
-	//        ImGui::Sliderdouble("double", &f, 0.0f, 1.0f);            // Edit 1 double using a slider from 0.0f to 1.0f
-	//        ImGui::ColorEdit3("clear color", (double*)&clear_color); // Edit 3 doubles representing a color
-
-	//        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-	//            counter++;
-	//        ImGui::SameLine();
-	//        ImGui::Text("counter = %d", counter);
-
-	//        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-	//        ImGui::End();
-	//    }
-	//    // Rendering
-	//   
-	//}
-
-
 	resetSimulator();
 
 
@@ -67,7 +48,8 @@ void Simulator::runSimulation()
 	//Setup Motion Controller
 	ControlSystemTuner controlSystemTuner;
 
-	TunableControlSystem tunableControlSystem = TunableControlSystem(controlSystemTuner, pidParamsRate, pidParamsAngle);
+	std::shared_ptr<TunableControlSystem> tunableControlSystem = std::make_shared<TunablePIDControlSystem>(controlSystemTuner, pidParamsRate, pidParamsAngle);
+	//std::shared_ptr<ControlSystem> tunableControlSystem = std::make_shared<PIDControlSystem>(pidParamsRate, pidParamsAngle);
 	MotionControlSystem motionController = MotionControlSystem(tunableControlSystem, course, 50);
 
 
@@ -75,134 +57,114 @@ void Simulator::runSimulation()
 
 
 
-	//ThrustParameters thrustParameters = ThrustParameters(0, 0, 25);
 
 	if (autoTune) {
-		//plot x angular velocity vs simulation time and thrust parameter vs simulation time using matplotplusplus
-		std::vector<double> xAngularVelocity = { 0 };
-		std::vector<double> simulationTime = { 0 };
-		std::vector<double> thrustParameter = { 0 };
-		std::vector<double> pid2out = { 0 };
-		std::vector<double> xAngle = { 0 };
-
-
-		ThrustParameters thrustParameters = ThrustParameters(0, 0, rocket.getMaxThrust());
-		resetSimulator();
-		//    autoTuneController = AutoTuneController(degreesToRad(-20), chSys.GetChTime, out_step=maxDeflectionAngle,sampletime=10, lookback=80)
-		PIDAutoTuner pidAutoTuner = PIDAutoTuner(degreesToRad(-20), maxDeflection, 10, 50, -100000, 100000, 0.5, 0, 0, 0, false, 10);
-
-
-		bool done = false;
-		while (!done && !DataLog::isDone()) {
-
-			while (DataLog::isPaused()) {
-
-			}
 		
+		//ThrustParameters thrustParameters = ThrustParameters(0, 0, rocket.getMaxThrust());
+		//resetSimulator();
+		//PIDAutoTuner pidAutoTuner = PIDAutoTuner(degreesToRad(-20), maxDeflection, 10, 50, -100000, 100000, 0.5, 0, 0, 0, false, 10);
 
-			if (done)
-				break;
-			
-			ThrustParameters thrustParameters = ThrustParameters(pidAutoTuner.getOutput(), 0, rocket.getMaxThrust());
-			DataLog::logData("xAngVel", this->rocket.getRocketUpper()->GetWvel_loc().x());
-			DataLog::logData("thrustPitch", thrustParameters.pitchAngle);
-			DataLog::pushTimestamp(this->sys.GetChTime());
-			
-			DataLog::logData("setPoint", pidAutoTuner.getOutput());
-			/*xAngularVelocity.push_back(this->rocket.getRocketUpper()->GetWvel_loc().x());
-			simulationTime.push_back(this->sys.GetChTime());
-			thrustParameter.push_back(thrustParameters.pitchAngle);*/
+		//bool done = false;
+		//while (!done && !DataLog::isDone()) {
 
-			this->rocket.accumulateForces(thrustParameters.convertToForceVector());
-			//	std::cout << "Wvel_loc: " << this->rocket.getRocketUpper()->GetWvel_loc() << std::endl;
-			done = pidAutoTuner.run(this->rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
-			this->sys.DoStepDynamics(1e-3);
-			
-		}
-		if (DataLog::isDone()) {
-			cleanup();
-return;
-		}
-		//f->show();
-		if (pidAutoTuner.getState() == PIDState::STATE_SUCCEEDED) {
-			for (std::string rule : pidAutoTuner.getTuningRules()) {
-				PIDParams pidParams = pidAutoTuner.getPidParams(rule);
-				std::cout << "rule: " << rule << std::endl;
-				std::cout << "Kp: " << pidParams.getKp() << std::endl;
-				std::cout << "Ki: " << pidParams.getKi() << std::endl;
-				std::cout << "Kd: " << pidParams.getKd() << std::endl;
-			}
-		}
-		pidParamsRate = pidAutoTuner.getPidParams("ziegler-nichols");
-		std::cout << "Rate Tuning complete. Press Enter to Start Angle Tuning" << std::endl;
-		std::cin.get();
+		//	while (DataLog::isPaused()) {
 
-		xAngularVelocity.clear();
-		simulationTime.clear();
-		thrustParameter.clear();
-		xAngle.clear();
-		pid2out.clear();
+		//	}
+		//
 
-		resetSimulator();
-		//	input();
-		resetSimulator();
-		pidAutoTuner = PIDAutoTuner(degreesToRad(-20), degreesToRad(5), 50, 500, -100000, 10000, degreesToRad(0.5), 0, 0, 0, false, 10);
-		done = false;
-		PIDNew yawRatePID = PIDNew(pidParamsRate.getKp(), pidParamsRate.getKi(), pidParamsRate.getKd(), 0.01, maxDeflection);
-		while (!done && !DataLog::isDone()) {
+		//	if (done)
+		//		break;
+		//	
+		//	ThrustParameters thrustParameters = ThrustParameters(pidAutoTuner.getOutput(), 0, rocket.getMaxThrust());
+		//	DataLog::logData("xAngVel", this->rocket.getRocketUpper()->GetWvel_loc().x());
+		//	DataLog::logData("thrustPitch", thrustParameters.pitchAngle);
+		//	DataLog::pushTimestamp(this->sys.GetChTime());
+		//	
+		//	DataLog::logData("setPoint", pidAutoTuner.getOutput());
+		//	
 
-			while (DataLog::isPaused()) {
-
-			}
+		//	this->rocket.accumulateForces(thrustParameters.convertToForceVector());
+		//	//	std::cout << "Wvel_loc: " << this->rocket.getRocketUpper()->GetWvel_loc() << std::endl;
+		//	done = pidAutoTuner.run(this->rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
+		//	this->sys.DoStepDynamics(1e-3);
+		//	
+		//}
+		//if (DataLog::isDone()) {
+		//	cleanup();
+		//	return;
+		//}
+		////f->show();
+		//if (pidAutoTuner.getState() == PIDState::STATE_SUCCEEDED) {
+		//	for (std::string rule : pidAutoTuner.getTuningRules()) {
+		//		PIDParams pidParams = pidAutoTuner.getPidParams(rule);
+		//		std::cout << "rule: " << rule << std::endl;
+		//		std::cout << "Kp: " << pidParams.getKp() << std::endl;
+		//		std::cout << "Ki: " << pidParams.getKi() << std::endl;
+		//		std::cout << "Kd: " << pidParams.getKd() << std::endl;
+		//	}
+		//}
+		//pidParamsRate = pidAutoTuner.getPidParams("ziegler-nichols");
+		//std::cout << "Rate Tuning complete. Press Enter to Start Angle Tuning" << std::endl;
+		//std::cin.get();
 
 
-			yawRatePID.setSetpoint(pidAutoTuner.getOutput());
-			double yaw = yawRatePID.update(rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
-			thrustParameters = ThrustParameters(yaw, 0, rocket.getMaxThrust());
+		//resetSimulator();
+		//pidAutoTuner = PIDAutoTuner(degreesToRad(-20), degreesToRad(5), 50, 500, -100000, 10000, degreesToRad(0.5), 0, 0, 0, false, 10);
+		//done = false;
+		//PIDNew yawRatePID = PIDNew(pidParamsRate.getKp(), pidParamsRate.getKi(), pidParamsRate.getKd(), 0.01, maxDeflection);
+		//while (!done && !DataLog::isDone()) {
+
+		//	while (DataLog::isPaused()) {
+
+		//	}
 
 
-			DataLog::logData("xAngVel", this->rocket.getRocketUpper()->GetWvel_loc().x());
-			DataLog::logData("thrustPitch", thrustParameters.pitchAngle);
-			DataLog::logData("xAngle", this->rocket.getRocketUpper()->GetRot().Q_to_Euler123().x());
-			DataLog::logData("setPoint", pidAutoTuner.getOutput());
-			DataLog::pushTimestamp(this->sys.GetChTime());
+		//	yawRatePID.setSetpoint(pidAutoTuner.getOutput());
+		//	double yaw = yawRatePID.update(rocket.getRocketUpper()->GetWvel_loc().x(), this->sys.GetChTime());
+		//	thrustParameters = ThrustParameters(yaw, 0, rocket.getMaxThrust());
 
 
-			this->rocket.accumulateForces(thrustParameters.convertToForceVector());
-			done = pidAutoTuner.run(this->rocket.getRocketUpper()->GetRot().Q_to_Euler123().x(), this->sys.GetChTime());
-			this->sys.DoStepDynamics(1e-3);
+		//	DataLog::logData("xAngVel", this->rocket.getRocketUpper()->GetWvel_loc().x());
+		//	DataLog::logData("thrustPitch", thrustParameters.pitchAngle);
+		//	DataLog::logData("xAngle", this->rocket.getRocketUpper()->GetRot().Q_to_Euler123().x());
+		//	DataLog::logData("setPoint", pidAutoTuner.getOutput());
+		//	DataLog::pushTimestamp(this->sys.GetChTime());
+
+
+		//	this->rocket.accumulateForces(thrustParameters.convertToForceVector());
+		//	done = pidAutoTuner.run(this->rocket.getRocketUpper()->GetRot().Q_to_Euler123().x(), this->sys.GetChTime());
+		//	this->sys.DoStepDynamics(1e-3);
 
 
 
-		}
+		//}
 
-		if (pidAutoTuner.getState() == PIDState::STATE_SUCCEEDED) {
-			for (std::string rule : pidAutoTuner.getTuningRules()) {
-				PIDParams pidParams = pidAutoTuner.getPidParams(rule);
-				std::cout << "rule: " << rule << std::endl;
-				std::cout << "Kp: " << pidParams.getKp() << std::endl;
-				std::cout << "Ki: " << pidParams.getKi() << std::endl;
-				std::cout << "Kd: " << pidParams.getKd() << std::endl;
-			}
-		}
-		if (DataLog::isDone()) {
-			cleanup();
-			return;
-		}
-		//Do AutoTune of anglePID
-		pidParamsAngle = pidAutoTuner.getPidParams("ziegler-nichols");
+		//if (pidAutoTuner.getState() == PIDState::STATE_SUCCEEDED) {
+		//	for (std::string rule : pidAutoTuner.getTuningRules()) {
+		//		PIDParams pidParams = pidAutoTuner.getPidParams(rule);
+		//		std::cout << "rule: " << rule << std::endl;
+		//		std::cout << "Kp: " << pidParams.getKp() << std::endl;
+		//		std::cout << "Ki: " << pidParams.getKi() << std::endl;
+		//		std::cout << "Kd: " << pidParams.getKd() << std::endl;
+		//	}
+		//}
+		//if (DataLog::isDone()) {
+		//	cleanup();
+		//	return;
+		//}
+		////Do AutoTune of anglePID
+		//pidParamsAngle = pidAutoTuner.getPidParams("ziegler-nichols");
 
-		std::cout << "Angle Tuning complete. Press Enter to Start Simulation" << std::endl;
-		resetSimulator();
-		//input();
-		resetSimulator();
+		//std::cout << "Angle Tuning complete. Press Enter to Start Simulation" << std::endl;
+		//resetSimulator();
 
 
-		tunableControlSystem.setParamsAngle(pidParamsAngle);
-		tunableControlSystem.setParamsRate(pidParamsRate);
+
+		//tunableControlSystem->setParamsAngle(pidParamsAngle);
+		//tunableControlSystem->setParamsRate(pidParamsRate);
 
 
-		tunableControlSystem.tune();
+		tunableControlSystem->tune(maxDeflection, maxRotationAngle, this);
 	}
 
 	

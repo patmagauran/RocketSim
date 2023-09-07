@@ -21,7 +21,7 @@
 
 #include "Control/Trajectory/MotionControlSystem.h"
 
-#include "Control/Thrust/TunableControlSystem.h"
+
 
 #include "Control/Thrust/PID/PIDParams.h"
 
@@ -38,6 +38,8 @@ private:
 	ThrustParameters thrustParameters;
 	RocketModel rocket;
 public:
+	ChSystemNSC* getSystem();
+	RocketModel* getRocket();
 	void resetSimulator();
 	void runSimulation();
 	void cleanup();

@@ -1,7 +1,7 @@
 #include "MotionControlSystem.h"
 #include "TrajectoryCommand.h"
 
-MotionControlSystem::MotionControlSystem(ControlSystem controlSystem, Course course, double lookahead) : controlSystem(controlSystem), course(course), lookahead(lookahead)
+MotionControlSystem::MotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead) : controlSystem(controlSystem), course(course), lookahead(lookahead)
 {
 }
 double getPitchAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity) {
@@ -66,13 +66,13 @@ MotionCommand MotionControlSystem::getNextMotionCommand(ChVector<> g_location, R
 	ChVector<> rotation = rocket_upper->GetRot().Q_to_Euler123();
 
 
-	double yawAngleO = this->controlSystem.getYawAngle(nextCommand.yawAngle, rotation.z(), currentTime);
+	double yawAngleO = this->controlSystem->getYawAngle(nextCommand.yawAngle, rotation.z(), currentTime);
 
-	double yawThrustAng = this->controlSystem.getYawRate(yawAngleO, rocket_upper->GetWvel_loc().z(), currentTime);
+	double yawThrustAng = this->controlSystem->getYawRate(yawAngleO, rocket_upper->GetWvel_loc().z(), currentTime);
 
-	double pitchAngleO = this->controlSystem.getPitchAngle(nextCommand.pitchAngle, rotation.x(), currentTime);
+	double pitchAngleO = this->controlSystem->getPitchAngle(nextCommand.pitchAngle, rotation.x(), currentTime);
 
-	double pitchThrustAng = this->controlSystem.getPitchRate(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
+	double pitchThrustAng = this->controlSystem->getPitchRate(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
 
 	//return MotionCommand(ThrustParameters(0,0,0));
 	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, rocket.getMaxThrust()), nextCommand);

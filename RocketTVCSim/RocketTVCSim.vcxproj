@@ -287,10 +287,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="points.csv" />
     <None Include="points2.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Control\Thrust\PIDControl\PIDControlSystem.cpp" />
     <ClCompile Include="src\Util\DataLog\CSVLogger.cpp" />
     <ClCompile Include="src\Util\DataLog\PlotUI.cpp" />
     <ClCompile Include="src\Util\DataLog\DataLog.cpp" />
@@ -314,8 +317,11 @@
     <ClCompile Include="src\Util\ForceApplication.cpp" />
     <ClCompile Include="src\Util\Kinematics.cpp" />
     <ClCompile Include="src\Util\ObjectKinematics.cpp" />
+    <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Control\Thrust\ITunable.h" />
+    <ClInclude Include="src\Control\Thrust\PIDControl\PIDControlSystem.h" />
     <ClInclude Include="src\Util\DataLog\CSVLogger.h" />
     <ClInclude Include="src\Util\DataLog\PlotUI.h" />
     <ClInclude Include="src\Util\DataLog\PlotDataContainer.h" />
@@ -345,9 +351,12 @@
     <ClInclude Include="src\Util\ForceApplication.h" />
     <ClInclude Include="src\Util\Kinematics.h" />
     <ClInclude Include="src\Util\ObjectKinematics.h" />
+    <ClInclude Include="src\Util\Utils.h" />
+    <ClInclude Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />
+    <Text Include="src\TODO.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,11 +9,11 @@
 using namespace chrono;
 class MotionControlSystem
 {
-	ControlSystem controlSystem;
+	std::shared_ptr<ControlSystem> controlSystem;
 	Course course;
 	double lookahead;
 public:
-	MotionControlSystem(ControlSystem controlSystem, Course course, double lookahead);
+	MotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead);
 	TrajectoryCommand getNextTrajectoryCommand(ChVector<> currentPosition, ChVector<> currentVelocity);
 	MotionCommand getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime);
 };

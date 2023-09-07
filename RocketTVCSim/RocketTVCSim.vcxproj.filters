@@ -12,6 +12,8 @@
     <None Include="..\.gitignore" />
     <None Include="points.csv" />
     <None Include="points2.csv" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Control\Thrust\PID\PID.cpp" />
@@ -37,6 +39,8 @@
     <ClCompile Include="src\Util\DataLog\IMGuiHelpers.cpp" />
     <ClCompile Include="src\Util\DataLog\PlotUI.cpp" />
     <ClCompile Include="src\Util\DataLog\CSVLogger.cpp" />
+    <ClCompile Include="src\Control\Thrust\PIDControl\PIDControlSystem.cpp" />
+    <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -68,8 +72,13 @@
     <ClInclude Include="src\Util\DataLog\PlotDataContainer.h" />
     <ClInclude Include="src\Util\DataLog\PlotUI.h" />
     <ClInclude Include="src\Util\DataLog\CSVLogger.h" />
+    <ClInclude Include="src\Util\Utils.h" />
+    <ClInclude Include="src\Control\Thrust\PIDControl\PIDControlSystem.h" />
+    <ClInclude Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.h" />
+    <ClInclude Include="src\Control\Thrust\ITunable.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />
+    <Text Include="src\TODO.txt" />
   </ItemGroup>
 </Project>
