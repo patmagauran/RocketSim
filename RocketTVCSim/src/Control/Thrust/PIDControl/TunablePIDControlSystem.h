@@ -13,16 +13,16 @@ class TunablePIDControlSystem :
 {
 public:
     using PIDControlSystem::PIDControlSystem;
-    using PIDControlSystem::setParamsRate;
-    using PIDControlSystem::setParamsAngle;
-    using PIDControlSystem::getParamsRate;
-    using PIDControlSystem::getParamsAngle;
-    using PIDControlSystem::getYawAngle;
-    using PIDControlSystem::getYawRate;
-    using PIDControlSystem::getPitchAngle;
-    using PIDControlSystem::getPitchRate;
+    using PIDControlSystem::setParamsThrustAngleFromRate;
+    using PIDControlSystem::setParamsRateFromAngle;
+    using PIDControlSystem::getParamsThrustAngleFromRate;
+    using PIDControlSystem::getParamsRateFromAngle;
+    using PIDControlSystem::getYawRateFromAngleDeviation;
+    using PIDControlSystem::getYawThrustAngleFromRateDeviation;
+    using PIDControlSystem::getPitchRateFromAngleDeviation;
+    using PIDControlSystem::getPitchThrustAngleFromRateDeviation;
 
-    TunablePIDControlSystem(ControlSystemTuner tuner, PIDParams rateParams, PIDParams angleParams);
-    virtual void tune(double maxDeflection, double maxRotationAngle, Simulator* sim) override;
+    TunablePIDControlSystem(ControlSystemTuner tuner, PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle);
+    virtual void tune(Simulator* sim) override;
 };
 

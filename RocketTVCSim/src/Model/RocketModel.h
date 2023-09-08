@@ -6,7 +6,7 @@
 #include "chrono/physics/ChBody.h"
 #include "chrono/physics/ChLinkMate.h"
 #include "../Util/ForceApplication.h"
-
+#include "RocketParams.h"
 using namespace chrono;
 using namespace chrono::irrlicht;
 class RocketModel
@@ -17,15 +17,20 @@ class RocketModel
 	std::shared_ptr <ChLinkMateFix> fixed_link;
 	ChVector<> thrust_point;
 	std::list<ForceApplication> forces;
-	float maxThrust = 5;
-	public:
-	RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass);
+	double maxThrust = 5;
+	double maxThrustAngle=1000, maxRotationRate=1000;
+public:
+	RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust);
+	RocketModel(RocketParams params);
 	~RocketModel();
 	void addRocketModelToSystem(chrono::ChSystem &system);
 	void accumulateForces(ChVector<> thrust_force);
 	std::list<ForceApplication> getDisplayedForces();
 	ChVector<> getGLocation();
 	std::shared_ptr<ChBody> getRocketUpper();
-	float getMaxThrust();
+	double getMaxThrust();
+	double getMaxThrustAngle();
+	double getMaxRotationRate();
+	void logRocketData();
 };
 

@@ -41,6 +41,7 @@
     <ClCompile Include="src\Util\DataLog\CSVLogger.cpp" />
     <ClCompile Include="src\Control\Thrust\PIDControl\PIDControlSystem.cpp" />
     <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
+    <ClCompile Include="src\Model\RocketParams.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -76,6 +77,7 @@
     <ClInclude Include="src\Control\Thrust\PIDControl\PIDControlSystem.h" />
     <ClInclude Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.h" />
     <ClInclude Include="src\Control\Thrust\ITunable.h" />
+    <ClInclude Include="src\Model\RocketParams.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

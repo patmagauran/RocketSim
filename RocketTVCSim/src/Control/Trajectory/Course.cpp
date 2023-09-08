@@ -142,6 +142,10 @@ ChVector<> Course::getLookaheadPoint(ChVector<> currentPosition, double lookahea
 		if (intersectionPoint == NULL)
 		{
 			intersectionPoint = getPathCross(this->waypoints[this->waypointIndex], this->waypoints[this->waypointIndex + 1], currentPosition, lookahead);
+			if (intersectionPoint == NULL) {
+				//Its not in current or next, we must have deviated too far from the path
+				return NULL;
+			}
 		}
 		else
 		{

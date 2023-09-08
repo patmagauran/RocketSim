@@ -1,5 +1,5 @@
 #include "RocketModel.h"
-
+#include "../Util/DataLog/DataLog.h"
 
 
 /*
@@ -38,7 +38,7 @@ std::shared_ptr < ChBody > RocketModel::makeCylinder(double radius, double lengt
 	return cylinder;
 }
 
-RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass)
+RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust) : maxThrustAngle(maxThrustAngle), maxRotationRate(maxRotationRate), maxThrust(maxThrust)
 {
 
 	auto material = std::make_shared<ChMaterialSurfaceNSC>();
@@ -55,6 +55,11 @@ RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB,
 
 	
 }
+
+RocketModel::RocketModel(RocketParams params) : RocketModel(params.getRocketRadius(), params.getLengthAG(), params.getLengthGB(), params.getRocketMass(), params.getMaxThrustAngle(), params.getMaxRotationRate(), params.getMaxThrust())
+{
+}
+
 
 RocketModel::~RocketModel()
 {
@@ -93,8 +98,41 @@ std::shared_ptr<ChBody> RocketModel::getRocketUpper()
 	return this->rocket_upper;
 }
 
-float RocketModel::getMaxThrust()
+double RocketModel::getMaxThrust()
 {
 	return maxThrust;
+}
+
+double RocketModel::getMaxThrustAngle()
+{
+	return this->maxThrustAngle;
+}
+
+double RocketModel::getMaxRotationRate()
+{
+	return this->maxRotationRate;
+}
+
+void RocketModel::logRocketData()
+{
+	DataLog::logData("rocket_x", this->getGLocation().x());
+	DataLog::logData("rocket_y", this->getGLocation().y());
+	DataLog::logData("rocket_z", this->getGLocation().z());
+	DataLog::logData("rocket_vx", this->rocket_lower->GetPos_dt().x());
+	DataLog::logData("rocket_vy", this->rocket_lower->GetPos_dt().y());
+	DataLog::logData("rocket_vz", this->rocket_lower->GetPos_dt().z());
+	DataLog::logData("rocket_ax", this->rocket_lower->GetPos_dtdt().x());
+	DataLog::logData("rocket_ay", this->rocket_lower->GetPos_dtdt().y());
+	DataLog::logData("rocket_az", this->rocket_lower->GetPos_dtdt().z());
+	DataLog::logData("rocket_theta", this->rocket_lower->GetRot().Q_to_NasaAngles().x());
+	DataLog::logData("rocket_phi", this->rocket_lower->GetRot().Q_to_NasaAngles().y());
+	DataLog::logData("rocket_psi", this->rocket_lower->GetRot().Q_to_NasaAngles().z());
+	DataLog::logData("rocket_wx", this->rocket_lower->GetWvel_loc().x());
+	DataLog::logData("rocket_wy", this->rocket_lower->GetWvel_loc().y());
+	DataLog::logData("rocket_wz", this->rocket_lower->GetWvel_loc().z());
+	DataLog::logData("rocket_alphx", this->rocket_lower->GetWacc_loc().x());
+	DataLog::logData("rocket_alphy", this->rocket_lower->GetWacc_loc().y());
+	DataLog::logData("rocket_alphz", this->rocket_lower->GetWacc_loc().z());
+
 }
 

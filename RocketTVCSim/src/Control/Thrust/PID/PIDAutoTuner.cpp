@@ -2,7 +2,8 @@
 #include <stdexcept>
 #include <iostream>
 
-PIDAutoTuner::PIDAutoTuner(double setPoint, double outStep, double sampleTime, double lookback, double out_min, double out_max, double noiseband, double kp, double ki, double kd, bool ratePid, double maxDeflection) : setPoint(setPoint), outStep(outStep), sampleTime(sampleTime), outMin(out_min), outMax(out_max), noiseBand(noiseband), innerParams(PIDParams(kp, ki, kd)), useInnerPID(ratePid), outerParams(0, 0, 0), state(PIDState::STATE_OFF), maxInputs(std::round(lookback / sampleTime))
+PIDAutoTuner::PIDAutoTuner(double setPoint, double outStep, double sampleTime, double lookback, double out_min, double out_max, double noiseband) 
+	: setPoint(setPoint), outStep(outStep), sampleTime(sampleTime), outMin(out_min), outMax(out_max), noiseBand(noiseband), state(PIDState::STATE_OFF), maxInputs(std::round(lookback / sampleTime))
 {
 	/*
 	 if setPoint is None:
@@ -76,8 +77,8 @@ bool PIDAutoTuner::run(double input, double currentTime)
 		self._output = min(self._output, self._out_max)
 		self._output = max(self._output, self._out_min)
 		if (self.ratepid):
-			self.yawRatePID.setPoint = self._output
-			self._output = self.yawRatePID(input_val)
+			self.yawThrustAngleFromRatePID.setPoint = self._output
+			self._output = self.yawThrustAngleFromRatePID(input_val)
 		# identify peaks
 		is_max = True
 		is_min = True
@@ -348,12 +349,13 @@ PIDState PIDAutoTuner::getState()
 	return this->state;
 }
 
-PIDParams PIDAutoTuner::getPidParams(std::string tuningRule)
+
+PIDParams PIDAutoTuner::getPidParams(std::string tuningRule, double sampleTime, double maxOutput)
 {
 	PIDParams rules = TUNING_RULES_MAP.at(tuningRule);
 	double kp = this->Ku / rules.getKp();
 	double ki = kp / (this->Pu / rules.getKi());
 	double kd = kp * (this->Pu / rules.getKd());
-	return PIDParams(kp, ki, kd);
+	return PIDParams(kp, ki, kd, sampleTime, maxOutput);
 
 }

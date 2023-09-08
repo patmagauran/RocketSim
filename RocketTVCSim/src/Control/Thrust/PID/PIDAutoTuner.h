@@ -41,10 +41,7 @@ static const std::vector<std::string> TUNING_RULES{
 
 class PIDAutoTuner
 {
-	PIDParams innerParams;
-	PIDParams outerParams;
-	bool useInnerPID;
-	PIDNew innerPID;
+	
 	std::deque<double> inputs;
 	double sampleTime;
 	double setPoint;
@@ -56,22 +53,23 @@ class PIDAutoTuner
 	PIDState state;
 	std::deque<double> peakTimestamps;
 	std::deque<double> peakValues;
-	double output;
-	double peakType;
-	double peakCount;
-	double initialOutput;
-	double inducedAmplitude;
-	double Ku;
-	double Pu;
+	double output = 0;
+	double peakType = 0;
+	double peakCount = 0;
+	double initialOutput = 0;
+	double inducedAmplitude = 0;
+	double Ku = 0;
+	double Pu = 0;
 	int maxInputs;
 public:
-	PIDAutoTuner(double setpoint, double outStep, double sampleTime, double lookback, double out_min, double out_max, double noiseband, double kp, double ki, double kd, bool ratePid, double maxDeflection);
+	PIDAutoTuner(double setpoint, double outStep, double sampleTime, double lookback, double out_min, double out_max, double noiseband);
 	bool run(double input, double currentTime);
 	void initTuner(double inputVal, double timestamp);
 	std::vector<std::string> getTuningRules();
 	double getPidIn();
 	double getOutput();
 	PIDState getState();
-	PIDParams getPidParams(std::string tuningRule = "ziegler-nichols");
+	//PIDParams getPidParams(std::string tuningRule = "ziegler-nichols");
+	PIDParams getPidParams(std::string tuningRule = "ziegler-nichols", double sampleTime = 0, double maxOutput = 0);
 };
 

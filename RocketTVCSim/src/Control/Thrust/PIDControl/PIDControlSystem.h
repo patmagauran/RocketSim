@@ -8,25 +8,25 @@ class PIDControlSystem :
     public virtual ControlSystem
 {
 protected:
-	PIDParams paramsRate, paramsAngle;
-	PIDNew yawAnglePID, yawRatePID, pitchAnglePID, pitchRatePID;
+	PIDParams paramsThrustAngleFromRate, paramsRateFromAngle;
+	PIDNew yawRateFromAnglePID, yawThrustAngleFromRatePID, pitchRateFromAnglePID, pitchThrustAngleFromRatePID;
 public:
-	PIDControlSystem(PIDParams rateParams, PIDParams angleParams);
+	PIDControlSystem(PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle);
 	// Inherited via ControlSystem
-	void setParamsRate(PIDParams params) override;
+	void setParamsThrustAngleFromRate(PIDParams params) override;
 
-	void setParamsAngle(PIDParams params) override;
+	void setParamsRateFromAngle(PIDParams params) override;
 
-	PIDParams getParamsRate() override;
+	PIDParams getParamsThrustAngleFromRate() override;
 
-	PIDParams getParamsAngle() override;
+	PIDParams getParamsRateFromAngle() override;
 
-	double getYawAngle(double target, double current, double currentTime) override;
+	double getYawRateFromAngleDeviation(double target, double current, double currentTime) override;
 
-	double getYawRate(double target, double current, double currentTime) override;
+	double getYawThrustAngleFromRateDeviation(double target, double current, double currentTime) override;
 
-	double getPitchAngle(double target, double current, double currentTime) override;
+	double getPitchRateFromAngleDeviation(double target, double current, double currentTime) override;
 
-	double getPitchRate(double target, double current, double currentTime) override;
+	double getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime) override;
 };
 

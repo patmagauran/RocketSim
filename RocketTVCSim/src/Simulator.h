@@ -31,18 +31,25 @@
 // Use the namespace of Chrono
 using namespace chrono;
 using namespace chrono::irrlicht;
+
+class TunableControlSystem;
 class Simulator
 {
 private:
 	ChSystemNSC sys;
 	ThrustParameters thrustParameters;
 	RocketModel rocket;
+	RocketParams rocketParams;
+	std::shared_ptr<TunableControlSystem> tunableControlSystem;
+	std::shared_ptr<MotionControlSystem> motionController;
 public:
 	ChSystemNSC* getSystem();
 	RocketModel* getRocket();
 	void resetSimulator();
-	void runSimulation();
+	void runSimulation(bool autoTune);
 	void cleanup();
-	Simulator();
+	Simulator(std::shared_ptr<TunableControlSystem> tunableControlSystem, std::shared_ptr<MotionControlSystem> motionControlSystem, RocketParams rocketParams);
+
 };
 
+//

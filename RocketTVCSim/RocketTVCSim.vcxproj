@@ -293,6 +293,7 @@
     <None Include="points2.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Model\RocketParams.cpp" />
     <ClCompile Include="src\Control\Thrust\PIDControl\PIDControlSystem.cpp" />
     <ClCompile Include="src\Util\DataLog\CSVLogger.cpp" />
     <ClCompile Include="src\Util\DataLog\PlotUI.cpp" />
@@ -320,6 +321,7 @@
     <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Model\RocketParams.h" />
     <ClInclude Include="src\Control\Thrust\ITunable.h" />
     <ClInclude Include="src\Control\Thrust\PIDControl\PIDControlSystem.h" />
     <ClInclude Include="src\Util\DataLog\CSVLogger.h" />

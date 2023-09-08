@@ -1,56 +1,60 @@
 #include "PIDControlSystem.h"
 
-PIDControlSystem::PIDControlSystem(PIDParams rateParams, PIDParams angleParams) :
-    paramsRate(rateParams), paramsAngle(angleParams),
-    yawAnglePID(angleParams.getKd(), angleParams.getKi(), angleParams.getKp(), angleParams.getSampleTime(), angleParams.getMaxOutput()),
-    yawRatePID(rateParams.getKd(), rateParams.getKi(), rateParams.getKp(), rateParams.getSampleTime(), rateParams.getMaxOutput()),
-    pitchAnglePID(angleParams.getKd(), angleParams.getKi(), angleParams.getKp(), angleParams.getSampleTime(), angleParams.getMaxOutput()),
-    pitchRatePID(rateParams.getKd(), rateParams.getKi(), rateParams.getKp(), rateParams.getSampleTime(), rateParams.getMaxOutput())
+PIDControlSystem::PIDControlSystem(PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle) :
+    paramsThrustAngleFromRate(paramsThrustAngleFromRate), paramsRateFromAngle(paramsRateFromAngle),
+    yawRateFromAnglePID(paramsRateFromAngle.getKd(), paramsRateFromAngle.getKi(), paramsRateFromAngle.getKp(), paramsRateFromAngle.getSampleTime(), paramsRateFromAngle.getMaxOutput()),
+    yawThrustAngleFromRatePID(paramsThrustAngleFromRate.getKd(), paramsThrustAngleFromRate.getKi(), paramsThrustAngleFromRate.getKp(), paramsThrustAngleFromRate.getSampleTime(), paramsThrustAngleFromRate.getMaxOutput()),
+    pitchRateFromAnglePID(paramsRateFromAngle.getKd(), paramsRateFromAngle.getKi(), paramsRateFromAngle.getKp(), paramsRateFromAngle.getSampleTime(), paramsRateFromAngle.getMaxOutput()),
+    pitchThrustAngleFromRatePID(paramsThrustAngleFromRate.getKd(), paramsThrustAngleFromRate.getKi(), paramsThrustAngleFromRate.getKp(), paramsThrustAngleFromRate.getSampleTime(), paramsThrustAngleFromRate.getMaxOutput())
 {
 
 }
 
 
-void PIDControlSystem::setParamsRate(PIDParams params)
+void PIDControlSystem::setParamsThrustAngleFromRate(PIDParams params)
 {
-    this->paramsRate = params;
+    this->paramsThrustAngleFromRate = params;
+    this->yawThrustAngleFromRatePID = PIDNew(params.getKp(), params.getKi(), params.getKd(), params.getSampleTime(), params.getMaxOutput());
+    this->pitchThrustAngleFromRatePID = PIDNew(params.getKp(), params.getKi(), params.getKd(), params.getSampleTime(), params.getMaxOutput());
 }
 
-void PIDControlSystem::setParamsAngle(PIDParams params)
+void PIDControlSystem::setParamsRateFromAngle(PIDParams params)
 {
-    this->paramsAngle = params;
+    this->paramsRateFromAngle = params;
+    this->yawRateFromAnglePID = PIDNew(params.getKp(), params.getKi(), params.getKd(), params.getSampleTime(), params.getMaxOutput());
+    this->pitchRateFromAnglePID = PIDNew(params.getKp(), params.getKi(), params.getKd(), params.getSampleTime(), params.getMaxOutput());
 }
 
-PIDParams PIDControlSystem::getParamsRate()
+PIDParams PIDControlSystem::getParamsThrustAngleFromRate()
 {
-    return this->paramsRate;
+    return this->paramsThrustAngleFromRate;
 }
 
-PIDParams PIDControlSystem::getParamsAngle()
+PIDParams PIDControlSystem::getParamsRateFromAngle()
 {
-    return this->paramsAngle;
+    return this->paramsRateFromAngle;
 }
 
-double PIDControlSystem::getYawAngle(double target, double current, double currentTime)
+double PIDControlSystem::getYawRateFromAngleDeviation(double target, double current, double currentTime)
 {
-    yawAnglePID.setSetpoint(target);
-    return yawAnglePID.update(current, currentTime);
+    yawRateFromAnglePID.setSetpoint(target);
+    return yawRateFromAnglePID.update(current, currentTime);
 }
 
-double PIDControlSystem::getYawRate(double target, double current, double currentTime)
+double PIDControlSystem::getYawThrustAngleFromRateDeviation(double target, double current, double currentTime)
 {
-    yawRatePID.setSetpoint(target);
-    return yawRatePID.update(current, currentTime);
+    yawThrustAngleFromRatePID.setSetpoint(target);
+    return yawThrustAngleFromRatePID.update(current, currentTime);
 }
 
-double PIDControlSystem::getPitchAngle(double target, double current, double currentTime)
+double PIDControlSystem::getPitchRateFromAngleDeviation(double target, double current, double currentTime)
 {
-    pitchAnglePID.setSetpoint(target);
-    return pitchAnglePID.update(current, currentTime);
+    pitchRateFromAnglePID.setSetpoint(target);
+    return pitchRateFromAnglePID.update(current, currentTime);
 }
 
-double PIDControlSystem::getPitchRate(double target, double current, double currentTime)
+double PIDControlSystem::getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime)
 {
-    pitchRatePID.setSetpoint(target);
-    return pitchRatePID.update(current, currentTime);
+    pitchThrustAngleFromRatePID.setSetpoint(target);
+    return pitchThrustAngleFromRatePID.update(current, currentTime);
 }

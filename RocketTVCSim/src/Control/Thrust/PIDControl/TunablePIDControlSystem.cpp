@@ -1,17 +1,17 @@
 #include "TunablePIDControlSystem.h"
 
-TunablePIDControlSystem::TunablePIDControlSystem(ControlSystemTuner tuner, PIDParams rateParams, PIDParams angleParams) : PIDControlSystem{ rateParams, angleParams }
+TunablePIDControlSystem::TunablePIDControlSystem(ControlSystemTuner tuner, PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle) : PIDControlSystem{ paramsThrustAngleFromRate, paramsRateFromAngle }
 {
 
 }
 
-void TunablePIDControlSystem::tune(double maxDeflection, double maxRotationAngle, Simulator* sim)
+void TunablePIDControlSystem::tune(Simulator* sim)
 {
 	RocketModel* rocket = sim->getRocket();
 	ChSystemNSC* sys = sim->getSystem();
 	ThrustParameters thrustParameters = ThrustParameters(0, 0, rocket->getMaxThrust());
 	sim->resetSimulator();
-	PIDAutoTuner pidAutoTuner = PIDAutoTuner(degreesToRad(-20), maxDeflection, 10, 50, -100000, 100000, 0.5, 0, 0, 0, false, 10);
+	PIDAutoTuner pidAutoTuner = PIDAutoTuner(degreesToRad(-20), rocket->getMaxThrustAngle() , 10, 50, -100000, 100000, 0.5);
 
 	bool done = false;
 	while (!done && !DataLog::isDone()) {
@@ -52,15 +52,15 @@ void TunablePIDControlSystem::tune(double maxDeflection, double maxRotationAngle
 			std::cout << "Kd: " << pidParams.getKd() << std::endl;
 		}
 	}
-	this->paramsRate = pidAutoTuner.getPidParams("ziegler-nichols");
+	this->paramsThrustAngleFromRate = pidAutoTuner.getPidParams("ziegler-nichols", this->paramsThrustAngleFromRate.getSampleTime(), rocket->getMaxThrustAngle());
 	std::cout << "Rate Tuning complete. Press Enter to Start Angle Tuning" << std::endl;
-	std::cin.get();
+//	std::cin.get();
 
 
 	sim->resetSimulator();
-	pidAutoTuner = PIDAutoTuner(degreesToRad(-20), degreesToRad(5), 50, 500, -100000, 10000, degreesToRad(0.5), 0, 0, 0, false, 10);
+	pidAutoTuner = PIDAutoTuner(degreesToRad(-20), rocket->getMaxRotationRate(), 50, 500, -100000, 10000, degreesToRad(0.5));
 	done = false;
-	PIDNew yawRatePID = PIDNew(this->paramsRate.getKp(), this->paramsRate.getKi(), this->paramsRate.getKd(), 0.01, maxDeflection);
+	PIDNew yawThrustAngleFromRatePID = PIDNew(this->paramsThrustAngleFromRate.getKp(), this->paramsThrustAngleFromRate.getKi(), this->paramsThrustAngleFromRate.getKd(), 0.01, rocket->getMaxThrustAngle());
 	while (!done && !DataLog::isDone()) {
 
 		while (DataLog::isPaused()) {
@@ -68,8 +68,8 @@ void TunablePIDControlSystem::tune(double maxDeflection, double maxRotationAngle
 		}
 
 
-		yawRatePID.setSetpoint(pidAutoTuner.getOutput());
-		double yaw = yawRatePID.update(rocket->getRocketUpper()->GetWvel_loc().x(), sys->GetChTime());
+		yawThrustAngleFromRatePID.setSetpoint(pidAutoTuner.getOutput());
+		double yaw = yawThrustAngleFromRatePID.update(rocket->getRocketUpper()->GetWvel_loc().x(), sys->GetChTime());
 		thrustParameters = ThrustParameters(yaw, 0, rocket->getMaxThrust());
 
 
@@ -102,13 +102,10 @@ void TunablePIDControlSystem::tune(double maxDeflection, double maxRotationAngle
 		return;
 	}
 	//Do AutoTune of anglePID
-	this->paramsAngle = pidAutoTuner.getPidParams("ziegler-nichols");
-
+	this->paramsRateFromAngle = pidAutoTuner.getPidParams("ziegler-nichols",this->paramsRateFromAngle.getSampleTime(), rocket->getMaxThrustAngle());
+	this->setParamsRateFromAngle(this->paramsRateFromAngle);
+	this->setParamsThrustAngleFromRate(this->paramsThrustAngleFromRate);
 	std::cout << "Angle Tuning complete. Press Enter to Start Simulation" << std::endl;
 	sim->resetSimulator();
 
-
-
-	/*tunableControlSystem->setParamsAngle(pidParamsAngle);
-	tunableControlSystem->setParamsRate(pidParamsRate);*/
 }
