@@ -11,6 +11,8 @@
 class TunablePIDControlSystem :
      public PIDControlSystem, public virtual TunableControlSystem
 {
+    std::string rateFromAngleRule;
+    std::string thrustFromRateRule;
 public:
     using PIDControlSystem::PIDControlSystem;
     using PIDControlSystem::setParamsThrustAngleFromRate;
@@ -22,7 +24,7 @@ public:
     using PIDControlSystem::getPitchRateFromAngleDeviation;
     using PIDControlSystem::getPitchThrustAngleFromRateDeviation;
 
-    TunablePIDControlSystem(ControlSystemTuner tuner, PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle);
+    TunablePIDControlSystem(PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle, std::string rateFromAngleRule = "ziegler-nichols", std::string thrustFromRateRule = "ziegler-nichols");
     virtual void tune(Simulator* sim) override;
 };
 

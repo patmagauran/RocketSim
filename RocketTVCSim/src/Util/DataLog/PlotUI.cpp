@@ -147,7 +147,14 @@ void PlotUI::drawPlots() {
 	/*static ImPlotAxisFlags xflags = ImPlotAxisFlags_AutoFit | ImPlot;
 	static ImPlotAxisFlags yflags = ImPlotAxisFlags_AutoFit | ImPlotAxisFlags_RangeFit;*/
 	//loop through plotData and draw plots
-	if (ImPlot::BeginSubplots("Data Plots", plotData.getIndexMap().size(), 1, ImVec2(-1, -1), flags)) {
+
+	//Wrap plots in a scrollable window
+
+	if (plotData.getIndexMap().size() < 1) {
+		return;
+	}
+
+	if (ImPlot::BeginSubplots("Data Plots", plotData.getIndexMap().size(), 1, ImVec2(-1, 200* plotData.getIndexMap().size()), flags)) {
 		for (const auto& [name, index] : plotData.getIndexMap()) {
 
 			const auto& data = plotData.getData()[index];

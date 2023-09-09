@@ -6,6 +6,7 @@
 #include "Control/Thrust/PIDControl/PIDControlSystem.h"
 
 #include "Control/Thrust/PIDControl/TunablePIDControlSystem.h"
+#include "Control/Trajectory/NullControlSystem/NullMotionControlSystem.h"
 using namespace matplot;
 
 
@@ -30,6 +31,7 @@ void Simulator::resetSimulator() {
 double errorMap(double error) {
 	return error;
 }
+
 void Simulator::runSimulation(bool autoTune)
 {
 	//ChSystemNSC sys;
@@ -47,21 +49,11 @@ void Simulator::runSimulation(bool autoTune)
 
 	if (autoTune) {
 
-		tunableControlSystem->tune(this);
+		motionController->tune(this);
 	}
 
 	
-	ChVisualSystemIrrlicht vis;
-	vis.AttachSystem(&this->sys);
-	vis.SetWindowSize(1024, 768);
-	vis.SetWindowTitle("Rocket Visualization Demo");
-	vis.Initialize();
-	vis.AddSkyBox();
-	vis.AddCamera(ChVector<>(10, 10, 10));
-	vis.AddTypicalLights();
-	vis.EnableBodyFrameDrawing(true);
-	vis.SetSymbolScale(10);
-	vis.ShowInfoPanel(true);
+
 	// Cleanup
 	
 	//Make a sphere to represent the lookahead point
@@ -117,6 +109,16 @@ void Simulator::runSimulation(bool autoTune)
 
 		// Perform the integration stpe
 		this->sys.DoStepDynamics(step_size);
+		//We need to compute distance from rocket to course
+		// 
+		rocket.logRocketData();
+		double distance = motionController->distanceFromTrajectory(this->rocket.getGLocation());
+		DataLog::logData("course_deviation", distance);
+		DataLog::pushTimestamp(sys.GetChTime());
+		if (distance > 100) {
+			break;
+		}
+
 
 		//Advance Motion Controller
 		motionCommand = motionController->getNextMotionCommand(this->rocket.getGLocation(), this->rocket, sys.GetChTime());
@@ -134,7 +136,32 @@ void Simulator::cleanup() {
 
 }
 
-Simulator::Simulator(std::shared_ptr<TunableControlSystem> tunableControlSystem, std::shared_ptr<MotionControlSystem> motionControlSystem, RocketParams rocketParams)
-	: thrustParameters(0, 0, 0), rocketParams(rocketParams), tunableControlSystem(tunableControlSystem), motionController(motionControlSystem), rocket(rocketParams)
+Simulator::Simulator()
+	: thrustParameters(0, 0, 0), rocketParams(), motionController(std::make_shared<NullMotionControlSystem>()), rocket(RocketParams()), maxDeviationFromCourse(100)
 {
+	vis.AttachSystem(&this->sys);
+	vis.SetWindowSize(1024, 768);
+	vis.SetWindowTitle("Rocket Visualization Demo");
+	vis.Initialize();
+	vis.AddSkyBox();
+	vis.AddCamera(ChVector<>(10, 10, 10));
+	vis.AddTypicalLights();
+	vis.EnableBodyFrameDrawing(true);
+	vis.SetSymbolScale(10);
+	vis.ShowInfoPanel(true);
 }
+
+void Simulator::setMotionControlSystem(std::shared_ptr<MotionControlSystem> motionControlSystem) {
+	this->motionController = motionControlSystem;
+}
+void Simulator::setRocketParams(RocketParams rocketParams) {
+	this->rocketParams = rocketParams;
+}
+
+void Simulator::setMaxDeviationFromCourse(double maxDeviationFromCourse)
+{
+	this->maxDeviationFromCourse = maxDeviationFromCourse;
+}
+
+
+//There are now some display glitches. It seems that models aren't getting loaded now. And the second launch of the plot ui doesn't work. We should have a plot UI that is always running and just updates the data.

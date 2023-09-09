@@ -16,6 +16,7 @@
 #include "Control/Thrust/PIDControl/PIDControlSystem.h"
 
 #include "Control/Thrust/PIDControl/TunablePIDControlSystem.h"
+#include "Control/Trajectory/LookaheadSystem/LookaheadMotionControlSystem.h"
 // Use the namespace of Chrono
 using namespace chrono;
 using namespace chrono::irrlicht;
@@ -35,13 +36,23 @@ int main(int argc, char* argv[]) {
 	Course course = Course("C:\\Users\\patma\\source\\repos\\RocketSim\\RocketSimTemplate\\RocketTVCSim\\points.csv");
 
 	//Setup Motion Controller
-	ControlSystemTuner controlSystemTuner;
 
-	std::shared_ptr<TunableControlSystem> tunableControlSystem = std::make_shared<TunablePIDControlSystem>(controlSystemTuner, pidParamsThrustAngleFromRate, pidParamsRateFromAngle);
+	std::shared_ptr<TunableControlSystem> tunableControlSystem = std::make_shared<TunablePIDControlSystem>(pidParamsThrustAngleFromRate, pidParamsRateFromAngle);
 	//std::shared_ptr<ControlSystem> tunableControlSystem = std::make_shared<PIDControlSystem>(pidParamsRate, pidParamsAngle);
-	std::shared_ptr < MotionControlSystem> motionController = std::make_shared < MotionControlSystem>(tunableControlSystem, course, 25);
-    Simulator sim = Simulator(tunableControlSystem, motionController, rocketParams);
+	std::shared_ptr < MotionControlSystem> motionController = std::make_shared <LookaheadMotionControlSystem>(tunableControlSystem, course, 25);
+    Simulator sim = Simulator();
+	sim.setRocketParams(rocketParams);
+	sim.setMotionControlSystem(motionController);
     sim.runSimulation(true);
+	sim.cleanup();
 
+	DataLog::initialize("data2.csv");
+	tunableControlSystem = std::make_shared<TunablePIDControlSystem>(pidParamsThrustAngleFromRate, pidParamsRateFromAngle, "tyreus-luyben");
+	//std::shared_ptr<ControlSystem> tunableControlSystem = std::make_shared<PIDControlSystem>(pidParamsRate, pidParamsAngle);
+	motionController = std::make_shared < LookaheadMotionControlSystem>(tunableControlSystem, course, 25);
+	sim.setRocketParams(rocketParams);
+	sim.setMotionControlSystem(motionController);
+	sim.runSimulation(true);
+	sim.cleanup();
     return 0;
 }

@@ -1,23 +1,17 @@
 #pragma once
-#include "../Thrust/ControlSystem.h"
 #include "chrono/core/ChVector.h"
-#include "chrono/physics/ChBody.h"
 #include "MotionCommand.h"
 #include "TrajectoryCommand.h"
-#include "Course.h"
 #include "../../Model/RocketModel.h"
 using namespace chrono;
+class Simulator;
 class MotionControlSystem
 {
-	std::shared_ptr<ControlSystem> controlSystem;
-	Course course;
-	double lookahead;
-	ChVector<> lastGoodPoint;
 public:
-	MotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead);
-	TrajectoryCommand getNextTrajectoryCommand(ChVector<> currentPosition, ChVector<> currentVelocity);
-	MotionCommand getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime);
-	std::vector <ChVector<>> getWaypoints();
-
+	virtual TrajectoryCommand getNextTrajectoryCommand(ChVector<> currentPosition, ChVector<> currentVelocity) = 0;
+	virtual MotionCommand getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime) = 0;
+	virtual std::vector <ChVector<>> getWaypoints() = 0;
+	virtual void tune(Simulator* sim) = 0;
+	virtual double distanceFromTrajectory(ChVector<> currentPosition) = 0;
 };
 

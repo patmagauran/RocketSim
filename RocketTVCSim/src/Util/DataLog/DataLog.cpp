@@ -8,10 +8,13 @@ void DataLog::initialize(std::string filename) {
 	dataThread = std::thread(DataLog::startDataThread);
 	plotUIInstance = new PlotUI(plotData);
 	csvLoggerInstance = new CSVLogger(filename);
+	paused.store(false);
+	done.store(false);
 
 }
 void DataLog::cleanup() {
 	if (!initialized) return;
+	DataLog::pushEvent(EventType::DONE, "DataLog::cleanup() called");
 	initialized = false;
 	dataThread.join();
 	plotUIInstance->~PlotUI();

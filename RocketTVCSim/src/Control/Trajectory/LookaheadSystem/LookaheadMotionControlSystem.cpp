@@ -1,7 +1,8 @@
-#include "MotionControlSystem.h"
-#include "TrajectoryCommand.h"
+#include "LookaheadMotionControlSystem.h"
+#include "../TrajectoryCommand.h"
+#include "../../Thrust/TunableControlSystem.h"
 
-MotionControlSystem::MotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead) : controlSystem(controlSystem), course(course), lookahead(lookahead), lastGoodPoint(0, 0, 0)
+LookaheadMotionControlSystem::LookaheadMotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead) : controlSystem(controlSystem), course(course), lookahead(lookahead), lastGoodPoint(0, 0, 0)
 {
 }
 double getPitchAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity) {
@@ -32,7 +33,7 @@ double getYawAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<
 	double angle = acos(currentLookaheadVector.Dot(currentVelocity) / (div));
 	return angle;
 }
-TrajectoryCommand MotionControlSystem::getNextTrajectoryCommand(ChVector<> currentPosition, ChVector<> currentVelocity) {
+TrajectoryCommand LookaheadMotionControlSystem::getNextTrajectoryCommand(ChVector<> currentPosition, ChVector<> currentVelocity) {
 
 
 	//ChVector<> currentPoint = currentPosition;
@@ -60,7 +61,7 @@ TrajectoryCommand MotionControlSystem::getNextTrajectoryCommand(ChVector<> curre
 
 }
 
-MotionCommand MotionControlSystem::getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime)
+MotionCommand LookaheadMotionControlSystem::getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime)
 {
 	std::shared_ptr<ChBody> rocket_upper = rocket.getRocketUpper();
 	ChVector<> currentVelocity = rocket_upper->GetPos_dt();
@@ -85,7 +86,30 @@ MotionCommand MotionControlSystem::getNextMotionCommand(ChVector<> g_location, R
 	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, rocket.getMaxThrust()), nextCommand);
 }
 
-std::vector<ChVector<>> MotionControlSystem::getWaypoints()
+std::vector<ChVector<>> LookaheadMotionControlSystem::getWaypoints()
 {
 	return this->course.getWaypoints();
+}
+
+void LookaheadMotionControlSystem::tune(Simulator* sim)
+{
+	//Note, Dynamic casting not the ideal way, but it should work and be safe
+	TunableControlSystem* ptr = dynamic_cast<TunableControlSystem*>(controlSystem.get());
+	if (ptr) {
+		ptr->tune(sim);
+	}
+	else {
+		std::cout << "We can't tune using this control system. Skipping tuning." << std::endl;
+	}
+}
+
+double LookaheadMotionControlSystem::distanceFromTrajectory(ChVector<> currentPosition)
+{
+	//we want the close location along the course to the current position
+
+	//for each segment on course, find closest point to current position
+	//Then select the closest of those points
+	
+	return course.distanceFromTrajectory(currentPosition);
+	
 }

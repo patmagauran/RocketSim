@@ -155,4 +155,35 @@ ChVector<> Course::getLookaheadPoint(ChVector<> currentPosition, double lookahea
 return intersectionPoint;
 }
 
+double Course::distanceFromTrajectory(ChVector<> currentPosition)
+{
+	double closestDistance = 1000000;
+	for (int i = 0; i < this->waypoints.size() - 2; i++) {
+		ChVector<> closestPoint = getClosestPointOnSegment(currentPosition, waypoints.at(i), waypoints.at(i+1));
+		double distanceToClosestPoint = (closestPoint - currentPosition).Length();
+		if (distanceToClosestPoint < closestDistance) {
+			closestDistance = distanceToClosestPoint;
+		}
+	}
+	return closestDistance;
+}
+
+ChVector<> Course::getClosestPointOnSegment(ChVector<> currentPosition, ChVector<> segmentStart, ChVector<> segmentEnd)
+{
+//https://stackoverflow.com/questions/64663170/how-to-find-nearest-point-in-segment-in-a-3d-space
+	ChVector<> v = segmentEnd - segmentStart;
+	ChVector<> w = currentPosition - segmentStart;
+	double c1 = w.Dot(v);
+	if (c1 <= 0) {
+		return segmentStart;
+	}
+	double c2 = v.Dot(v);
+	if (c2 <= c1) {
+		return segmentEnd;
+	}
+	double b = c1 / c2;
+	ChVector<> Pb = segmentStart + b * v;
+	return Pb;
+}
+
 

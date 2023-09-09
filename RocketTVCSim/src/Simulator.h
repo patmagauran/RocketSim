@@ -40,16 +40,21 @@ private:
 	ThrustParameters thrustParameters;
 	RocketModel rocket;
 	RocketParams rocketParams;
-	std::shared_ptr<TunableControlSystem> tunableControlSystem;
+	//std::shared_ptr<TunableControlSystem> tunableControlSystem;
 	std::shared_ptr<MotionControlSystem> motionController;
+	double maxDeviationFromCourse;
+	ChVisualSystemIrrlicht vis;
 public:
 	ChSystemNSC* getSystem();
 	RocketModel* getRocket();
 	void resetSimulator();
 	void runSimulation(bool autoTune);
 	void cleanup();
-	Simulator(std::shared_ptr<TunableControlSystem> tunableControlSystem, std::shared_ptr<MotionControlSystem> motionControlSystem, RocketParams rocketParams);
-
+	Simulator();
+	//void setTunableControlSystem(std::shared_ptr<TunableControlSystem> tunableControlSystem);
+	void setMotionControlSystem(std::shared_ptr<MotionControlSystem> motionControlSystem);
+	void setRocketParams(RocketParams rocketParams);
+	void setMaxDeviationFromCourse(double maxDeviationFromCourse);
 };
 
 //

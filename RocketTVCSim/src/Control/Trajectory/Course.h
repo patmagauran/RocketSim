@@ -14,5 +14,7 @@ public:
 	Course(std::string fileName);
 	std::vector <ChVector<>> getWaypoints();
 	ChVector<> getLookaheadPoint(ChVector<> currentPosition, double lookahead);
+	double distanceFromTrajectory(ChVector<> currentPosition);
+	ChVector<> getClosestPointOnSegment(ChVector<> currentPosition, ChVector<> segmentStart, ChVector<> segmentEnd);
 };
 

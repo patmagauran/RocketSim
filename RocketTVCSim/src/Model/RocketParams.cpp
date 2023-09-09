@@ -4,6 +4,10 @@ RocketParams::RocketParams(double rocket_radius, double lengthAG, double lengthG
 {
 }
 
+RocketParams::RocketParams()
+{
+}
+
 RocketParams::~RocketParams()
 {
 }

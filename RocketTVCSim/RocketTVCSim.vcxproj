@@ -293,6 +293,8 @@
     <None Include="points2.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.cpp" />
+    <ClCompile Include="src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.cpp" />
     <ClCompile Include="src\Model\RocketParams.cpp" />
     <ClCompile Include="src\Control\Thrust\PIDControl\PIDControlSystem.cpp" />
     <ClCompile Include="src\Util\DataLog\CSVLogger.cpp" />
@@ -308,7 +310,6 @@
     <ClCompile Include="src\Control\Thrust\TunableControlSystem.cpp" />
     <ClCompile Include="src\Control\Trajectory\Course.cpp" />
     <ClCompile Include="src\Control\Trajectory\MotionCommand.cpp" />
-    <ClCompile Include="src\Control\Trajectory\MotionControlSystem.cpp" />
     <ClCompile Include="src\Model\DragModel.cpp" />
     <ClCompile Include="src\Model\RocketModel.cpp" />
     <ClCompile Include="src\Model\RocketModelWithDrag.cpp" />
@@ -321,6 +322,8 @@
     <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.h" />
+    <ClInclude Include="src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.h" />
     <ClInclude Include="src\Model\RocketParams.h" />
     <ClInclude Include="src\Control\Thrust\ITunable.h" />
     <ClInclude Include="src\Control\Thrust\PIDControl\PIDControlSystem.h" />
