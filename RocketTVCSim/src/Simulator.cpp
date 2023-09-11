@@ -59,6 +59,8 @@ void Simulator::runSimulation(bool autoTune)
 
 	// 3 - Create the Irrlicht application and set-up the camera.
 
+	//Should add stage to datalog
+	//It will start a new csv file, clear the plotUi, and reset dataLog
 
 
 	if (autoTune) {
@@ -68,6 +70,7 @@ void Simulator::runSimulation(bool autoTune)
 
 
 	initialize();
+	DataLog::pushEvent(EventType::STAGE, "main");
 	resetSimulator();
 	// Cleanup
 	

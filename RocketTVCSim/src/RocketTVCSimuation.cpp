@@ -40,14 +40,14 @@ int main(int argc, char* argv[]) {
 	//std::shared_ptr<ControlSystem> tunableControlSystem = std::make_shared<PIDControlSystem>(pidParamsRate, pidParamsAngle);
 	std::shared_ptr < MotionControlSystem> motionController = std::make_shared <LookaheadMotionControlSystem>(tunableControlSystem, course, 25);
     Simulator sim = Simulator();
-	DataLog::initialize("data.csv");
+	DataLog::initialize("data");
 
 	sim.setRocketParams(rocketParams);
 	sim.setMotionControlSystem(motionController);
     sim.runSimulation(true);
 	sim.cleanup();
 
-	DataLog::initialize("data2.csv");
+	DataLog::initialize("data2");
 	tunableControlSystem = std::make_shared<TunablePIDControlSystem>(pidParamsThrustAngleFromRate, pidParamsRateFromAngle, "tyreus-luyben");
 	//std::shared_ptr<ControlSystem> tunableControlSystem = std::make_shared<PIDControlSystem>(pidParamsRate, pidParamsAngle);
 	motionController = std::make_shared < LookaheadMotionControlSystem>(tunableControlSystem, course, 25);

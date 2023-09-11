@@ -6,8 +6,11 @@
 //Need to be able to free data for files that are closed
 //Need to be able to automatically close files that are not being used
 
-void DataLog::initialize(std::string filename) {
+void DataLog::initialize(std::string filename, bool newRun) {
 	if (initialized) return;
+	if (newRun) {
+		DataLog::filename = filename;
+	}
 	paused.store(false);
 	done.store(false);
 	DataLog::initialized = true;
@@ -19,7 +22,7 @@ void DataLog::initialize(std::string filename) {
 		plotData = std::make_shared<PlotDataContainer>();
 		plotUIInstance->setPlotData(plotData);
 	}
-	csvLoggerInstance = new CSVLogger(filename);
+	csvLoggerInstance = new CSVLogger(filename + ".csv");
 
 
 }
@@ -81,6 +84,8 @@ void DataLog::pushEvent(EventType eventType, std::string message)
 		break;
 	case EventType::STAGE:
 		std::cout << "[STAGE] " << message << std::endl;
+		cleanup(false);
+		initialize(DataLog::filename + "-" + message, false);
 		break;
 	case EventType::PAUSE:
 		std::cout << "[PAUSE] " << message << std::endl;

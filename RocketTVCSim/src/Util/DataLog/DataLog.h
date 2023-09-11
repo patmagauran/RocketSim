@@ -23,7 +23,7 @@ class DataLog
 
 
 	inline static bool initialized = false;
-
+	inline static std::string filename = "";
 	inline static DataLog * datalogInstance = nullptr;
 
 	inline static PlotUI * plotUIInstance = nullptr;
@@ -51,7 +51,7 @@ class DataLog
 	inline static std::shared_ptr<PlotDataContainer> plotData = std::make_shared<PlotDataContainer>();
 
 public:
-	static void initialize(std::string filename);
+	static void initialize(std::string filename, bool newRun = true);
 	static void logData(std::string name, double value);
 	static void pushTimestamp(double timestamp);
 	static void pushEvent(EventType eventType, std::string message); //TODO: Implement

@@ -14,6 +14,8 @@ void TunablePIDControlSystem::tune(Simulator* sim)
 	PIDAutoTuner pidAutoTuner = PIDAutoTuner(degreesToRad(-20), rocket->getMaxThrustAngle() , 10, 50, -100000, 100000, 0.5);
 
 	bool done = false;
+	DataLog::pushEvent(EventType::STAGE, "rate");
+
 	while (!done && !DataLog::isDone()) {
 
 		while (DataLog::isPaused()) {
@@ -58,6 +60,8 @@ void TunablePIDControlSystem::tune(Simulator* sim)
 
 
 	sim->resetSimulator();
+	DataLog::pushEvent(EventType::STAGE, "angle");
+
 	pidAutoTuner = PIDAutoTuner(degreesToRad(-20), rocket->getMaxRotationRate(), 50, 500, -100000, 10000, degreesToRad(0.5));
 	done = false;
 	PIDNew yawThrustAngleFromRatePID = PIDNew(this->paramsThrustAngleFromRate.getKp(), this->paramsThrustAngleFromRate.getKi(), this->paramsThrustAngleFromRate.getKd(), 0.01, rocket->getMaxThrustAngle());
