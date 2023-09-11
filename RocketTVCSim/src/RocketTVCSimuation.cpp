@@ -29,7 +29,6 @@ int main(int argc, char* argv[]) {
     // Create a Chrono physical system
 	PIDParams pidParamsThrustAngleFromRate = PIDParams(0.0149925, 0.881914, 6.37183e-05, 0.01, rocketParams.getMaxThrustAngle());
 	PIDParams pidParamsRateFromAngle = PIDParams(0.0328315, 0.820787, 0.000328315, 0.01, rocketParams.getMaxRotationRate());
-	DataLog::initialize("data.csv");
 
 
 
@@ -41,6 +40,8 @@ int main(int argc, char* argv[]) {
 	//std::shared_ptr<ControlSystem> tunableControlSystem = std::make_shared<PIDControlSystem>(pidParamsRate, pidParamsAngle);
 	std::shared_ptr < MotionControlSystem> motionController = std::make_shared <LookaheadMotionControlSystem>(tunableControlSystem, course, 25);
     Simulator sim = Simulator();
+	DataLog::initialize("data.csv");
+
 	sim.setRocketParams(rocketParams);
 	sim.setMotionControlSystem(motionController);
     sim.runSimulation(true);
@@ -54,5 +55,8 @@ int main(int argc, char* argv[]) {
 	sim.setMotionControlSystem(motionController);
 	sim.runSimulation(true);
 	sim.cleanup();
+
+
+	DataLog::cleanup(true);
     return 0;
 }

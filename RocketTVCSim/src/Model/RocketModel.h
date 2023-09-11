@@ -23,7 +23,7 @@ public:
 	RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust);
 	RocketModel(RocketParams params);
 	~RocketModel();
-	void addRocketModelToSystem(chrono::ChSystem &system);
+	void addRocketModelToSystem(chrono::ChSystem &system, chrono::ChVisualSystem &vis);
 	void accumulateForces(ChVector<> thrust_force);
 	std::list<ForceApplication> getDisplayedForces();
 	ChVector<> getGLocation();
@@ -32,5 +32,7 @@ public:
 	double getMaxThrustAngle();
 	double getMaxRotationRate();
 	void logRocketData();
+	void reset(RocketParams params);
+
 };
 

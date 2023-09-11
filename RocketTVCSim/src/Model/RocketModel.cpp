@@ -60,16 +60,52 @@ RocketModel::RocketModel(RocketParams params) : RocketModel(params.getRocketRadi
 {
 }
 
+void RocketModel::reset(RocketParams params) {
 
-RocketModel::~RocketModel()
-{
+	double rocket_radius;
+	double lengthAG;
+	double lengthGB;
+	double rocket_mass;
+	rocket_radius = params.getRocketRadius();
+	lengthAG = params.getLengthAG();
+	lengthGB = params.getLengthGB();
+	rocket_mass = params.getRocketMass();
+	maxThrustAngle = params.getMaxThrustAngle();
+	maxRotationRate = params.getMaxRotationRate();
+	maxThrust = params.getMaxThrust();
+
+
+	this->rocket_lower.reset();
+	this->rocket_upper.reset();
+	this->fixed_link.reset();
+
+	auto material = std::make_shared<ChMaterialSurfaceNSC>();
+	double comp_mass = rocket_mass / 2;
+	this->rocket_lower = makeCylinder(rocket_radius, lengthAG, ChColor(1, 1, 1), material, comp_mass);
+	this->rocket_upper = makeCylinder(rocket_radius, lengthGB, ChColor(1, 1, 0.2), material, comp_mass);
+	this->rocket_upper->SetPos(ChVector<>(0, lengthAG / 2, 0));
+	this->rocket_upper->SetPos_dt(ChVector<>(0, 0, 0));
+	this->rocket_lower->SetPos(ChVector<>(0, -lengthGB / 2, 0));
+	this->rocket_lower->SetPos_dt(ChVector<>(0, 0, 0));
+	this->fixed_link = std::make_shared<ChLinkMateFix>();
+	this->fixed_link->Initialize(this->rocket_lower, this->rocket_upper, ChFrame<>(ChCoordsys<>(ChVector<>(0, 0, 0))));
+	this->thrust_point = ChVector<>(0, -lengthGB / 2, 0);
 }
 
 
-void RocketModel::addRocketModelToSystem(chrono::ChSystem& system) {
+RocketModel::~RocketModel()
+{
+
+
+}
+
+
+void RocketModel::addRocketModelToSystem(chrono::ChSystem& system, chrono::ChVisualSystem& vis) {
 	system.AddBody(this->rocket_lower);
 	system.AddBody(this->rocket_upper);
 	system.AddLink(this->fixed_link);
+	vis.BindItem(this->rocket_lower);
+	vis.BindItem(this->rocket_upper);
 
 }
 

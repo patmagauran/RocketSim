@@ -44,6 +44,7 @@ private:
 	std::shared_ptr<MotionControlSystem> motionController;
 	double maxDeviationFromCourse;
 	ChVisualSystemIrrlicht vis;
+	bool initialized = false;
 public:
 	ChSystemNSC* getSystem();
 	RocketModel* getRocket();
@@ -55,6 +56,7 @@ public:
 	void setMotionControlSystem(std::shared_ptr<MotionControlSystem> motionControlSystem);
 	void setRocketParams(RocketParams rocketParams);
 	void setMaxDeviationFromCourse(double maxDeviationFromCourse);
+	void initialize();
 };
 
 //

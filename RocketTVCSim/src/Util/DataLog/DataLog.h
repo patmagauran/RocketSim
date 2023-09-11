@@ -33,6 +33,7 @@ class DataLog
 
 	inline static std::atomic_bool paused = false;
 	inline static std::atomic_bool done = false;
+	inline static std::atomic_bool uiShouldBeRunning = true;
 	inline static double lastTsSim = -1.0f;
 	inline static auto lastTsProg = std::chrono::steady_clock::now();
 	inline static auto startTime = std::chrono::steady_clock::now();
@@ -47,7 +48,7 @@ class DataLog
 
 	inline static std::unordered_map<std::string, double> currentData = std::unordered_map<std::string, double>();
 
-	inline static PlotDataContainer plotData = PlotDataContainer();
+	inline static std::shared_ptr<PlotDataContainer> plotData = std::make_shared<PlotDataContainer>();
 
 public:
 	static void initialize(std::string filename);
@@ -55,8 +56,9 @@ public:
 	static void pushTimestamp(double timestamp);
 	static void pushEvent(EventType eventType, std::string message); //TODO: Implement
 	static bool isDone();
+	static bool uiSHouldBeRunning();
 	static bool isPaused();
-	static void cleanup();
+	static void cleanup(bool close = true);
 
 };
 

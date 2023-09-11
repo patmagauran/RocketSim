@@ -1,23 +1,37 @@
 #include "DataLog.h"
 
-
+//It should create a new subwindow for each filename each drawing from own dataset?
+//Need to differentiate a state for closing the window and dx resources and for exiting processing loop
+//Need to maintain data for every file
+//Need to be able to free data for files that are closed
+//Need to be able to automatically close files that are not being used
 
 void DataLog::initialize(std::string filename) {
 	if (initialized) return;
-	DataLog::initialized = true;
-	dataThread = std::thread(DataLog::startDataThread);
-	plotUIInstance = new PlotUI(plotData);
-	csvLoggerInstance = new CSVLogger(filename);
 	paused.store(false);
 	done.store(false);
+	DataLog::initialized = true;
+	dataThread = std::thread(DataLog::startDataThread);
+	if (!plotUIInstance) {
+		plotUIInstance = new PlotUI(plotData);
+	}
+	else {
+		plotData = std::make_shared<PlotDataContainer>();
+		plotUIInstance->setPlotData(plotData);
+	}
+	csvLoggerInstance = new CSVLogger(filename);
+
 
 }
-void DataLog::cleanup() {
+void DataLog::cleanup(bool close) {
 	if (!initialized) return;
-	DataLog::pushEvent(EventType::DONE, "DataLog::cleanup() called");
 	initialized = false;
+	done.store(true);
 	dataThread.join();
-	plotUIInstance->~PlotUI();
+	if (close) {
+		uiShouldBeRunning.store(false);
+		plotUIInstance->~PlotUI();
+	}
 	csvLoggerInstance->~CSVLogger();
 	//dataThread.~thread();
 }
@@ -79,12 +93,17 @@ void DataLog::pushEvent(EventType eventType, std::string message)
 	case EventType::DONE:
 		std::cout << "[DONE] " << message << std::endl;
 		done.store(true);
+		uiShouldBeRunning.store(false);
 		break;
 	}
 }
 bool DataLog::isDone()
 {
 	return done.load();
+}
+bool DataLog::uiSHouldBeRunning()
+{
+	return uiShouldBeRunning.load();
 }
 bool DataLog::isPaused()
 {
@@ -101,7 +120,7 @@ void DataLog::run() {
 		while (dataQueue.try_dequeue(currentRow)) {
 			csvLoggerInstance->addRow(currentRow);
 			for (const auto& [name, value] : currentRow.data) {
-				plotData.putData(name, currentRow.timestamp, value);
+				plotData->putData(name, currentRow.timestamp, value);
 			}
 		}
 	}

@@ -22,14 +22,29 @@ RocketModel* Simulator::getRocket()
 
 void Simulator::resetSimulator() {
 	this->sys.Clear();
-	this->sys.SetChTime(0);
-	this->rocket = RocketModel(this->rocketParams);
+    this->sys.SetChTime(0);
+	this->rocket.reset(this->rocketParams);
 
-	this->rocket.addRocketModelToSystem(this->sys);
+	this->rocket.addRocketModelToSystem(this->sys, this->vis);
 	this->sys.Set_G_acc(ChVector<>(0, 0, 0));
 }
 double errorMap(double error) {
 	return error;
+}
+
+void Simulator::initialize() {
+	if (initialized) return;
+	vis.AttachSystem(&this->sys);
+	vis.SetWindowSize(1024, 768);
+	vis.SetWindowTitle("Rocket Visualization Demo");
+	vis.Initialize();
+	vis.AddSkyBox();
+	vis.AddCamera(ChVector<>(10, 10, 10));
+	vis.AddTypicalLights();
+	vis.EnableBodyFrameDrawing(true);
+	vis.SetSymbolScale(10);
+	vis.ShowInfoPanel(true);
+	initialized = true;
 }
 
 void Simulator::runSimulation(bool autoTune)
@@ -46,14 +61,14 @@ void Simulator::runSimulation(bool autoTune)
 
 
 
-
 	if (autoTune) {
 
 		motionController->tune(this);
 	}
 
-	
 
+	initialize();
+	resetSimulator();
 	// Cleanup
 	
 	//Make a sphere to represent the lookahead point
@@ -132,23 +147,16 @@ void Simulator::runSimulation(bool autoTune)
 }
 
 void Simulator::cleanup() {
-	DataLog::cleanup();
+
+	DataLog::cleanup(false);
 
 }
 
 Simulator::Simulator()
 	: thrustParameters(0, 0, 0), rocketParams(), motionController(std::make_shared<NullMotionControlSystem>()), rocket(RocketParams()), maxDeviationFromCourse(100)
 {
-	vis.AttachSystem(&this->sys);
-	vis.SetWindowSize(1024, 768);
-	vis.SetWindowTitle("Rocket Visualization Demo");
-	vis.Initialize();
-	vis.AddSkyBox();
-	vis.AddCamera(ChVector<>(10, 10, 10));
-	vis.AddTypicalLights();
-	vis.EnableBodyFrameDrawing(true);
-	vis.SetSymbolScale(10);
-	vis.ShowInfoPanel(true);
+	
+
 }
 
 void Simulator::setMotionControlSystem(std::shared_ptr<MotionControlSystem> motionControlSystem) {
