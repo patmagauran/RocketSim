@@ -291,8 +291,12 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="points.csv" />
     <None Include="points2.csv" />
+    <None Include="Runs.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\SimParams.cpp" />
+    <ClCompile Include="src\Util\CSVReader.cpp" />
+    <ClCompile Include="src\SimSetup.cpp" />
     <ClCompile Include="src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.cpp" />
     <ClCompile Include="src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.cpp" />
     <ClCompile Include="src\Model\RocketParams.cpp" />
@@ -322,6 +326,9 @@
     <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Util\CSVReader.h" />
+    <ClInclude Include="src\SimParams.h" />
+    <ClInclude Include="src\SimSetup.h" />
     <ClInclude Include="src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.h" />
     <ClInclude Include="src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.h" />
     <ClInclude Include="src\Model\RocketParams.h" />
@@ -353,6 +360,7 @@
     <ClInclude Include="src\Simulator.h" />
     <ClInclude Include="src\Util\CircularBuffer.h" />
     <ClInclude Include="src\Util\DataLog\concurrent\readerwriterqueue.h" />
+    <ClInclude Include="src\Util\defines.h" />
     <ClInclude Include="src\Util\ForceApplication.h" />
     <ClInclude Include="src\Util\Kinematics.h" />
     <ClInclude Include="src\Util\ObjectKinematics.h" />

@@ -14,6 +14,7 @@
     <None Include="points2.csv" />
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="Runs.csv" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Control\Thrust\PID\PID.cpp" />
@@ -43,6 +44,9 @@
     <ClCompile Include="src\Model\RocketParams.cpp" />
     <ClCompile Include="src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.cpp" />
     <ClCompile Include="src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.cpp" />
+    <ClCompile Include="src\SimSetup.cpp" />
+    <ClCompile Include="src\Util\CSVReader.cpp" />
+    <ClCompile Include="src\SimParams.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -81,6 +85,10 @@
     <ClInclude Include="src\Model\RocketParams.h" />
     <ClInclude Include="src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.h" />
     <ClInclude Include="src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.h" />
+    <ClInclude Include="src\SimSetup.h" />
+    <ClInclude Include="src\SimParams.h" />
+    <ClInclude Include="src\Util\CSVReader.h" />
+    <ClInclude Include="src\Util\defines.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

@@ -5,6 +5,17 @@
 LookaheadMotionControlSystem::LookaheadMotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead) : controlSystem(controlSystem), course(course), lookahead(lookahead), lastGoodPoint(0, 0, 0)
 {
 }
+
+std::shared_ptr < LookaheadMotionControlSystem> LookaheadMotionControlSystem::getFromString(std::shared_ptr<ControlSystem> controlSystem, std::array<std::string, NUM_MOTION_CONTROL_OPTIONS> options)
+{
+	std::string courseFile = options[0];
+	double lookahead = std::stod(options[1]);
+	Course course = Course(courseFile);
+	return std::make_shared<LookaheadMotionControlSystem>(controlSystem, course, lookahead);
+}
+
+
+
 double getPitchAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity) {
 	//Calculate Angle in the x-y plane
 	ChVector<> currentLookaheadVector = lookaheadPoint - currentPoint;

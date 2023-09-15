@@ -5,6 +5,27 @@ TunablePIDControlSystem::TunablePIDControlSystem( PIDParams paramsThrustAngleFro
 
 }
 
+std::shared_ptr<TunablePIDControlSystem> TunablePIDControlSystem::fromOptions(std::array<std::string, NUM_CONTROL_OPTIONS> options, double maxThrust, double maxRotationRate)
+{
+	std::string thrustFromRateRule = options[0];
+	double ta_kp = std::stod(options[1]);
+	double ta_ki = std::stod(options[2]);
+	double ta_kd = std::stod(options[3]);
+	double ta_sampleTime = std::stod(options[4]);
+	double ta_outputMax = maxThrust;
+
+	std::string rateFromAngleRule = options[5];
+	double ra_kp = std::stod(options[6]);
+	double ra_ki = std::stod(options[7]);
+	double ra_kd = std::stod(options[8]);
+	double ra_sampleTime = std::stod(options[9]);
+	double ra_outputMax = maxRotationRate;
+
+	PIDParams paramsThrustAngleFromRate(ta_kp, ta_ki, ta_kd, ta_sampleTime, ta_outputMax);
+	PIDParams paramsRateFromAngle(ra_kp, ra_ki, ra_kd, ra_sampleTime, ra_outputMax);
+	return std::make_shared<TunablePIDControlSystem>(paramsThrustAngleFromRate, paramsRateFromAngle, rateFromAngleRule, thrustFromRateRule);
+}
+
 void TunablePIDControlSystem::tune(Simulator* sim)
 {
 	RocketModel* rocket = sim->getRocket();
