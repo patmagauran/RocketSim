@@ -47,6 +47,7 @@
     <ClCompile Include="src\SimSetup.cpp" />
     <ClCompile Include="src\Util\CSVReader.cpp" />
     <ClCompile Include="src\SimParams.cpp" />
+    <ClCompile Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="src\SimParams.h" />
     <ClInclude Include="src\Util\CSVReader.h" />
     <ClInclude Include="src\Util\defines.h" />
+    <ClInclude Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

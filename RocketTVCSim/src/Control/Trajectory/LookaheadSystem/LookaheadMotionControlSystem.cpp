@@ -1,6 +1,7 @@
 #include "LookaheadMotionControlSystem.h"
 #include "../TrajectoryCommand.h"
 #include "../../Thrust/TunableControlSystem.h"
+#include "../../Thrust/FeedForwardControl/FeedForwardControl.h"
 
 LookaheadMotionControlSystem::LookaheadMotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead) : controlSystem(controlSystem), course(course), lookahead(lookahead), lastGoodPoint(0, 0, 0)
 {
@@ -83,15 +84,33 @@ MotionCommand LookaheadMotionControlSystem::getNextMotionCommand(ChVector<> g_lo
 	//MotionCommand nextCommand = getNextCommand(g_location, currentVelocity);
 	TrajectoryCommand nextCommand = getNextTrajectoryCommand(g_location, currentVelocity);
 	ChVector<> rotation = rocket_upper->GetRot().Q_to_Euler123();
+	double yawThrustAng, pitchThrustAng;
+	switch (this->controlSystem->getControlSystemType()) {
+		case ControlSystemType::PID:
+		{
+			double yawAngleO = this->controlSystem->getYawRateFromAngleDeviation(nextCommand.yawAngle, rotation.z(), currentTime);
 
+			yawThrustAng = this->controlSystem->getYawThrustAngleFromRateDeviation(yawAngleO, rocket_upper->GetWvel_loc().z(), currentTime);
 
-	double yawAngleO = this->controlSystem->getYawRateFromAngleDeviation(nextCommand.yawAngle, rotation.z(), currentTime);
+			double pitchAngleO = this->controlSystem->getPitchRateFromAngleDeviation(nextCommand.pitchAngle, rotation.x(), currentTime);
 
-	double yawThrustAng = this->controlSystem->getYawThrustAngleFromRateDeviation(yawAngleO, rocket_upper->GetWvel_loc().z(), currentTime);
-
-	double pitchAngleO = this->controlSystem->getPitchRateFromAngleDeviation(nextCommand.pitchAngle, rotation.x(), currentTime);
-
-	double pitchThrustAng = this->controlSystem->getPitchThrustAngleFromRateDeviation(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
+			pitchThrustAng = this->controlSystem->getPitchThrustAngleFromRateDeviation(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
+		}
+		case ControlSystemType::FEED_FORWARD:
+		{
+			//Note, Dynamic casting not the ideal way, but it should work and be safe
+			FeedForwardControl* ptr = dynamic_cast<FeedForwardControl*>(controlSystem.get());
+			if (ptr) {
+				yawThrustAng = ptr->ComputeAngle(currentVelocity.Length(), nextCommand.yawAngle - rotation.z(), rocket_upper->GetWvel_loc().z());
+				pitchThrustAng = ptr->ComputeAngle(currentVelocity.Length(), nextCommand.pitchAngle - rotation.x(), rocket_upper->GetWvel_loc().x());
+			}
+			else {
+				std::cout << "Tried to call feed forward functions on non feed forward controller" << std::endl;
+			}
+			//yawThrustAng = this->controlSystem->ComputeAngle
+		}
+	}
+	
 
 	//return MotionCommand(ThrustParameters(0,0,0));
 	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, rocket.getMaxThrust()), nextCommand);

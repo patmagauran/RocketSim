@@ -1,23 +1,12 @@
 #include "PIDNew.h"
 #include <cstddef>
+#include "../../../Util/Utils.h"
 
 PIDNew::PIDNew(double kp, double ki, double kd, double sample_time, double maxOut) :
 	kp(kp), ki(ki), kd(kd), sample_time(sample_time), maxOut(maxOut)
 {
 }
 
-double clamp(double inputVal, double maxVal) {
-	//Clamps inputVal to between -maxVal and maxVal
-if (inputVal > maxVal) {
-		return maxVal;
-	}
-	else if (inputVal < -maxVal) {
-		return -maxVal;
-	}
-	else {
-		return inputVal;
-	}
-}
 
 double PIDNew::update(double input, double currentTime)
 {

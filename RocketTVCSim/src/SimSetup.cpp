@@ -1,5 +1,6 @@
 #include "SimSetup.h"
 #include "Control/Thrust/ControlSystem.h"
+#include "Control/Thrust/FeedForwardControl/FeedForwardControl.h"
 #include "Control/Thrust/PIDControl/TunablePIDControlSystem.h"
 #include "Control/Trajectory/LookaheadSystem/LookaheadMotionControlSystem.h"
 
@@ -31,6 +32,9 @@ SimSetup SimSetup::fromParameters(SimParams simParams)
 	}
 	if (simParams.getControlSystem() == "PID") {
 		controlSystem = TunablePIDControlSystem::fromOptions(simParams.getControlOptions(), rocketParams.getMaxThrustAngle(), rocketParams.getMaxRotationRate());
+	}
+	else if (simParams.getControlSystem() == "FeedForward") {
+		controlSystem = FeedForwardControl::fromOptions(simParams.getControlOptions(), rocketParams);
 	}
 	else {
 		throw std::invalid_argument("Invalid Control System");

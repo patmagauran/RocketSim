@@ -294,6 +294,7 @@
     <None Include="Runs.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.cpp" />
     <ClCompile Include="src\SimParams.cpp" />
     <ClCompile Include="src\Util\CSVReader.cpp" />
     <ClCompile Include="src\SimSetup.cpp" />
@@ -326,6 +327,7 @@
     <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.h" />
     <ClInclude Include="src\Util\CSVReader.h" />
     <ClInclude Include="src\SimParams.h" />
     <ClInclude Include="src\SimSetup.h" />

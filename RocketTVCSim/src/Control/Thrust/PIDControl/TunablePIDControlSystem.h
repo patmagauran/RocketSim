@@ -24,7 +24,7 @@ public:
     using PIDControlSystem::getYawThrustAngleFromRateDeviation;
     using PIDControlSystem::getPitchRateFromAngleDeviation;
     using PIDControlSystem::getPitchThrustAngleFromRateDeviation;
-
+    using PIDControlSystem::getControlSystemType;
     TunablePIDControlSystem(PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle, std::string rateFromAngleRule = "ziegler-nichols", std::string thrustFromRateRule = "ziegler-nichols");
     static std::shared_ptr<TunablePIDControlSystem> fromOptions(std::array<std::string, NUM_CONTROL_OPTIONS> options, double maxThrust, double maxRotationRate);
     virtual void tune(Simulator* sim) override;

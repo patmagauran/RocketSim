@@ -18,6 +18,11 @@ void PIDControlSystem::setParamsThrustAngleFromRate(PIDParams params)
     this->pitchThrustAngleFromRatePID = PIDNew(params.getKp(), params.getKi(), params.getKd(), params.getSampleTime(), params.getMaxOutput());
 }
 
+ControlSystemType PIDControlSystem::getControlSystemType()
+{
+    return ControlSystemType::PID;
+}
+
 void PIDControlSystem::setParamsRateFromAngle(PIDParams params)
 {
     this->paramsRateFromAngle = params;

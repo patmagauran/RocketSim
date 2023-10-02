@@ -3,10 +3,15 @@
 #include "pid/PIDNew.h"
 #include "chrono/physics/ChSystemNSC.h"
 
+enum class ControlSystemType {
+	FEED_FORWARD,
+	PID
+};
+
 class ControlSystem
 {
 public:
-
+	virtual ControlSystemType getControlSystemType() = 0;
 	virtual void setParamsThrustAngleFromRate(PIDParams params) = 0;
 	virtual void setParamsRateFromAngle(PIDParams params) = 0;
 
