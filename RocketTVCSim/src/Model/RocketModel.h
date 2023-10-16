@@ -11,6 +11,7 @@ using namespace chrono;
 using namespace chrono::irrlicht;
 class RocketModel
 {	
+	protected:
 	std::shared_ptr < ChBody > makeCylinder(double radius, double length, ChColor color, std::shared_ptr< ChMaterialSurface > material, double mass);
 	std::shared_ptr < ChBody > rocket_upper;
 	std::shared_ptr < ChBody > rocket_lower;
@@ -25,6 +26,7 @@ public:
 	~RocketModel();
 	void addRocketModelToSystem(chrono::ChSystem &system, chrono::ChVisualSystem &vis);
 	void accumulateForces(ChVector<> thrust_force);
+	void accumulateDrag(ChVector<> wind);
 	std::list<ForceApplication> getDisplayedForces();
 	ChVector<> getGLocation();
 	std::shared_ptr<ChBody> getRocketUpper();

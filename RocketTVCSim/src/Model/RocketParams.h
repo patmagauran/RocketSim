@@ -11,8 +11,9 @@ class RocketParams
 	double maxThrustAngle; 
 	double maxRotationRate; 
 	double maxThrust;
+	double dragCoefficient;
 	public:
-	RocketParams(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust);
+	RocketParams(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust, double dragCoefficient = 0);
 	static RocketParams fromOptions(std::array<std::string, NUM_ROCKET_PARAMS> options);
 	RocketParams();
 	~RocketParams();
@@ -23,5 +24,6 @@ class RocketParams
 	double getMaxThrustAngle();
 	double getMaxRotationRate();
 	double getMaxThrust();
+	double getDragCoefficient();
 };
 

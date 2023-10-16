@@ -7,7 +7,7 @@
 
 #include "chrono_irrlicht/ChVisualSystemIrrlicht.h"
 
-#include "Model/RocketModel.h"
+#include "Model/RocketModelWithDrag.h"
 
 #include "Control/Thrust/ThrustParameters.h"
 
@@ -38,7 +38,7 @@ class Simulator
 private:
 	ChSystemNSC sys;
 	ThrustParameters thrustParameters;
-	RocketModel rocket;
+	RocketModelWithDrag rocket;
 	RocketParams rocketParams;
 	//std::shared_ptr<TunableControlSystem> tunableControlSystem;
 	std::shared_ptr<MotionControlSystem> motionController;

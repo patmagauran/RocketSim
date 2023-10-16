@@ -43,13 +43,16 @@ RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB,
 
 	auto material = std::make_shared<ChMaterialSurfaceNSC>();
 	double comp_mass = rocket_mass / 2;
-	this->rocket_lower = makeCylinder(rocket_radius, lengthAG, ChColor(1,1,1), material, comp_mass);
-	this->rocket_upper = makeCylinder(rocket_radius, lengthGB, ChColor(1,1,0.2), material, comp_mass);
+	this->rocket_upper = makeCylinder(rocket_radius, lengthAG, ChColor(1, 1, 0.2), material, comp_mass);
+	this->rocket_lower = makeCylinder(rocket_radius, lengthGB, ChColor(1, 1, 1), material, comp_mass);
+
 	this->rocket_upper->SetPos(ChVector<>(0, lengthAG/2, 0));
 	this->rocket_upper->SetPos_dt(ChVector<>(0, 0, 0));
+
 	this->rocket_lower->SetPos(ChVector<>(0, -lengthGB/2, 0));
 	this->rocket_lower->SetPos_dt(ChVector<>(0, 0, 0));
 	this->fixed_link = std::make_shared<ChLinkMateFix>();
+
 	this->fixed_link->Initialize(this->rocket_lower, this->rocket_upper, ChFrame<>(ChCoordsys<>(ChVector<>(0, 0, 0))));
 	this->thrust_point = ChVector<>(0, -lengthGB / 2, 0);
 
@@ -81,8 +84,9 @@ void RocketModel::reset(RocketParams params) {
 
 	auto material = std::make_shared<ChMaterialSurfaceNSC>();
 	double comp_mass = rocket_mass / 2;
-	this->rocket_lower = makeCylinder(rocket_radius, lengthAG, ChColor(1, 1, 1), material, comp_mass);
-	this->rocket_upper = makeCylinder(rocket_radius, lengthGB, ChColor(1, 1, 0.2), material, comp_mass);
+	this->rocket_upper = makeCylinder(rocket_radius, lengthAG, ChColor(1, 1, 0.2), material, comp_mass);
+	this->rocket_lower = makeCylinder(rocket_radius, lengthGB, ChColor(1, 1, 1), material, comp_mass);
+
 	this->rocket_upper->SetPos(ChVector<>(0, lengthAG / 2, 0));
 	this->rocket_upper->SetPos_dt(ChVector<>(0, 0, 0));
 	this->rocket_lower->SetPos(ChVector<>(0, -lengthGB / 2, 0));
@@ -108,15 +112,17 @@ void RocketModel::addRocketModelToSystem(chrono::ChSystem& system, chrono::ChVis
 	vis.BindItem(this->rocket_upper);
 
 }
-
+void RocketModel::accumulateDrag(ChVector<> wind) {
+	
+}
 void RocketModel::accumulateForces(ChVector<> thrust_force)
 {
 	this->forces.clear();
 	this->rocket_lower->Empty_forces_accumulators();
-this->rocket_upper->Empty_forces_accumulators();
+	this->rocket_upper->Empty_forces_accumulators();
 
-this->rocket_lower->Accumulate_force(thrust_force, this->thrust_point, true);
-this->forces.push_back(ForceApplication(rocket_lower->Dir_Body2World(thrust_force), rocket_lower->Point_Body2World(this->thrust_point)));
+	this->rocket_lower->Accumulate_force(thrust_force, this->thrust_point, true);
+	this->forces.push_back(ForceApplication(rocket_lower->Dir_Body2World(thrust_force), rocket_lower->Point_Body2World(this->thrust_point)));
 }
 
 std::list<ForceApplication> RocketModel::getDisplayedForces()

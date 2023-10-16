@@ -25,7 +25,13 @@ SimSetup SimSetup::fromParameters(SimParams simParams)
 	std::shared_ptr<ControlSystem> controlSystem;
 	RocketParams rocketParams;
 	if (simParams.getRocketModel() == "Simple") {
+		std::array<std::string, NUM_ROCKET_PARAMS> rocketOptions = simParams.getRocketOptions();
+		rocketOptions[7] = "0"; // Set drag to 0
 		rocketParams = RocketParams::fromOptions(simParams.getRocketOptions());
+	}
+	else if (simParams.getRocketModel() == "drag") {
+		rocketParams = RocketParams::fromOptions(simParams.getRocketOptions());
+
 	}
 	else {
 		throw std::invalid_argument("Invalid Rocket Model");

@@ -30,7 +30,7 @@ void runSim(SimSetup setup, std::string name) {
 
 	sim.setRocketParams(setup.getRocketParams());
 	sim.setMotionControlSystem(setup.getMotionControlSystem());
-	sim.runSimulation(true);
+	sim.runSimulation(false);
 	sim.cleanup();
 }
 void runDefault() {
