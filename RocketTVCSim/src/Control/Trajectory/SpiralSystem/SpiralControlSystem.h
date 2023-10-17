@@ -10,6 +10,8 @@ protected:
 	double lookahead;
 	ChVector<> lastGoodPoint;
 	double computeAngle(ChVector<> g_location, ChVector<> lookaheadPt);
+	double getYawAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity);
+	double getPitchAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity);
 public:
 	SpiralControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead);
 	static std::shared_ptr < SpiralControlSystem> getFromString(std::shared_ptr<ControlSystem> controlSystem, std::array<std::string, NUM_MOTION_CONTROL_OPTIONS> options);

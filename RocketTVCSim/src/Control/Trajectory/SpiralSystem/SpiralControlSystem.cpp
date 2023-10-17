@@ -17,7 +17,7 @@ std::shared_ptr < SpiralControlSystem> SpiralControlSystem::getFromString(std::s
 
 
 
-double getPitchAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity) {
+double SpiralControlSystem::getPitchAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity) {
 	//Calculate Angle in the x-y plane
 	ChVector<> currentLookaheadVector = lookaheadPoint - currentPoint;
 	currentLookaheadVector[0] = 0;
@@ -31,7 +31,7 @@ double getPitchAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVecto
 	double angle = acos(currentLookaheadVector.Dot(currentVelocity) / (div));
 	return angle;
 }
-double getYawAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity) {
+double SpiralControlSystem::getYawAngle(ChVector<> currentPoint, ChVector<> lookaheadPoint, ChVector<> currentVelocity) {
 	//Calculate Angle in the x-z plane
 	ChVector<> currentLookaheadVector = lookaheadPoint - currentPoint;
 	currentLookaheadVector[2] = 0;

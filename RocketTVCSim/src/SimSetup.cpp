@@ -3,7 +3,7 @@
 #include "Control/Thrust/FeedForwardControl/FeedForwardControl.h"
 #include "Control/Thrust/PIDControl/TunablePIDControlSystem.h"
 #include "Control/Trajectory/LookaheadSystem/LookaheadMotionControlSystem.h"
-
+#include "Control/Thrust/MPCControl/MPCControl.h"
 SimSetup::SimSetup(std::shared_ptr<MotionControlSystem> motionControlSystem, RocketParams rocketParams) : motionControlSystem(motionControlSystem), rocketParams(rocketParams)
 {
 }
@@ -24,6 +24,8 @@ SimSetup SimSetup::fromParameters(SimParams simParams)
 	std::shared_ptr<MotionControlSystem> motionControlSystem;
 	std::shared_ptr<ControlSystem> controlSystem;
 	RocketParams rocketParams;
+	MPCControl mpcControl;
+	mpcControl.computeAngle();
 	if (simParams.getRocketModel() == "Simple") {
 		std::array<std::string, NUM_ROCKET_PARAMS> rocketOptions = simParams.getRocketOptions();
 		rocketOptions[7] = "0"; // Set drag to 0

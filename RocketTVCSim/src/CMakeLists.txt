@@ -122,6 +122,17 @@ endif()
 
 add_subdirectory("C:\Users\patma\source\repos\matplotplusplus")
 
+# Find OSQP library and headers
+find_package(NLopt REQUIRED)
+
+# Link the OSQP shared library
+
+# Find OSQP library and headers
+find_package(osqp REQUIRED)
+find_package(mpc++ CONFIG REQUIRED)
+include_directories(${mpc++_INCLUDE_DIRS})
+
+# Link the OSQP shared library
 #--------------------------------------------------------------
 # === 3 ===
 # Add the executable from your project and specify all C++ 
@@ -149,6 +160,10 @@ target_link_options(RocketTVCSim PUBLIC ${CHRONO_LINKER_FLAGS})
 
 target_link_libraries(RocketTVCSim ${CHRONO_LIBRARIES})
 target_link_directories(RocketTVCSim PUBLIC matplot)
+target_link_libraries(RocketTVCSim PRIVATE osqp::osqp)
+target_link_libraries(RocketTVCSim PRIVATE nlplot)
+target_link_libraries(RocketTVCSim mpc++)
+
 #--------------------------------------------------------------
 # === 4 (OPTIONAL) ===
 # 

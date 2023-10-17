@@ -48,6 +48,8 @@
     <ClCompile Include="src\Util\CSVReader.cpp" />
     <ClCompile Include="src\SimParams.cpp" />
     <ClCompile Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.cpp" />
+    <ClCompile Include="src\Control\Trajectory\SpiralSystem\SpiralControlSystem.cpp" />
+    <ClCompile Include="src\Control\Thrust\MPCControl\MPCControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -91,6 +93,8 @@
     <ClInclude Include="src\Util\CSVReader.h" />
     <ClInclude Include="src\Util\defines.h" />
     <ClInclude Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.h" />
+    <ClInclude Include="src\Control\Trajectory\SpiralSystem\SpiralControlSystem.h" />
+    <ClInclude Include="src\Control\Thrust\MPCControl\MPCControl.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />
