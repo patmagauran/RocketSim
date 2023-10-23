@@ -36,5 +36,8 @@ public:
 	void logRocketData();
 	void reset(RocketParams params);
 
+	Eigen::Matrix<double, 7, 7> getAmatrix();
+	Eigen::Matrix<double, 7, 3> getBmatrix();
+
 };
 

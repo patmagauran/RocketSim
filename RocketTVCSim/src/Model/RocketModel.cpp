@@ -30,9 +30,9 @@ std::shared_ptr < ChBody > RocketModel::makeCylinder(double radius, double lengt
 	vshape->GetGeometry().r = radius;
 	vshape->GetGeometry().h = length;
 	vshape->SetColor(color);
-	
+
 	auto vmodel = std::make_shared<ChVisualModel>();
-	vmodel->AddShape(vshape, ChFrame<>(ChVector<>(0,0,0), ChQuaternion<>(0, 0, 0.7071068, 0.7071068)));
+	vmodel->AddShape(vshape, ChFrame<>(ChVector<>(0, 0, 0), ChQuaternion<>(0, 0, 0.7071068, 0.7071068)));
 	cylinder->AddVisualModel(vmodel);
 
 	return cylinder;
@@ -46,17 +46,17 @@ RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB,
 	this->rocket_upper = makeCylinder(rocket_radius, lengthAG, ChColor(1, 1, 0.2), material, comp_mass);
 	this->rocket_lower = makeCylinder(rocket_radius, lengthGB, ChColor(1, 1, 1), material, comp_mass);
 
-	this->rocket_upper->SetPos(ChVector<>(0, lengthAG/2, 0));
+	this->rocket_upper->SetPos(ChVector<>(0, lengthAG / 2, 0));
 	this->rocket_upper->SetPos_dt(ChVector<>(0, 0, 0));
 
-	this->rocket_lower->SetPos(ChVector<>(0, -lengthGB/2, 0));
+	this->rocket_lower->SetPos(ChVector<>(0, -lengthGB / 2, 0));
 	this->rocket_lower->SetPos_dt(ChVector<>(0, 0, 0));
 	this->fixed_link = std::make_shared<ChLinkMateFix>();
 
 	this->fixed_link->Initialize(this->rocket_lower, this->rocket_upper, ChFrame<>(ChCoordsys<>(ChVector<>(0, 0, 0))));
 	this->thrust_point = ChVector<>(0, -lengthGB / 2, 0);
 
-	
+
 }
 
 RocketModel::RocketModel(RocketParams params) : RocketModel(params.getRocketRadius(), params.getLengthAG(), params.getLengthGB(), params.getRocketMass(), params.getMaxThrustAngle(), params.getMaxRotationRate(), params.getMaxThrust())
@@ -113,7 +113,7 @@ void RocketModel::addRocketModelToSystem(chrono::ChSystem& system, chrono::ChVis
 
 }
 void RocketModel::accumulateDrag(ChVector<> wind) {
-	
+
 }
 void RocketModel::accumulateForces(ChVector<> thrust_force)
 {
@@ -176,5 +176,126 @@ void RocketModel::logRocketData()
 	DataLog::logData("rocket_alphy", this->rocket_lower->GetWacc_loc().y());
 	DataLog::logData("rocket_alphz", this->rocket_lower->GetWacc_loc().z());
 
+}
+
+
+
+Eigen::Matrix<double, 7, 7> RocketModel::getAmatrix()
+{
+	Eigen::Matrix<double, 7, 7> A;
+	double C_n = 0;
+	double C_a = 0;
+	double S = 0;
+	double rho = 0;
+	double d = 0;
+	double I_x = 0;
+	double I_y = 0;
+	double I_z = 0;
+
+
+	double v_x = this->rocket_lower->GetPos_dt().x();
+	double v_y = this->rocket_lower->GetPos_dt().y();
+	double v_z = this->rocket_lower->GetPos_dt().z();
+	double w_x = this->rocket_lower->GetWvel_loc().x();
+	double w_y = this->rocket_lower->GetWvel_loc().y();
+	double w_z = this->rocket_lower->GetWvel_loc().z();
+	double v = this->rocket_lower->GetPos_dt().Length();
+	double e_x = this->rocket_lower->GetRot().Q_to_NasaAngles().x();
+	double e_y = this->rocket_lower->GetRot().Q_to_NasaAngles().y();
+	double e_z = this->rocket_lower->GetRot().Q_to_NasaAngles().z();
+	double m = this->rocket_lower->GetMass();
+	double D_n = C_n * S * rho;
+	double D_a = C_a * S * rho;
+	double D_nv = D_n * (pow(v, 2));
+	double D_mn = D_n * d;
+	double D_mnv = D_mn * pow(v, 2);
+	double v_xz = sqrt(pow(v_x, 2) + pow(v_x, 2));
+	A(0, 0) = -D_a * v_x / m;
+	A(0, 1) = -D_a * v_y / m + w_z; A(0, 1) = -D_a * v_y / m + w_z;
+	A(0, 2) = -D_a * v_z / m - w_y;
+	A(0, 3) = -v_z;
+	A(0, 4) = v_y;
+	A(0, 5) = 0;
+	A(0, 6) = 0;
+	A(1, 0) = -w_z + (-D_n * pow(v_x, 2) / v_xz + D_nv * pow(v_x, 2) / (2 * pow(v_xz, 3)) - D_nv / (2 * v_xz)) / m;
+	A(1, 1) = -D_n * v_x * v_y / (m * v_xz);
+	A(1, 2) = w_x + (-D_n * v_x * v_z / v_xz + D_nv * v_x * v_z / (2 * pow(v_xz, 3))) / m;
+	A(1, 3) = 0;
+	A(1, 4) = -v_x;
+	A(1, 5) = 0;
+	A(1, 6) = 0;
+	A(2, 0) = w_y + (D_n * v_x / v_xz - D_nv * v_x / (2 * pow(v_xz, 3))) / m;
+	A(2, 1) = D_n * v_y / (m * v_xz) - w_x;
+	A(2, 2) = (D_n * v_z / v_xz - D_nv * v_z / (2 * pow(v_xz, 3))) / m;
+	A(2, 3) = v_x;
+	A(2, 4) = 0;
+	A(2, 5) = 0;
+	A(2, 6) = 0;
+	A(3, 0) = (D_mn * pow(v, 2) * pow(v_x, 2) / (2 * pow(v_xz, 3)) - D_mn * pow(v, 2) / (2 * v_xz) - D_mn * pow(v_x, 2) / v_xz) / I_y;
+	A(3, 1) = -D_mn * v_x * v_y / (I_y * v_xz);
+	A(3, 2) = (D_mn * pow(v, 2) * v_x * v_z / (2 * pow(v_xz, 3)) - D_mn * v_x * v_z / v_xz) / I_y;
+	A(3, 3) = 0;
+	A(3, 4) = -w_x * (I_x - I_z) / I_y;
+	A(3, 5) = 0;
+	A(3, 6) = 0;
+	A(4, 0) = (-D_mn * pow(v, 2) * v_x / (2 * pow(v_xz, 3)) + D_mn * v_x / v_xz) / I_z;
+	A(4, 1) = D_mn * v_y / (I_z * v_xz);
+	A(4, 2) = (-D_mn * pow(v, 2) * v_z / (2 * pow(v_xz, 3)) + D_mn * v_z / v_xz) / I_z;
+	A(4, 3) = -w_x * (-I_x + I_y) / I_z;
+	A(4, 4) = 0;
+	A(4, 5) = 0;
+	A(4, 6) = 0;
+	A(5, 0) = 0;
+	A(5, 1) = 0;
+	A(5, 2) = 0;
+	A(5, 3) = 0;
+	A(5, 4) = 0;
+	A(5, 5) = cos(e_x);
+	A(5, 6) = -sin(e_x);
+	A(6, 0) = 0;
+	A(6, 1) = 0;
+	A(6, 2) = 0;
+	A(6, 3) = 0;
+	A(6, 4) = 0;
+	A(6, 5) = sin(e_x) / cos(e_y);
+	A(6, 6) = cos(e_x) / cos(e_y);
+
+	return A;
+}
+
+Eigen::Matrix<double, 7, 3> RocketModel::getBmatrix()
+{
+	Eigen::Matrix<double, 7, 3> B;
+
+	double T = 0.0;
+	double m = 0.0;
+	double d_nozzle = 0.0;
+	double gamma_1 = 0.0;
+	double gamma_2 = 0.0;
+	double I_y = 0.0;
+	double I_z = 0.0;
+
+	B(0, 0) = -T * sin(gamma_1) * cos(gamma_2) / m;
+	B(0, 1) = -T * sin(gamma_2) * cos(gamma_1) / m;
+	B(0, 2) = cos(gamma_1) * cos(gamma_2) / m;
+	B(1, 0) = -T * sin(gamma_1) * sin(gamma_2) / m;
+	B(1, 1) = T * cos(gamma_1) * cos(gamma_2) / m;
+	B(1, 2) = sin(gamma_2) * cos(gamma_1) / m;
+	B(2, 0) = -T * cos(gamma_1) / m;
+	B(2, 1) = 0;
+	B(2, 2) = -sin(gamma_1) / m;
+	B(3, 0) = -T * d_nozzle * sin(gamma_1) * sin(gamma_2) / I_y;
+	B(3, 1) = T * d_nozzle * cos(gamma_1) * cos(gamma_2) / I_y;
+	B(3, 2) = d_nozzle * sin(gamma_2) * cos(gamma_1) / I_y;
+	B(4, 0) = -T * d_nozzle * cos(gamma_1) / I_z;
+	B(4, 1) = 0;
+	B(4, 2) = -d_nozzle * sin(gamma_1) / I_z;
+	B(5, 0) = 0;
+	B(5, 1) = 0;
+	B(5, 2) = 0;
+	B(6, 0) = 0;
+	B(6, 1) = 0;
+	B(6, 2) = 0;
+	return B;
 }
 
