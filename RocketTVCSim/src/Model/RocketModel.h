@@ -9,6 +9,7 @@
 #include "RocketParams.h"
 using namespace chrono;
 using namespace chrono::irrlicht;
+class ThrustParameters;
 class RocketModel
 {	
 	protected:
@@ -20,12 +21,24 @@ class RocketModel
 	std::list<ForceApplication> forces;
 	double maxThrust = 5;
 	double maxThrustAngle=1000, maxRotationRate=1000;
+	double C_n = 0;
+	double C_a = 0;
+	double S = 0;
+	double rho = 0;
+	double d = 0;
+	double T = maxThrust;
+	double gamma_1 = 0;
+	double gamma_2 = 0;
+	double m;
+	double d_nozzle;
+	ChVector<> inertia;
+
 public:
 	RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust);
 	RocketModel(RocketParams params);
 	~RocketModel();
 	void addRocketModelToSystem(chrono::ChSystem &system, chrono::ChVisualSystem &vis);
-	void accumulateForces(ChVector<> thrust_force);
+	void accumulateForces(ThrustParameters thrustParams);
 	void accumulateDrag(ChVector<> wind);
 	std::list<ForceApplication> getDisplayedForces();
 	ChVector<> getGLocation();

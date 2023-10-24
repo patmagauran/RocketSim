@@ -92,7 +92,7 @@ void Simulator::runSimulation(bool autoTune)
 
 		}
 		//Accumulate Forces
-		this->rocket.accumulateForces(this->thrustParameters.convertToForceVector());
+		this->rocket.accumulateForces(this->thrustParameters);
 		this->rocket.accumulateDrag(ChVector<>(0, 0, 0));
 		sphere->SetPos(motionCommand.getTrajectoryCommand().lookaheadPoint);
 

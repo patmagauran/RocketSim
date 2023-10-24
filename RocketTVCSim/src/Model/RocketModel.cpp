@@ -1,5 +1,6 @@
 #include "RocketModel.h"
 #include "../Util/DataLog/DataLog.h"
+#include "../Control/Thrust/ThrustParameters.h"
 
 
 /*
@@ -11,6 +12,22 @@ Make 2 cylinders joined by a fixed link
 using namespace chrono;
 using namespace chrono::irrlicht;
 
+ChVector<> computeSingleInertia(double length, double radius, double mass) {
+	return ChVector<double>((1.0 / 12.0) * mass * (3 * pow(radius, 2) + pow(length, 2)),
+		0.5 * mass * pow(radius, 2),
+		(1.0 / 12.0) * mass * (3 * pow(radius, 2) + pow(length, 2)));
+}
+
+double computeParallelAxisTheorem(double inertiaCenter, double distance, double mass) {
+	return inertiaCenter + (mass * (pow(distance , 2)));
+}
+ChVector<> computeCompositeInertia(double lengthA, double LengthB, double massA, double massB, ChVector<> inertiaA, ChVector<> inertiaB) {
+	
+	double Ixx = computeParallelAxisTheorem(inertiaA.x(), lengthA / 2, massA) + computeParallelAxisTheorem(inertiaB.x(), LengthB / 2, massB);
+	double Iyy = inertiaA.y() + inertiaB.y(); //Y is coincident for both
+	double Izz = computeParallelAxisTheorem(inertiaA.z(), lengthA / 2, massA) + computeParallelAxisTheorem(inertiaB.z(), LengthB / 2, massB);
+	return ChVector<>(Ixx, Iyy, Izz);
+}
 
 std::shared_ptr < ChBody > RocketModel::makeCylinder(double radius, double length, ChColor color, std::shared_ptr< ChMaterialSurface > material, double mass) {
 	auto cylinder = std::make_shared<ChBody>();
@@ -18,9 +35,7 @@ std::shared_ptr < ChBody > RocketModel::makeCylinder(double radius, double lengt
 	double density = mass / (CH_C_PI * pow(radius, 2) * length);
 	cylinder->SetDensity(density);
 	cylinder->SetMass(mass);
-	cylinder->SetInertiaXX(ChVector<double>((1.0 / 12.0) * mass * (3 * pow(radius, 2) + pow(length, 2)),
-		0.5 * mass * pow(radius, 2),
-		(1.0 / 12.0) * mass * (3 * pow(radius, 2) + pow(length, 2))));
+	cylinder->SetInertiaXX(computeSingleInertia(length, radius, mass));
 	cylinder->GetCollisionModel()->ClearModel();
 	cylinder->GetCollisionModel()->AddCylinder(material, radius, radius, length / 2);
 	cylinder->GetCollisionModel()->BuildModel();
@@ -38,7 +53,8 @@ std::shared_ptr < ChBody > RocketModel::makeCylinder(double radius, double lengt
 	return cylinder;
 }
 
-RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust) : maxThrustAngle(maxThrustAngle), maxRotationRate(maxRotationRate), maxThrust(maxThrust)
+//I Should rewrite this to be cleaner
+RocketModel::RocketModel(double rocket_radius, double lengthAG, double lengthGB, double rocket_mass, double maxThrustAngle, double maxRotationRate, double maxThrust) : maxThrustAngle(maxThrustAngle), maxRotationRate(maxRotationRate), maxThrust(maxThrust), m(rocket_mass), d_nozzle(lengthGB), T(maxThrust), inertia(computeCompositeInertia(lengthAG, lengthGB, rocket_mass / 2, rocket_mass / 2, computeSingleInertia(lengthAG, rocket_radius, rocket_mass / 2), computeSingleInertia(lengthGB, rocket_radius, rocket_mass / 2)))
 {
 
 	auto material = std::make_shared<ChMaterialSurfaceNSC>();
@@ -76,6 +92,11 @@ void RocketModel::reset(RocketParams params) {
 	maxThrustAngle = params.getMaxThrustAngle();
 	maxRotationRate = params.getMaxRotationRate();
 	maxThrust = params.getMaxThrust();
+	m = rocket_mass;
+	d_nozzle = lengthGB;
+	gamma_1 = 0;
+	gamma_2 = 0;
+	T = maxThrust;
 
 
 	this->rocket_lower.reset();
@@ -115,8 +136,15 @@ void RocketModel::addRocketModelToSystem(chrono::ChSystem& system, chrono::ChVis
 void RocketModel::accumulateDrag(ChVector<> wind) {
 
 }
-void RocketModel::accumulateForces(ChVector<> thrust_force)
+void RocketModel::accumulateForces(ThrustParameters thrustParams)
 {
+
+	ChVector<> thrust_force = thrustParams.convertToForceVector();
+
+	//Need to verify these
+	this->gamma_1 = thrustParams.pitchAngle;
+	this->gamma_2 = thrustParams.yawAngle;
+	this->T = thrustParams.force;
 	this->forces.clear();
 	this->rocket_lower->Empty_forces_accumulators();
 	this->rocket_upper->Empty_forces_accumulators();
@@ -183,14 +211,20 @@ void RocketModel::logRocketData()
 Eigen::Matrix<double, 7, 7> RocketModel::getAmatrix()
 {
 	Eigen::Matrix<double, 7, 7> A;
-	double C_n = 0;
-	double C_a = 0;
-	double S = 0;
-	double rho = 0;
-	double d = 0;
-	double I_x = 0;
-	double I_y = 0;
-	double I_z = 0;
+
+	double C_n = this->C_n;
+	double C_a = this->C_a;
+	double S = this->S;
+	double rho = this->rho;
+	double d = this->d;
+
+	//The SSM assumes that the X-axis is the longitudinal axis of the rocket, need to adjust to match simulated model
+	ChVector<> lower_Inertia = this->rocket_lower->GetInertiaXX();
+	ChVector<> upper_Inertia = this->rocket_upper->GetInertiaXX();
+	double I_x = this->inertia.x();
+	double I_y = this->inertia.y();
+	double I_z = this->inertia.z();
+
 
 
 	double v_x = this->rocket_lower->GetPos_dt().x();
@@ -266,14 +300,14 @@ Eigen::Matrix<double, 7, 7> RocketModel::getAmatrix()
 Eigen::Matrix<double, 7, 3> RocketModel::getBmatrix()
 {
 	Eigen::Matrix<double, 7, 3> B;
+	double T = this->T;
+	double m = this->m;
+	double d_nozzle = this->d_nozzle;
+	double gamma_1 = this->gamma_1;
+	double gamma_2 = this->gamma_2;
+	double I_y = this->inertia.y();
+	double I_z = this->inertia.z();
 
-	double T = 0.0;
-	double m = 0.0;
-	double d_nozzle = 0.0;
-	double gamma_1 = 0.0;
-	double gamma_2 = 0.0;
-	double I_y = 0.0;
-	double I_z = 0.0;
 
 	B(0, 0) = -T * sin(gamma_1) * cos(gamma_2) / m;
 	B(0, 1) = -T * sin(gamma_2) * cos(gamma_1) / m;

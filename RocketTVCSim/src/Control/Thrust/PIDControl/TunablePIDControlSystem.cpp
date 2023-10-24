@@ -55,7 +55,7 @@ void TunablePIDControlSystem::tune(Simulator* sim)
 		DataLog::logData("setPoint", pidAutoTuner.getOutput());
 
 
-		rocket->accumulateForces(thrustParameters.convertToForceVector());
+		rocket->accumulateForces(thrustParameters);
 		//	std::cout << "Wvel_loc: " << rocket->getRocketUpper()->GetWvel_loc() << std::endl;
 		done = pidAutoTuner.run(rocket->getRocketUpper()->GetWvel_loc().x(), sys->GetChTime());
 		sys->DoStepDynamics(1e-3);
@@ -105,7 +105,7 @@ void TunablePIDControlSystem::tune(Simulator* sim)
 		DataLog::pushTimestamp(sys->GetChTime());
 
 
-		rocket->accumulateForces(thrustParameters.convertToForceVector());
+		rocket->accumulateForces(thrustParameters);
 		done = pidAutoTuner.run(rocket->getRocketUpper()->GetRot().Q_to_Euler123().x(), sys->GetChTime());
 		sys->DoStepDynamics(1e-3);
 
