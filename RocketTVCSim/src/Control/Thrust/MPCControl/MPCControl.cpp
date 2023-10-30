@@ -1,6 +1,6 @@
 ﻿#include "MPCControl.h"
-#include <mpc/LMPC.hpp>
-
+#include "../ThrustParameters.h"
+#include "../../../Model/RocketModel.h"
 #define M_PI 3.14159
 MPCControl::MPCControl()
 {
@@ -23,20 +23,15 @@ MPCControl::MPCControl()
 
 }
 
-ControlSystemType MPCControl::getControlSystemType()
+void MPCControl::initialize(RocketModel model)
 {
-	return ControlSystemType();
-}
-
-double MPCControl::computeAngle()
-{
-    mpc::LMPC<> optsolver(
+    /*optsolver = std::make_shared<mpc::LMPC<>>(mpc::LMPC(
         Tnx, Tnu, Tndu, Tny,
-        Tph, Tch);
-    optsolver.setLoggerLevel(mpc::Logger::log_level::DEEP);
+        Tph, Tch));*/
+    optsolver.setLoggerLevel(mpc::Logger::log_level::NORMAL);
 
-    mpc::mat<Tnx, Tnx> Ad;
-    Ad << 1, 0, 0, 0, 0, 0, 0.1, 0, 0, 0, 0, 0,
+    mpc::mat<Tnx, Tnx> Ad = model.getAmatrix();
+   /* Ad << 1, 0, 0, 0, 0, 0, 0.1, 0, 0, 0, 0, 0,
         0, 1, 0, 0, 0, 0, 0, 0.1, 0, 0, 0, 0,
         0, 0, 1, 0, 0, 0, 0, 0, 0.1, 0, 0, 0,
         0.0488, 0, 0, 1, 0, 0, 0.0016, 0, 0, 0.0992, 0, 0,
@@ -47,21 +42,21 @@ double MPCControl::computeAngle()
         0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
         0.9734, 0, 0, 0, 0, 0, 0.0488, 0, 0, 0.9846, 0, 0,
         0, -0.9734, 0, 0, 0, 0, 0, -0.0488, 0, 0, 0.9846, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9846;
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9846;*/
 
-    mpc::mat<Tnx, Tnu> Bd;
-    Bd << 0, -0.0726, 0, 0.0726,
-        -0.0726, 0, 0.0726, 0,
-        -0.0152, 0.0152, -0.0152, 0.0152,
-        0, -0.0006, -0.0000, 0.0006,
-        0.0006, 0, -0.0006, 0,
-        0.0106, 0.0106, 0.0106, 0.0106,
-        0, -1.4512, 0, 1.4512,
-        -1.4512, 0, 1.4512, 0,
-        -0.3049, 0.3049, -0.3049, 0.3049,
-        0, -0.0236, 0, 0.0236,
-        0.0236, 0, -0.0236, 0,
-        0.2107, 0.2107, 0.2107, 0.2107;
+    mpc::mat<Tnx, Tnu> Bd = model.getBmatrix();
+    //Bd << 0, -0.0726, 0, 0.0726,
+    //    -0.0726, 0, 0.0726, 0,
+    //    -0.0152, 0.0152, -0.0152, 0.0152,
+    //    0, -0.0006, -0.0000, 0.0006,
+    //    0.0006, 0, -0.0006, 0,
+    //    0.0106, 0.0106, 0.0106, 0.0106,
+    //    0, -1.4512, 0, 1.4512,
+    //    -1.4512, 0, 1.4512, 0,
+    //    -0.3049, 0.3049, -0.3049, 0.3049,
+    //    0, -0.0236, 0, 0.0236,
+    //    0.0236, 0, -0.0236, 0,
+    //    0.2107, 0.2107, 0.2107, 0.2107;
 
     mpc::mat<Tny, Tnx> Cd;
     Cd.setIdentity();
@@ -81,11 +76,11 @@ double MPCControl::computeAngle()
     optsolver.setObjectiveWeights(OutputWMat, InputWMat, DeltaInputWMat);
 
     mpc::cvec<Tnu> InputW, DeltaInputW;
-    mpc::cvec<Tny> OutputW;
+    mpc::cvec<Tny> OutputW = mpc::cvec<Tny>::Zero();
 
-    OutputW << 0, 0, 10, 10, 10, 10, 0, 0, 0, 5, 5, 5;
-    InputW << 0.1, 0.1, 0.1, 0.1;
-    DeltaInputW << 0, 0, 0, 0;
+  //  OutputW << 0, 0, 10, 10, 10, 10, 0, 0, 0, 5, 5, 5;
+    InputW << 0.1, 0.1, 0.1;
+    DeltaInputW << 0, 0, 0;
 
     optsolver.setObjectiveWeights(OutputW, InputW, DeltaInputW, { 0, Tph });
 
@@ -103,11 +98,11 @@ double MPCControl::computeAngle()
     optsolver.setConstraints(xminmat, uminmat, yminmat, xmaxmat, umaxmat, ymaxmat);
 
     mpc::cvec<Tnx> xmin, xmax;
-    xmin << -M_PI / 6, -M_PI / 6, -mpc::inf, -mpc::inf, -mpc::inf, -1,
-        -mpc::inf, -mpc::inf, -mpc::inf, -mpc::inf, -mpc::inf, -mpc::inf;
+    xmin << -mpc::inf, -mpc::inf, -mpc::inf, -mpc::inf, -mpc::inf, -mpc::inf,
+        -mpc::inf;
 
-    xmax << M_PI / 6, M_PI / 6, mpc::inf, mpc::inf, mpc::inf, mpc::inf,
-        mpc::inf, mpc::inf, mpc::inf, mpc::inf, mpc::inf, mpc::inf;
+    xmax << mpc::inf, mpc::inf, mpc::inf, mpc::inf, mpc::inf, mpc::inf,
+        mpc::inf;
 
     mpc::cvec<Tny> ymin, ymax;
     ymin.setOnes();
@@ -116,11 +111,11 @@ double MPCControl::computeAngle()
     ymax *= mpc::inf;
 
     mpc::cvec<Tnu> umin, umax;
-    double u0 = 10.5916;
-    umin << 9.6, 9.6, 9.6, 9.6;
-    umin.array() -= u0;
-    umax << 13, 13, 13, 13;
-    umax.array() -= u0;
+  //  double u0 = 10.5916;
+    umin << -model.getMaxThrustAngle(), -model.getMaxThrustAngle(), 0;
+   // umin.array() -= u0;
+    umax << model.getMaxThrustAngle(), model.getMaxThrustAngle(), model.getMaxThrust();
+   // umax.array() -= u0;
 
     optsolver.setConstraints(xmin, umin, ymin, xmax, umax, ymax, { 0, Tph });
     optsolver.setConstraints(xmin, umin, ymin, xmax, umax, ymax, { 0, 1 });
@@ -128,18 +123,38 @@ double MPCControl::computeAngle()
     optsolver.setScalarConstraint(-mpc::inf, mpc::inf, mpc::cvec<Tnx>::Ones(), mpc::cvec<Tnu>::Ones(), { -1, -1 });
     optsolver.setScalarConstraint(0, -mpc::inf, mpc::inf, mpc::cvec<Tnx>::Ones(), mpc::cvec<Tnu>::Ones());
 
-    optsolver.setReferences(mpc::mat<Tny, Tph>::Zero(), mpc::mat<Tnu, Tph>::Zero(), mpc::mat<Tnu, Tph>::Zero());
-
-    mpc::cvec<Tny> yRef;
-    yRef << 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
-    optsolver.setReferences(yRef, mpc::cvec<Tnu>::Zero(), mpc::cvec<Tnu>::Zero(), { 0, Tph });
-
     mpc::LParameters params;
     params.maximum_iteration = 250;
     optsolver.setOptimizerParameters(params);
 
     optsolver.setExogenuosInputs(mpc::mat<Tndu, Tph>::Zero());
     optsolver.setExogenuosInputs(mpc::cvec<Tndu>::Zero(), { 0, Tph });
+    initialized = true;
+}
+
+bool MPCControl::getInitialized()
+{
+    return initialized;
+}
+
+ControlSystemType MPCControl::getControlSystemType()
+{
+	return ControlSystemType::MPC;
+}
+
+double MPCControl::computeAngle()
+{
+   
+
+   
+
+  /*  optsolver.setReferences(mpc::mat<Tny, Tph>::Zero(), mpc::mat<Tnu, Tph>::Zero(), mpc::mat<Tnu, Tph>::Zero());
+
+    mpc::cvec<Tny> yRef;
+    yRef << 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    optsolver.setReferences(yRef, mpc::cvec<Tnu>::Zero(), mpc::cvec<Tnu>::Zero(), { 0, Tph });
+
+  
 
     auto res = optsolver.step(mpc::cvec<Tnx>::Zero(), mpc::cvec<Tnu>::Zero());
     auto seq = optsolver.getOptimalSequence();
@@ -147,7 +162,7 @@ double MPCControl::computeAngle()
 
     mpc::cvec<4> testRes;
     testRes << -0.9916, 1.74839, -0.9916, 1.74839;
-    res.cmd.isApprox(testRes, 1e-4);
+    res.cmd.isApprox(testRes, 1e-4);*/
 	return 0.0;
 }
 
@@ -171,6 +186,7 @@ PIDParams MPCControl::getParamsRateFromAngle()
 
 double MPCControl::getYawRateFromAngleDeviation(double target, double current, double currentTime)
 {
+    return (target - current) / 5;
 	return 0.0;
 }
 
@@ -181,10 +197,36 @@ double MPCControl::getYawThrustAngleFromRateDeviation(double target, double curr
 
 double MPCControl::getPitchRateFromAngleDeviation(double target, double current, double currentTime)
 {
+    return (target - current) / 5;
+
 	return 0.0;
 }
 
 double MPCControl::getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime)
 {
 	return 0.0;
+}
+
+std::shared_ptr<MPCControl> MPCControl::fromOptions(std::array<std::string, NUM_CONTROL_OPTIONS> options, double maxThrust, double maxRotationRate)
+{
+    return std::make_shared<MPCControl>();
+}
+
+ThrustParameters MPCControl::computeThrustParameters(Eigen::Matrix<double, -1, 1> state, Eigen::Matrix<double, -1, 1> desired_state)
+{
+
+
+
+    optsolver.setReferences(mpc::mat<Tny, Tph>::Zero(), mpc::mat<Tnu, Tph>::Zero(), mpc::mat<Tnu, Tph>::Zero());
+
+    optsolver.setReferences(desired_state, mpc::cvec<Tnu>::Zero(), mpc::cvec<Tnu>::Zero(), { 0, Tph });
+
+
+
+    auto res = optsolver.step(state, optsolver.getLastResult().cmd);
+    auto seq = optsolver.getOptimalSequence();
+    //(void)seq;
+
+    mpc::cvec<Tnu> results = res.cmd;
+    return ThrustParameters(results[0], results[1], results[2]);
 }

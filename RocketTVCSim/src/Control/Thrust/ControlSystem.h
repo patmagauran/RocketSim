@@ -5,7 +5,9 @@
 
 enum class ControlSystemType {
 	FEED_FORWARD,
-	PID
+	PID,
+	LQR,
+	MPC
 };
 
 class ControlSystem

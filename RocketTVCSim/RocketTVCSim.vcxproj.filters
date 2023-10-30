@@ -50,6 +50,8 @@
     <ClCompile Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.cpp" />
     <ClCompile Include="src\Control\Trajectory\SpiralSystem\SpiralControlSystem.cpp" />
     <ClCompile Include="src\Control\Thrust\MPCControl\MPCControl.cpp" />
+    <ClCompile Include="src\Control\Thrust\LQRControl\LQRControl.cpp" />
+    <ClCompile Include="src\Control\Thrust\LQRControl\LQRController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\Thrust\PID\PID.h" />
@@ -95,6 +97,8 @@
     <ClInclude Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.h" />
     <ClInclude Include="src\Control\Trajectory\SpiralSystem\SpiralControlSystem.h" />
     <ClInclude Include="src\Control\Thrust\MPCControl\MPCControl.h" />
+    <ClInclude Include="src\Control\Thrust\LQRControl\LQRControl.h" />
+    <ClInclude Include="src\Control\Thrust\LQRControl\LQRController.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />

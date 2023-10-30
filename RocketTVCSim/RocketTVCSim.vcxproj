@@ -93,7 +93,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Users\patma\source\repos\RocketSim\nlopt\include;C:\Users\patma\source\repos\RocketSim\osqp\include;C:\Users\patma\source\repos\matplotplusplus;C:\Users\patma\source\repos\chrono\src;C:\Users\patma\source\repos\chrono\src\chrono;C:\Users\patma\source\repos\chrono\src\chrono\collision\bullet;C:\Users\patma\source\repos\chrono\src\chrono\collision\gimpact;C:\Users\patma\source\repos\chrono\src\chrono_thirdparty\HACD;C:\Users\patma\source\repos\chrono\src\chrono_thirdparty\HACDv2;C:\Users\patma\source\repos\chrono\chrono_build;C:\Data\Development\Rocket\eigen-3.4.0;C:\Data\Development\Rocket\irrlicht-1.8.5\include;C:\Users\patma\source\repos\RocketSim\libmpc-0.4.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -297,7 +297,9 @@
     <None Include="Runs.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Control\Thrust\LQRControl\LQRControl.cpp" />
     <ClCompile Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.cpp" />
+    <ClCompile Include="src\Control\Thrust\LQRControl\LQRController.cpp" />
     <ClCompile Include="src\Control\Thrust\MPCControl\MPCControl.cpp" />
     <ClCompile Include="src\Control\Trajectory\SpiralSystem\SpiralControlSystem.cpp" />
     <ClCompile Include="src\SimParams.cpp" />
@@ -332,7 +334,9 @@
     <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Control\Thrust\LQRControl\LQRControl.h" />
     <ClInclude Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.h" />
+    <ClInclude Include="src\Control\Thrust\LQRControl\LQRController.h" />
     <ClInclude Include="src\Control\Thrust\MPCControl\MPCControl.h" />
     <ClInclude Include="src\Control\Trajectory\SpiralSystem\SpiralControlSystem.h" />
     <ClInclude Include="src\Util\CSVReader.h" />

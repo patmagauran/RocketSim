@@ -4,6 +4,8 @@
 #include "Control/Thrust/PIDControl/TunablePIDControlSystem.h"
 #include "Control/Trajectory/LookaheadSystem/LookaheadMotionControlSystem.h"
 #include "Control/Thrust/MPCControl/MPCControl.h"
+#include <Eigen/Dense>
+#include "Control/Thrust/LQRControl/LQRControl.h"
 SimSetup::SimSetup(std::shared_ptr<MotionControlSystem> motionControlSystem, RocketParams rocketParams) : motionControlSystem(motionControlSystem), rocketParams(rocketParams)
 {
 }
@@ -24,8 +26,8 @@ SimSetup SimSetup::fromParameters(SimParams simParams)
 	std::shared_ptr<MotionControlSystem> motionControlSystem;
 	std::shared_ptr<ControlSystem> controlSystem;
 	RocketParams rocketParams;
-	MPCControl mpcControl;
-	mpcControl.computeAngle();
+	//MPCControl mpcControl;
+	//mpcControl.computeAngle();
 	if (simParams.getRocketModel() == "Simple") {
 		std::array<std::string, NUM_ROCKET_PARAMS> rocketOptions = simParams.getRocketOptions();
 		rocketOptions[7] = "0"; // Set drag to 0
@@ -43,6 +45,12 @@ SimSetup SimSetup::fromParameters(SimParams simParams)
 	}
 	else if (simParams.getControlSystem() == "FeedForward") {
 		controlSystem = FeedForwardControl::fromOptions(simParams.getControlOptions(), rocketParams);
+	}
+	else if (simParams.getControlSystem() == "LQR") {
+		controlSystem = LQRControl::fromOptions(simParams.getControlOptions(), rocketParams.getMaxThrustAngle(), rocketParams.getMaxRotationRate());
+	}
+	else if (simParams.getControlSystem() == "MPC") {
+		controlSystem = MPCControl::fromOptions(simParams.getControlOptions(), rocketParams.getMaxThrustAngle(), rocketParams.getMaxRotationRate());
 	}
 	else {
 		throw std::invalid_argument("Invalid Control System");

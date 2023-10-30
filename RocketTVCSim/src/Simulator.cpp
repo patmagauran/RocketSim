@@ -85,7 +85,7 @@ void Simulator::runSimulation(bool autoTune)
    // ChRealtimeStepTimer realtime_timer;
 	double step_size = 5e-3;
 	MotionCommand motionCommand;
-
+	
 	while (vis.Run() && !DataLog::isDone()) {
 
 		while (DataLog::isPaused()) {
