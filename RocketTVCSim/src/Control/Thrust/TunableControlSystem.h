@@ -1,7 +1,5 @@
 #pragma once
-#include "ControlSystemTuner.h"
 #include "ControlSystem.h"
-#include "ITunable.h"
 class Simulator;
 class TunableControlSystem :public virtual ControlSystem
 {

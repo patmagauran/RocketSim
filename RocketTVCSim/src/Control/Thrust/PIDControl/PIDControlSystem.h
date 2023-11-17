@@ -14,22 +14,23 @@ public:
 	PIDControlSystem(PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle);
 
 	// Inherited via ControlSystem
-	void setParamsThrustAngleFromRate(PIDParams params) override;
+	void setParamsThrustAngleFromRate(PIDParams params);
 
 	ControlSystemType getControlSystemType() override;
 
-	void setParamsRateFromAngle(PIDParams params) override;
+	void setParamsRateFromAngle(PIDParams params);
 
-	PIDParams getParamsThrustAngleFromRate() override;
+	PIDParams getParamsThrustAngleFromRate();
 
-	PIDParams getParamsRateFromAngle() override;
+	PIDParams getParamsRateFromAngle();
 
-	double getYawRateFromAngleDeviation(double target, double current, double currentTime) override;
+	double getYawRateFromAngleDeviation(double target, double current, double currentTime);
 
-	double getYawThrustAngleFromRateDeviation(double target, double current, double currentTime) override;
+	double getYawThrustAngleFromRateDeviation(double target, double current, double currentTime);
 
-	double getPitchRateFromAngleDeviation(double target, double current, double currentTime) override;
+	double getPitchRateFromAngleDeviation(double target, double current, double currentTime);
 
-	double getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime) override;
+	double getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime);
+	ThrustParameters computeThrustParameters(ControlState currentState, TrajectoryCommand command, double currentTime) override;
 };
 

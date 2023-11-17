@@ -30,17 +30,13 @@ public:
 	void initialize(RocketModel model);
 	bool getInitialized();
 	virtual ControlSystemType getControlSystemType() override;
-	virtual void setParamsThrustAngleFromRate(PIDParams params) override;
-	virtual void setParamsRateFromAngle(PIDParams params) override;
-	virtual PIDParams getParamsThrustAngleFromRate() override;
-	virtual PIDParams getParamsRateFromAngle() override;
-	virtual double getYawRateFromAngleDeviation(double target, double current, double currentTime) override;
-	virtual double getYawThrustAngleFromRateDeviation(double target, double current, double currentTime) override;
-	virtual double getPitchRateFromAngleDeviation(double target, double current, double currentTime) override;
-	virtual double getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime) override;
+	double getYawRateFromAngleDeviation(double target, double current, double currentTime);
+
+
+	double getPitchRateFromAngleDeviation(double target, double current, double currentTime);
 	static std::shared_ptr<MPCControl> fromOptions(std::array<std::string, NUM_CONTROL_OPTIONS> options, double maxThrust, double maxRotationRate);
 	ThrustParameters computeThrustParameters(Eigen::Matrix<double, -1, 1> state, Eigen::Matrix<double, -1, 1> desired_state);
-
+	ThrustParameters computeThrustParameters(ControlState currentState, TrajectoryCommand command, double currentTime) override;
 	double computeAngle();
 };
 

@@ -1,2 +1,249 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="SimParams" Collapsed="true">
+    <Position X="17.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQAAAAKAAAAAAoEKAAAAAACIAAAAAAAAAgAICIAAAAA=</HashCode>
+      <FileName>src\SimParams.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimSetup" Collapsed="true">
+    <Position X="19" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAQAAAAAIAAEAAACACBAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>src\SimSetup.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Simulator" Collapsed="true">
+    <Position X="20.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QCAAAAAAgBAAgABAAAEAECQgABCAAAAAgIQQAAAAAAA=</HashCode>
+      <FileName>src\Simulator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ObjectKinematics" Collapsed="true">
+    <Position X="24.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Util\ObjectKinematics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kinematics" Collapsed="true">
+    <Position X="19" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Util\Kinematics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ForceApplication" Collapsed="true">
+    <Position X="24.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAACAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Util\ForceApplication.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSVReader" Collapsed="true">
+    <Position X="20.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAQAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>src\Util\CSVReader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RocketParams" Collapsed="true">
+    <Position X="24.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEBAAAAABgAAAQAAEEEEAAEgBAEQAgAAABAAAAEQAE=</HashCode>
+      <FileName>src\Model\RocketParams.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RocketModelWithDrag">
+    <Position X="3" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAECwQAEAAAAAAAAAAAAAAAAAAAAABAAECAAAA=</HashCode>
+      <FileName>src\Model\RocketModelWithDrag.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RocketModel">
+    <Position X="3" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABnBEIAEAAAgAAQAQAAIAQAAABCARAQFQgAGEFCEAQE=</HashCode>
+      <FileName>src\Model\RocketModel.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DragModel" Collapsed="true">
+    <Position X="22.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Model\DragModel.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrajectoryCommand" Collapsed="true">
+    <Position X="24.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAQAFAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Trajectory\TrajectoryCommand.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MotionControlSystem">
+    <Position X="12.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAABhAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Trajectory\MotionControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MotionCommand" Collapsed="true">
+    <Position X="22.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAEAAAQIAAAAAAAAAEAA=</HashCode>
+      <FileName>src\Control\Trajectory\MotionCommand.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Course" Collapsed="true">
+    <Position X="19" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABIABAABgAAIAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>src\Control\Trajectory\Course.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpiralControlSystem">
+    <Position X="10.25" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAACAAAAABCAgQAQAAAEAABhAAAAgQAAAAAAAAAAAAI=</HashCode>
+      <FileName>src\Control\Trajectory\SpiralSystem\SpiralControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NullMotionControlSystem">
+    <Position X="14.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAABhAAAAiAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LookaheadMotionControlSystem">
+    <Position X="12.5" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAACAAAAQBCAgQAQAAAAAABhAAAAgQAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TunableControlSystem">
+    <Position X="5.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Thrust\TunableControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ThrustParameters" Collapsed="true">
+    <Position X="22.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAACAAAAAACAAAAAAAAAAAAAAAAAAQABAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Thrust\ThrustParameters.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ITunable" Collapsed="true">
+    <Position X="17.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Thrust\ITunable.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ControlSystemTuner" Collapsed="true">
+    <Position X="17.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Thrust\ControlSystemTuner.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ControlSystem">
+    <Position X="7.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAgAAABAAIAAAAABAAAIAAAAAAAEAAAAAACA=</HashCode>
+      <FileName>src\Control\Thrust\ControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MPCControl">
+    <Position X="3.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAQAAQhAAABAAIAEEAABAAAoEAAABAAEAAAAAACA=</HashCode>
+      <FileName>src\Control\Thrust\MPCControl\MPCControl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LQRController" Collapsed="true">
+    <Position X="20.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAIAAAAAAEAAggAAAAAIQAAAAAAQQEgAAIIGgAWA=</HashCode>
+      <FileName>src\Control\Thrust\LQRControl\LQRController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LQRControl">
+    <Position X="10" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAYIAAhACABCAIAEEAABAAAIEAAAJAAEAAAAAACA=</HashCode>
+      <FileName>src\Control\Thrust\LQRControl\LQRControl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FeedForwardControl">
+    <Position X="12.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAQAAAggAAABAAIAAAAABABBIEAAAAAAEAAAAAACA=</HashCode>
+      <FileName>src\Control\Thrust\FeedForwardControl\FeedForwardControl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PID" Collapsed="true">
+    <Position X="17.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>DAYIACAABgAAKAAAAIhRABAAAAACgAIDAADAAACEAAA=</HashCode>
+      <FileName>src\Control\Thrust\PID\PID.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PIDAutoTuner" Collapsed="true">
+    <Position X="19" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>3BACEgAAAGAcEAEAAAAAAgAACAAABBAMAAEAAFAAAAg=</HashCode>
+      <FileName>src\Control\Thrust\PID\PIDAutoTuner.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PIDNew" Collapsed="true">
+    <Position X="20.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAABBAAAAAACgCAAAEAAAIBEACAEAAECgA=</HashCode>
+      <FileName>src\Control\Thrust\PID\PIDNew.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PIDParams" Collapsed="true">
+    <Position X="22.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GAQAAAAAAAAADAAAAAAAAAAAAAAQAAACEACAAAAACAA=</HashCode>
+      <FileName>src\Control\Thrust\PID\PIDParams.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PIDControlSystem">
+    <Position X="7.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAKAAAAAAgAgABABIAAAAABAAAIIAAEAAAEAQAAAACA=</HashCode>
+      <FileName>src\Control\Thrust\PIDControl\PIDControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TunablePIDControlSystem">
+    <Position X="6.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAQAAAAAAAAAAAEAACAAIAAAAAAAAA=</HashCode>
+      <FileName>src\Control\Thrust\PIDControl\TunablePIDControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="ControlSystemType" Collapsed="true">
+    <Position X="17.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAEAAIAACAAAA=</HashCode>
+      <FileName>src\Control\Thrust\ControlSystem.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PIDState" Collapsed="true">
+    <Position X="19" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAgAAAAAAAAAQCAAAI=</HashCode>
+      <FileName>src\Control\Thrust\PID\PIDAutoTuner.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

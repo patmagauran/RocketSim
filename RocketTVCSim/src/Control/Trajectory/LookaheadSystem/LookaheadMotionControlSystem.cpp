@@ -4,7 +4,7 @@
 #include "../../Thrust/FeedForwardControl/FeedForwardControl.h"
 #include "../../Thrust/LQRControl/LQRControl.h"
 #include "../../Thrust/MPCControl/MPCControl.h"
-
+#include "../../../Model/ControlState.h"
 LookaheadMotionControlSystem::LookaheadMotionControlSystem(std::shared_ptr<ControlSystem> controlSystem, Course course, double lookahead) : controlSystem(controlSystem), course(course), lookahead(lookahead), lastGoodPoint(0, 0, 0)
 {
 }
@@ -75,32 +75,32 @@ TrajectoryCommand LookaheadMotionControlSystem::getNextTrajectoryCommand(ChVecto
 
 }
 
-Eigen::Matrix<double, 1, -1> computeState(RocketModel rocket) {
-	Eigen::Matrix<double, 1, 7> state; // = [ax, ay, az, wy, wz, ey, ez]
-	std::shared_ptr<ChBody> rocket_upper = rocket.getRocketUpper();
-	ChVector<> rocketAcc = rocket_upper->GetPos_dtdt();
-	ChVector<> rocket_euler_dt = rocket_upper->GetRot_dt().Q_to_Euler123();
-	ChVector<> rocketWacc = rocket_upper->GetWacc_loc();
-	state[0] = rocketAcc.x();
-	state[1] = rocketAcc.y();
-	state[2] = rocketAcc.z();
-	state[3] = rocketWacc.y();
-	state[4] = rocketWacc.z();
-	state[5] = rocket_euler_dt.y();
-	state[6] = rocket_euler_dt.z();
-	return state;
-}
-Eigen::Matrix<double, 1, -1> LookaheadMotionControlSystem::computeDesiredState(ChVector<> currentPosition, ChVector<> currentVelocity, TrajectoryCommand trajectoryCommand, ChVector<> rotation, double currentTime) {
-	Eigen::Matrix<double, 1, 7> state = Eigen::Matrix<double, 1, 7>::Zero();
-	//Desired acceleration is 0
-	//Desired angular acceleration is 0
-	//Desired euler velocities are computed from the trajectory command
-	double yawAngleO = this->controlSystem->getYawRateFromAngleDeviation(trajectoryCommand.yawAngle, rotation.z(), currentTime);
-	double pitchAngleO = this->controlSystem->getPitchRateFromAngleDeviation(trajectoryCommand.pitchAngle, rotation.x(), currentTime);
-	state[5] = yawAngleO;
-	state[6] = pitchAngleO;
-	return state;
-}
+//Eigen::Matrix<double, 1, -1> computeState(RocketModel rocket) {
+//	Eigen::Matrix<double, 1, 7> state; // = [ax, ay, az, wy, wz, ey, ez]
+//	std::shared_ptr<ChBody> rocket_upper = rocket.getRocketUpper();
+//	ChVector<> rocketAcc = rocket_upper->GetPos_dtdt();
+//	ChVector<> rocket_euler_dt = rocket_upper->GetRot_dt().Q_to_Euler123();
+//	ChVector<> rocketWacc = rocket_upper->GetWacc_loc();
+//	state[0] = rocketAcc.x();
+//	state[1] = rocketAcc.y();
+//	state[2] = rocketAcc.z();
+//	state[3] = rocketWacc.y();
+//	state[4] = rocketWacc.z();
+//	state[5] = rocket_euler_dt.y();
+//	state[6] = rocket_euler_dt.z();
+//	return state;
+//}
+//Eigen::Matrix<double, 1, -1> LookaheadMotionControlSystem::computeDesiredState(ChVector<> currentPosition, ChVector<> currentVelocity, TrajectoryCommand trajectoryCommand, ChVector<> rotation, double currentTime) {
+//	Eigen::Matrix<double, 1, 7> state = Eigen::Matrix<double, 1, 7>::Zero();
+//	//Desired acceleration is 0
+//	//Desired angular acceleration is 0
+//	//Desired euler velocities are computed from the trajectory command
+//	double yawAngleO = this->controlSystem->getYawRateFromAngleDeviation(trajectoryCommand.yawAngle, rotation.z(), currentTime);
+//	double pitchAngleO = this->controlSystem->getPitchRateFromAngleDeviation(trajectoryCommand.pitchAngle, rotation.x(), currentTime);
+//	state[5] = yawAngleO;
+//	state[6] = pitchAngleO;
+//	return state;
+//}
 
 MotionCommand LookaheadMotionControlSystem::getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime)
 {
@@ -114,68 +114,75 @@ MotionCommand LookaheadMotionControlSystem::getNextMotionCommand(ChVector<> g_lo
 	TrajectoryCommand nextCommand = getNextTrajectoryCommand(g_location, currentVelocity);
 	ChVector<> rotation = rocket_upper->GetRot().Q_to_Euler123();
 	double yawThrustAng, pitchThrustAng;
-	switch (this->controlSystem->getControlSystemType()) {
-		case ControlSystemType::PID:
-		{
-			double yawAngleO = this->controlSystem->getYawRateFromAngleDeviation(nextCommand.yawAngle, rotation.z(), currentTime);
 
-			yawThrustAng = this->controlSystem->getYawThrustAngleFromRateDeviation(yawAngleO, rocket_upper->GetWvel_loc().z(), currentTime);
-
-			double pitchAngleO = this->controlSystem->getPitchRateFromAngleDeviation(nextCommand.pitchAngle, rotation.x(), currentTime);
-
-			pitchThrustAng = this->controlSystem->getPitchThrustAngleFromRateDeviation(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
-			break;
-		}
-		case ControlSystemType::FEED_FORWARD:
-		{
-			//Note, Dynamic casting not the ideal way, but it should work and be safe
-			FeedForwardControl* ptr = dynamic_cast<FeedForwardControl*>(controlSystem.get());
-			if (ptr) {
-				yawThrustAng = ptr->ComputeAngle(currentVelocity.Length(), nextCommand.yawAngle - rotation.z(), rocket_upper->GetWvel_loc().z());
-				pitchThrustAng = ptr->ComputeAngle(currentVelocity.Length(), nextCommand.pitchAngle - rotation.x(), rocket_upper->GetWvel_loc().x());
-			}
-			else {
-				std::cout << "Tried to call feed forward functions on non feed forward controller" << std::endl;
-			}
-			break;
-			//yawThrustAng = this->controlSystem->ComputeAngle
-		}
-		case ControlSystemType::LQR:
-		{
-			LQRControl* ptr = dynamic_cast<LQRControl*>(controlSystem.get());
-			if (ptr) {
-				if (!ptr->getInitialized() || int(currentTime* 1000) % 1000 == 0) {
-					ptr->initialize(rocket);
-				}
-				Eigen::Matrix<double, 1, -1> state = computeState(rocket);
-				Eigen::Matrix<double, 1, -1> desiredState = computeDesiredState(g_location, currentVelocity, nextCommand, rotation, currentTime);
-				ThrustParameters params = ptr->computeThrustParameters(state, desiredState);
-				
-				return MotionCommand(params, nextCommand);
-			}
-			else {
-				std::cout << "Tried to call LQR functions on non LQR controller" << std::endl;
-			}
-			break;
-		}
-		case ControlSystemType::MPC:
-		{
-			MPCControl* ptr = dynamic_cast<MPCControl*>(controlSystem.get());
-			if (ptr) {
-				if (!ptr->getInitialized() || int(currentTime * 1000) % 1000 == 0) {
-					ptr->initialize(rocket);
-				}
-				Eigen::Matrix<double, 1, -1> state = computeState(rocket);
-				Eigen::Matrix<double, 1, -1> desiredState = computeDesiredState(g_location, currentVelocity, nextCommand, rotation, currentTime);
-				ThrustParameters params = ptr->computeThrustParameters(state, desiredState);
-				return MotionCommand(params, nextCommand);
-			}
-			else {
-				std::cout << "Tried to call MPC functions on non MPC controller" << std::endl;
-			}
-			break;
-		}
+	ControlState controlState = ControlState::computeCurrentStateFromModel(g_location,rocket);
+	if (!this->controlSystem->getInitialized() || int(currentTime * 1000) % 1000 == 0) {
+		this->controlSystem->initialize(rocket);
 	}
+	ThrustParameters thrustParams = this->controlSystem->computeThrustParameters(controlState, nextCommand, currentTime);
+
+	//switch (this->controlSystem->getControlSystemType()) {
+	//	case ControlSystemType::PID:
+	//	{
+	//		double yawAngleO = this->controlSystem->getYawRateFromAngleDeviation(nextCommand.yawAngle, rotation.z(), currentTime);
+
+	//		yawThrustAng = this->controlSystem->getYawThrustAngleFromRateDeviation(yawAngleO, rocket_upper->GetWvel_loc().z(), currentTime);
+
+	//		double pitchAngleO = this->controlSystem->getPitchRateFromAngleDeviation(nextCommand.pitchAngle, rotation.x(), currentTime);
+
+	//		pitchThrustAng = this->controlSystem->getPitchThrustAngleFromRateDeviation(pitchAngleO, rocket_upper->GetWvel_loc().x(), currentTime);
+	//		break;
+	//	}
+	//	case ControlSystemType::FEED_FORWARD:
+	//	{
+	//		//Note, Dynamic casting not the ideal way, but it should work and be safe
+	//		FeedForwardControl* ptr = dynamic_cast<FeedForwardControl*>(controlSystem.get());
+	//		if (ptr) {
+	//			yawThrustAng = ptr->ComputeAngle(currentVelocity.Length(), nextCommand.yawAngle - rotation.z(), rocket_upper->GetWvel_loc().z());
+	//			pitchThrustAng = ptr->ComputeAngle(currentVelocity.Length(), nextCommand.pitchAngle - rotation.x(), rocket_upper->GetWvel_loc().x());
+	//		}
+	//		else {
+	//			std::cout << "Tried to call feed forward functions on non feed forward controller" << std::endl;
+	//		}
+	//		break;
+	//		//yawThrustAng = this->controlSystem->ComputeAngle
+	//	}
+	//	case ControlSystemType::LQR:
+	//	{
+	//		LQRControl* ptr = dynamic_cast<LQRControl*>(controlSystem.get());
+	//		if (ptr) {
+	//			if (!ptr->getInitialized() || int(currentTime* 1000) % 1000 == 0) {
+	//				ptr->initialize(rocket);
+	//			}
+	//			Eigen::Matrix<double, 1, -1> state = computeState(rocket);
+	//			Eigen::Matrix<double, 1, -1> desiredState = computeDesiredState(g_location, currentVelocity, nextCommand, rotation, currentTime);
+	//			ThrustParameters params = ptr->computeThrustParameters(state, desiredState);
+	//			
+	//			return MotionCommand(params, nextCommand);
+	//		}
+	//		else {
+	//			std::cout << "Tried to call LQR functions on non LQR controller" << std::endl;
+	//		}
+	//		break;
+	//	}
+	//	case ControlSystemType::MPC:
+	//	{
+	//		MPCControl* ptr = dynamic_cast<MPCControl*>(controlSystem.get());
+	//		if (ptr) {
+	//			if (!ptr->getInitialized() || int(currentTime * 1000) % 1000 == 0) {
+	//				ptr->initialize(rocket);
+	//			}
+	//			Eigen::Matrix<double, 1, -1> state = computeState(rocket);
+	//			Eigen::Matrix<double, 1, -1> desiredState = computeDesiredState(g_location, currentVelocity, nextCommand, rotation, currentTime);
+	//			ThrustParameters params = ptr->computeThrustParameters(state, desiredState);
+	//			return MotionCommand(params, nextCommand);
+	//		}
+	//		else {
+	//			std::cout << "Tried to call MPC functions on non MPC controller" << std::endl;
+	//		}
+	//		break;
+	//	}
+	//}
 	
 
 	//return MotionCommand(ThrustParameters(0,0,0));

@@ -7,7 +7,10 @@
 
 #include "LQRController.h"
 #include "../../../Model/RocketModel.h"
+#include "../../Trajectory/TrajectoryCommand.h"
 #include "../ThrustParameters.h"
+#include "../../../Model/ControlState.h"
+
 using namespace Eigen;
 using namespace std;
 LQRControl::LQRControl(int maxIterations, double tolerance, MatrixXd weightMatrixQ, MatrixXd weightMatrixR) : maxIterations(maxIterations), tolerance(tolerance), weightMatrixQ(weightMatrixQ), weightMatrixR(weightMatrixR)
@@ -47,23 +50,7 @@ ControlSystemType LQRControl::getControlSystemType()
 	return ControlSystemType::LQR;
 }
 
-void LQRControl::setParamsThrustAngleFromRate(PIDParams params)
-{
-}
 
-void LQRControl::setParamsRateFromAngle(PIDParams params)
-{
-}
-
-PIDParams LQRControl::getParamsThrustAngleFromRate()
-{
-	return PIDParams(0,0,0);
-}
-
-PIDParams LQRControl::getParamsRateFromAngle()
-{
-	return PIDParams(0,0,0);
-}
 
 bool LQRControl::getInitialized()
 {
@@ -77,10 +64,7 @@ double LQRControl::getYawRateFromAngleDeviation(double target, double current, d
 	return 0.0;
 }
 
-double LQRControl::getYawThrustAngleFromRateDeviation(double target, double current, double currentTime)
-{
-	return 0.0;
-}
+
 
 double LQRControl::getPitchRateFromAngleDeviation(double target, double current, double currentTime)
 {
@@ -89,10 +73,6 @@ double LQRControl::getPitchRateFromAngleDeviation(double target, double current,
 	return 0.0;
 }
 
-double LQRControl::getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime)
-{
-	return 0.0;
-}
 
 std::shared_ptr<LQRControl> LQRControl::fromOptions(std::array<std::string, NUM_CONTROL_OPTIONS> options, double maxThrust, double maxRotationRate)
 {
@@ -130,4 +110,19 @@ ThrustParameters LQRControl::computeThrustParameters(Matrix<double, -1, 1> state
 		thrust = 0;
 	}
     return ThrustParameters(optControl(0,0), optControl(1,0), optControl(2,0));
+}
+
+ThrustParameters LQRControl::computeThrustParameters(ControlState currentState, TrajectoryCommand command, double currentTime)
+{
+    Eigen::Matrix<double, 1, -1> state = currentState.convertToSpaceStateState();
+    Eigen::Matrix<double, 1, 7> desiredState = Eigen::Matrix<double, 1, 7>::Zero();
+    //Desired acceleration is 0
+    //Desired angular acceleration is 0
+    //Desired euler velocities are computed from the trajectory command
+    double yawAngleO = getYawRateFromAngleDeviation(command.yawAngle, currentState.yawAngle, currentTime);
+    double pitchAngleO = getPitchRateFromAngleDeviation(command.pitchAngle, currentState.pitchAngle, currentTime);
+    desiredState[5] = yawAngleO;
+    desiredState[6] = pitchAngleO;
+    ThrustParameters params = computeThrustParameters(state, desiredState);
+    return params;
 }

@@ -1,6 +1,9 @@
 ﻿#include "MPCControl.h"
-#include "../ThrustParameters.h"
 #include "../../../Model/RocketModel.h"
+
+#include "../../Trajectory/TrajectoryCommand.h"
+#include "../ThrustParameters.h"
+#include "../../../Model/ControlState.h"
 #define M_PI 3.14159
 MPCControl::MPCControl()
 {
@@ -166,23 +169,6 @@ double MPCControl::computeAngle()
 	return 0.0;
 }
 
-void MPCControl::setParamsThrustAngleFromRate(PIDParams params)
-{
-}
-
-void MPCControl::setParamsRateFromAngle(PIDParams params)
-{
-}
-
-PIDParams MPCControl::getParamsThrustAngleFromRate()
-{
-	return PIDParams(0,0,0);
-}
-
-PIDParams MPCControl::getParamsRateFromAngle()
-{
-	return PIDParams(0, 0, 0);
-}
 
 double MPCControl::getYawRateFromAngleDeviation(double target, double current, double currentTime)
 {
@@ -190,20 +176,11 @@ double MPCControl::getYawRateFromAngleDeviation(double target, double current, d
 	return 0.0;
 }
 
-double MPCControl::getYawThrustAngleFromRateDeviation(double target, double current, double currentTime)
-{
-	return 0.0;
-}
 
 double MPCControl::getPitchRateFromAngleDeviation(double target, double current, double currentTime)
 {
     return (target - current) / 5;
 
-	return 0.0;
-}
-
-double MPCControl::getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime)
-{
 	return 0.0;
 }
 
@@ -229,4 +206,19 @@ ThrustParameters MPCControl::computeThrustParameters(Eigen::Matrix<double, -1, 1
 
     mpc::cvec<Tnu> results = res.cmd;
     return ThrustParameters(results[0], results[1], results[2]);
+}
+
+ThrustParameters MPCControl::computeThrustParameters(ControlState currentState, TrajectoryCommand command, double currentTime)
+{
+    Eigen::Matrix<double, 1, -1> state = currentState.convertToSpaceStateState();
+    Eigen::Matrix<double, 1, 7> desiredState = Eigen::Matrix<double, 1, 7>::Zero();
+    //Desired acceleration is 0
+    //Desired angular acceleration is 0
+    //Desired euler velocities are computed from the trajectory command
+    double yawAngleO = getYawRateFromAngleDeviation(command.yawAngle, currentState.yawAngle, currentTime);
+    double pitchAngleO = getPitchRateFromAngleDeviation(command.pitchAngle, currentState.pitchAngle, currentTime);
+    desiredState[5] = yawAngleO;
+    desiredState[6] = pitchAngleO;
+    ThrustParameters params = computeThrustParameters(state, desiredState);
+    return params;
 }

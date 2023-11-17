@@ -1,3 +1,5 @@
+#include "ControlSystem.h"
+#include "../../Model/RocketModel.h"
 //#include "ControlSystem.h"
 //
 //ControlSystem::ControlSystem(PIDParams rateParams, PIDParams angleParams) :
@@ -54,3 +56,12 @@
 //pitchRatePID.setSetpoint(target);
 //	return pitchRatePID.update(current, currentTime);
 //}
+
+bool ControlSystem::getInitialized()
+{
+	return true;
+}
+
+void ControlSystem::initialize(RocketModel rocket)
+{
+}

@@ -15,7 +15,6 @@
 
 #include "Control/Thrust/ControlSystem.h"
 
-#include "Control/Thrust/ControlSystemTuner.h"
 
 #include "Control/Trajectory/MotionCommand.h"
 

@@ -1,5 +1,7 @@
 #include "PIDControlSystem.h"
-
+#include "../../Trajectory/TrajectoryCommand.h"
+#include "../ThrustParameters.h"
+#include "../../../Model/ControlState.h"
 PIDControlSystem::PIDControlSystem(PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle) :
     paramsThrustAngleFromRate(paramsThrustAngleFromRate), paramsRateFromAngle(paramsRateFromAngle),
     yawRateFromAnglePID(paramsRateFromAngle.getKd(), paramsRateFromAngle.getKi(), paramsRateFromAngle.getKp(), paramsRateFromAngle.getSampleTime(), paramsRateFromAngle.getMaxOutput()),
@@ -62,4 +64,16 @@ double PIDControlSystem::getPitchThrustAngleFromRateDeviation(double target, dou
 {
     pitchThrustAngleFromRatePID.setSetpoint(target);
     return pitchThrustAngleFromRatePID.update(current, currentTime);
+}
+
+ThrustParameters PIDControlSystem::computeThrustParameters(ControlState currentState, TrajectoryCommand command, double currentTime)
+{
+    double yawAngleO = getYawRateFromAngleDeviation(command.yawAngle, currentState.yawAngle, currentTime);
+
+    double yawThrustAng = getYawThrustAngleFromRateDeviation(yawAngleO, currentState.wvelz, currentTime);
+
+    double pitchAngleO = getPitchRateFromAngleDeviation(command.pitchAngle,currentState.pitchAngle, currentTime);
+
+    double pitchThrustAng = getPitchThrustAngleFromRateDeviation(pitchAngleO, currentState.wvelx, currentTime);
+    return ThrustParameters(yawThrustAng, pitchThrustAng, currentState.maxThrust);
 }

@@ -12,25 +12,19 @@
     <None Include="..\.gitignore" />
     <None Include="points.csv" />
     <None Include="points2.csv" />
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Runs.csv" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Control\Thrust\PID\PID.cpp" />
     <ClCompile Include="src\Control\Thrust\PID\PIDParams.cpp" />
     <ClCompile Include="src\Control\Thrust\ControlSystem.cpp" />
-    <ClCompile Include="src\Control\Thrust\ControlSystemTuner.cpp" />
     <ClCompile Include="src\Control\Thrust\ThrustParameters.cpp" />
     <ClCompile Include="src\Control\Thrust\TunableControlSystem.cpp" />
     <ClCompile Include="src\Control\Trajectory\Course.cpp" />
     <ClCompile Include="src\Control\Trajectory\MotionCommand.cpp" />
-    <ClCompile Include="src\Model\DragModel.cpp" />
     <ClCompile Include="src\Model\RocketModel.cpp" />
     <ClCompile Include="src\Model\RocketModelWithDrag.cpp" />
     <ClCompile Include="src\Util\ForceApplication.cpp" />
-    <ClCompile Include="src\Util\Kinematics.cpp" />
-    <ClCompile Include="src\Util\ObjectKinematics.cpp" />
     <ClCompile Include="src\RocketTVCSimuation.cpp" />
     <ClCompile Include="src\Simulator.cpp" />
     <ClCompile Include="src\Control\Thrust\PID\PIDNew.cpp" />
@@ -52,24 +46,20 @@
     <ClCompile Include="src\Control\Thrust\MPCControl\MPCControl.cpp" />
     <ClCompile Include="src\Control\Thrust\LQRControl\LQRControl.cpp" />
     <ClCompile Include="src\Control\Thrust\LQRControl\LQRController.cpp" />
+    <ClCompile Include="src\Model\ControlState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Control\Thrust\PID\PID.h" />
     <ClInclude Include="src\Control\Thrust\PID\PIDParams.h" />
     <ClInclude Include="src\Control\Thrust\ControlSystem.h" />
-    <ClInclude Include="src\Control\Thrust\ControlSystemTuner.h" />
     <ClInclude Include="src\Control\Thrust\ThrustParameters.h" />
     <ClInclude Include="src\Control\Thrust\TunableControlSystem.h" />
     <ClInclude Include="src\Control\Trajectory\Course.h" />
     <ClInclude Include="src\Control\Trajectory\MotionCommand.h" />
     <ClInclude Include="src\Control\Trajectory\MotionControlSystem.h" />
     <ClInclude Include="src\Control\Trajectory\TrajectoryCommand.h" />
-    <ClInclude Include="src\Model\DragModel.h" />
     <ClInclude Include="src\Model\RocketModel.h" />
     <ClInclude Include="src\Model\RocketModelWithDrag.h" />
     <ClInclude Include="src\Util\ForceApplication.h" />
-    <ClInclude Include="src\Util\Kinematics.h" />
-    <ClInclude Include="src\Util\ObjectKinematics.h" />
     <ClInclude Include="src\Simulator.h" />
     <ClInclude Include="src\Control\Thrust\PID\PIDNew.h" />
     <ClInclude Include="src\Control\Thrust\PID\PIDAutoTuner.h" />
@@ -86,7 +76,6 @@
     <ClInclude Include="src\Util\Utils.h" />
     <ClInclude Include="src\Control\Thrust\PIDControl\PIDControlSystem.h" />
     <ClInclude Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.h" />
-    <ClInclude Include="src\Control\Thrust\ITunable.h" />
     <ClInclude Include="src\Model\RocketParams.h" />
     <ClInclude Include="src\Control\Trajectory\LookaheadSystem\LookaheadMotionControlSystem.h" />
     <ClInclude Include="src\Control\Trajectory\NullControlSystem\NullMotionControlSystem.h" />
@@ -99,9 +88,9 @@
     <ClInclude Include="src\Control\Thrust\MPCControl\MPCControl.h" />
     <ClInclude Include="src\Control\Thrust\LQRControl\LQRControl.h" />
     <ClInclude Include="src\Control\Thrust\LQRControl\LQRController.h" />
+    <ClInclude Include="src\Model\ControlState.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\CMakeLists.txt" />
-    <Text Include="src\TODO.txt" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 ﻿#include "FeedForwardControl.h"
 #include "../../../Util/Utils.h"
-
+#include "../../Trajectory/TrajectoryCommand.h"
+#include "../ThrustParameters.h"
+#include "../../../Model/ControlState.h"
 FeedForwardControl::FeedForwardControl(RocketParams rocketParams) : rocketParams(rocketParams)
 {
 }
@@ -10,28 +12,6 @@ ControlSystemType FeedForwardControl::getControlSystemType()
 	return ControlSystemType::FEED_FORWARD;
 }
 
-void FeedForwardControl::setParamsThrustAngleFromRate(PIDParams params)
-{
-}
-
-void FeedForwardControl::setParamsRateFromAngle(PIDParams params)
-{
-}
-
-PIDParams FeedForwardControl::getParamsThrustAngleFromRate()
-{
-	return PIDParams(0,0,0);
-}
-
-PIDParams FeedForwardControl::getParamsRateFromAngle()
-{
-	return PIDParams(0,0,0);
-}
-
-double FeedForwardControl::getYawRateFromAngleDeviation(double target, double current, double currentTime)
-{
-	return 0.0;
-}
 	
 
 double FeedForwardControl::ComputeAngle(double velocity, double theta, double ang_velocity) {
@@ -53,17 +33,9 @@ std::shared_ptr<FeedForwardControl> FeedForwardControl::fromOptions(std::array<s
 	return std::make_shared<FeedForwardControl>(rocketParams);
 }
 
-double FeedForwardControl::getYawThrustAngleFromRateDeviation(double target, double current, double currentTime)
+ThrustParameters FeedForwardControl::computeThrustParameters(ControlState currentState, TrajectoryCommand command, double currentTime)
 {
-	return 0.0;
-}
-
-double FeedForwardControl::getPitchRateFromAngleDeviation(double target, double current, double currentTime)
-{
-	return 0.0;
-}
-
-double FeedForwardControl::getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime)
-{
-	return 0.0;
+	double yawThrustAng = ComputeAngle(currentState.velocity, command.yawAngle - currentState.yawAngle, currentState.wvely);
+	double pitchThrustAng = ComputeAngle(currentState.velocity, command.pitchAngle - currentState.pitchAngle, currentState.wvelx);
+	return ThrustParameters(yawThrustAng, pitchThrustAng, currentState.maxThrust);
 }
