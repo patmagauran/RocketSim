@@ -21,20 +21,6 @@
       <FileName>src\Simulator.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ObjectKinematics" Collapsed="true">
-    <Position X="24.25" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\Util\ObjectKinematics.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Kinematics" Collapsed="true">
-    <Position X="19" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\Util\Kinematics.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="ForceApplication" Collapsed="true">
     <Position X="24.25" Y="2.75" Width="1.5" />
     <TypeIdentifier>
@@ -68,13 +54,6 @@
     <TypeIdentifier>
       <HashCode>ABnBEIAEAAAgAAQAQAAIAQAAABCARAQFQgAGEFCEAQE=</HashCode>
       <FileName>src\Model\RocketModel.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DragModel" Collapsed="true">
-    <Position X="22.5" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\Model\DragModel.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TrajectoryCommand" Collapsed="true">
@@ -140,31 +119,17 @@
       <FileName>src\Control\Thrust\ThrustParameters.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ITunable" Collapsed="true">
-    <Position X="17.25" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\Control\Thrust\ITunable.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ControlSystemTuner" Collapsed="true">
-    <Position X="17.25" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\Control\Thrust\ControlSystemTuner.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="ControlSystem">
     <Position X="7.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAAAAAgAAABAAIAAAAABAAAIAAAAAAAEAAAAAACA=</HashCode>
+      <HashCode>AAAAAQAAAAAAAAAAAAEAAABAAAAAAAABAAAAAAAAAAA=</HashCode>
       <FileName>src\Control\Thrust\ControlSystem.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MPCControl">
     <Position X="3.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAQAAQhAAABAAIAEEAABAAAoEAAABAAEAAAAAACA=</HashCode>
+      <HashCode>AAAAAQAAQBAAABAAAAEEAABAAAgEAAABAAAAAAAAACA=</HashCode>
       <FileName>src\Control\Thrust\MPCControl\MPCControl.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -178,22 +143,15 @@
   <Class Name="LQRControl">
     <Position X="10" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAYIAAhACABCAIAEEAABAAAIEAAAJAAEAAAAAACA=</HashCode>
+      <HashCode>AAAAAYIAABACABCAAAEEAABAAAAEAAAJAAAAAAAAACA=</HashCode>
       <FileName>src\Control\Thrust\LQRControl\LQRControl.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FeedForwardControl">
     <Position X="12.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAQAAAggAAABAAIAAAAABABBIEAAAAAAEAAAAAACA=</HashCode>
+      <HashCode>AAAAQAAAgAAAAAAAAAAAAABABBAEAAABAAAAAAAAAAA=</HashCode>
       <FileName>src\Control\Thrust\FeedForwardControl\FeedForwardControl.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="PID" Collapsed="true">
-    <Position X="17.25" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>DAYIACAABgAAKAAAAIhRABAAAAACgAIDAADAAACEAAA=</HashCode>
-      <FileName>src\Control\Thrust\PID\PID.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PIDAutoTuner" Collapsed="true">
@@ -220,7 +178,7 @@
   <Class Name="PIDControlSystem">
     <Position X="7.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAKAAAAAAgAgABABIAAAAABAAAIIAAEAAAEAQAAAACA=</HashCode>
+      <HashCode>IAKAAAAAAgAgABABIAAAAABAAAIIAAEBAAEAQAAAACA=</HashCode>
       <FileName>src\Control\Thrust\PIDControl\PIDControlSystem.h</FileName>
     </TypeIdentifier>
   </Class>

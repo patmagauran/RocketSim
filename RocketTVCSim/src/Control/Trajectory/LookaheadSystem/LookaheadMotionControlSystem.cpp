@@ -186,7 +186,7 @@ MotionCommand LookaheadMotionControlSystem::getNextMotionCommand(ChVector<> g_lo
 	
 
 	//return MotionCommand(ThrustParameters(0,0,0));
-	return MotionCommand(ThrustParameters(pitchThrustAng, yawThrustAng, rocket.getMaxThrust()), nextCommand);
+	return MotionCommand(thrustParams, nextCommand);
 }
 
 std::vector<ChVector<>> LookaheadMotionControlSystem::getWaypoints()
