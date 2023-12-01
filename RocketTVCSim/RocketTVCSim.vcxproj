@@ -288,6 +288,7 @@
     <None Include="Runs.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\SimResults.cpp" />
     <ClCompile Include="src\Control\Thrust\LQRControl\LQRControl.cpp" />
     <ClCompile Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.cpp" />
     <ClCompile Include="src\Control\Thrust\LQRControl\LQRController.cpp" />
@@ -320,6 +321,7 @@
     <ClCompile Include="src\Control\Thrust\PIDControl\TunablePIDControlSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\SimResults.h" />
     <ClInclude Include="src\Control\Thrust\LQRControl\LQRControl.h" />
     <ClInclude Include="src\Control\Thrust\FeedForwardControl\FeedForwardControl.h" />
     <ClInclude Include="src\Control\Thrust\LQRControl\LQRController.h" />

@@ -206,13 +206,18 @@ void LookaheadMotionControlSystem::tune(Simulator* sim)
 	}
 }
 
-double LookaheadMotionControlSystem::distanceFromTrajectory(ChVector<> currentPosition)
+ChVector<> LookaheadMotionControlSystem::getClosestPoint(ChVector<> currentPosition)
 {
 	//we want the close location along the course to the current position
 
 	//for each segment on course, find closest point to current position
 	//Then select the closest of those points
 	
-	return course.distanceFromTrajectory(currentPosition);
+	return course.getClosestPoint(currentPosition);
 	
+}
+
+double LookaheadMotionControlSystem::getPercentComplete(ChVector<> closestPoint)
+{
+	return course.getPercentComplete(closestPoint);
 }

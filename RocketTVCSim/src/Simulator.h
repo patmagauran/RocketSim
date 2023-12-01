@@ -26,6 +26,7 @@
 
 #include <matplot/matplot.h>
 #include "Util/DataLog/DataLog.h"
+#include "SimResults.h"
 
 // Use the namespace of Chrono
 using namespace chrono;
@@ -48,7 +49,7 @@ public:
 	ChSystemNSC* getSystem();
 	RocketModel* getRocket();
 	void resetSimulator();
-	void runSimulation(bool autoTune);
+	SimResults runSimulation(bool autoTune);
 	void cleanup();
 	Simulator();
 	//void setTunableControlSystem(std::shared_ptr<TunableControlSystem> tunableControlSystem);

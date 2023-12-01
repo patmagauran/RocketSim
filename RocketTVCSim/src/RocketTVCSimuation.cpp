@@ -1,4 +1,4 @@
-	#include "chrono/physics/ChSystemNSC.h"
+#include "chrono/physics/ChSystemNSC.h"
 #include "chrono/physics/ChBodyEasy.h"
 #include "chrono/physics/ChLinkMate.h"
 #include "chrono/assets/ChTexture.h"
@@ -24,14 +24,19 @@ using namespace chrono;
 using namespace chrono::irrlicht;
 
 
-void runSim(SimSetup setup, std::string name) {
+SimResults runSim(SimSetup setup, std::string name) {
 	Simulator sim = Simulator();
 	DataLog::initialize(name);
 
+	//TODO: Return a runResult Object(Contains the name, Runtime, simulation runtime, reason for exitting, max distance from course, score, and distance along course)
+	//TODO: Ensure error handling
 	sim.setRocketParams(setup.getRocketParams());
 	sim.setMotionControlSystem(setup.getMotionControlSystem());
-	sim.runSimulation(false);
+	SimResults results = sim.runSimulation(true);
+	results.distanceAlongCourse = setup.getMotionControlSystem()->getPercentComplete(results.closestPosition);
+	results.name = name;
 	sim.cleanup();
+	return results;
 }
 void runDefault() {
 	// Set path to Chrono data directory
@@ -75,11 +80,11 @@ void displayHelp() {
 	// If no args are given, runs default
 	// Otherwise args are parsed directly as follows:
 	// //-c dictates the control system
-    //-m dictates the motion control system
-    //-o dictates the options for the control system(space separated)
-    //-p dictates the options for the motion control system(space Separated)
-    // -r dictates the rocket model
-    // -s dictates the options for the rocket model(space separated)
+	//-m dictates the motion control system
+	//-o dictates the options for the control system(space separated)
+	//-p dictates the options for the motion control system(space Separated)
+	// -r dictates the rocket model
+	// -s dictates the options for the rocket model(space separated)
 
 
 	std::cout << "Usage: " << std::endl;
@@ -97,13 +102,15 @@ void displayHelp() {
 	std::cout << "Would run a simulation with a PID control system with the given parameters, a lookahead motion control system with 25 lookahead, and a rocket model with the given parameters" << std::endl;
 	std::cout << "Example: -f filename.csv" << std::endl;
 	std::cout << "Would run a simulation with the parameters given in the csv file" << std::endl;
-	
+
 }
 
 void runArgs(int argc, char* argv[]) {
-	
+
 	SimSetup simSetup = SimSetup::fromCLIFlags(argc, argv);
-	runSim(simSetup, "data");
+	SimResults results = runSim(simSetup, "data");
+	results.printResults();
+	//Pretty print the results
 }
 
 
@@ -130,11 +137,19 @@ void runCsv(char* fileName) {
 		std::cout << "Invalid CSV file" << std::endl;
 		return;
 	}
+	std::ofstream resultsFile = std::ofstream("results.csv");
+	resultsFile << "Name,WorldRunTime,SimRunTime,ResultType,MaxDistanceFromCourse,DistanceAlongCourse,Score" << std::endl;
+	SimResults results;
 	for (int i = 1; i < data.size(); i++) {
 		std::vector<std::string> row = data[i];
 		SimSetup simSetup = SimSetup::fromCSVRow(row, controlSysCol, motionControlCol, rocketModelCol);
-		runSim(simSetup, "data" + std::to_string(i));
+		results = runSim(simSetup, "data" + std::to_string(i));
+		//Save Results to CSV
+		resultsFile << results.name << "," << std::to_string(results.worldRunTime) << "," << std::to_string(results.simulationRunTime) << "," << results.resultType << "," << std::to_string(results.maxDistanceFromCourse) << "," << std::to_string(results.distanceAlongCourse) << "," << std::to_string(results.score) << std::endl;
+		resultsFile.flush();
 	}
+	resultsFile.flush();
+	resultsFile.close();
 }
 int main(int argc, char* argv[]) {
 	SetChronoDataPath(CHRONO_DATA_DIR);
@@ -146,7 +161,7 @@ int main(int argc, char* argv[]) {
 	//no args means run a simple default
 
 	if (argc > 1) {
-		if (strcmp(argv[1],"-f") == 0) {
+		if (strcmp(argv[1], "-f") == 0) {
 			//run from csv file
 			if (argc < 3) {
 				std::cout << "No file specified" << std::endl;
@@ -154,13 +169,13 @@ int main(int argc, char* argv[]) {
 			}
 			runCsv(argv[2]);
 		}
-		else if (strcmp(argv[1], "-h")== 0) {
+		else if (strcmp(argv[1], "-h") == 0) {
 			//show help
 			displayHelp();
 		}
 		else {
 			//run from args
-			runArgs(argc-1, &argv[1]);
+			runArgs(argc - 1, &argv[1]);
 		}
 	}
 	else {

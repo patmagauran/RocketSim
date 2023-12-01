@@ -27,7 +27,8 @@ public:
 	MotionCommand getNextMotionCommand(ChVector<> g_location, RocketModel rocket, double currentTime);
 	std::vector <ChVector<>> getWaypoints();
 	void tune(Simulator* sim);
-	double distanceFromTrajectory(ChVector<> currentPosition);
+	ChVector<> getClosestPoint(ChVector<> currentPosition);
+	double getPercentComplete(ChVector<> closestPoint);
 
 };
 

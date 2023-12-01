@@ -27,9 +27,17 @@ void NullMotionControlSystem::tune(Simulator* sim)
 	std::cerr << "Using NULL Motion Control System. This shouldnt be happening!" << std::endl;
 }
 
-double NullMotionControlSystem::distanceFromTrajectory(ChVector<> currentPosition)
+ChVector<> NullMotionControlSystem::getClosestPoint(ChVector<> currentPosition)
+{
+	std::cerr << "Using NULL Motion Control System. This shouldnt be happening!" << std::endl;
+
+	return ChVector<>();
+}
+
+double NullMotionControlSystem::getPercentComplete(ChVector<> closestPoint)
 {
 	std::cerr << "Using NULL Motion Control System. This shouldnt be happening!" << std::endl;
 
 	return 0.0;
 }
+

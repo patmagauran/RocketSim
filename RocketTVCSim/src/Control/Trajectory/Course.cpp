@@ -111,23 +111,23 @@ ChVector<> getPathCross(ChVector<> currentWaypoint, ChVector<> nextWaypoint, ChV
 
 
 ChVector<> Course::getLookaheadPoint(ChVector<> currentPosition, double lookahead) {
-//	intersectionPoint = None
-//		while (intersectionPoint is None) :
-//			if (self.waypointIndex + 2 >= len(self.waypoints)) :
-//				#We have reached the end of the path
-//				return self.waypoints[-1]
-//				#Not the most efficient but looksahead to next segment first.If not there, looks at current.Then increments waypoint index to look two ahead
-//				intersectionPoint = self._getPathCross(self.waypoints[self.waypointIndex + 1], self.waypoints[self.waypointIndex + 2], currentPoint)
-//				if (intersectionPoint is None) :
-//
-//					intersectionPoint = self._getPathCross(self.waypoints[self.waypointIndex], self.waypoints[self.waypointIndex + 1], currentPoint)
-//				else:
-//	self.waypointIndex += 1
-//# if (self.waypointIndex > len(self.waypoints)-3):
-//#     #We have reached the end of the path
-//		#     return self.waypoints[-1]
-//
-//		return intersectionPoint
+	//	intersectionPoint = None
+	//		while (intersectionPoint is None) :
+	//			if (self.waypointIndex + 2 >= len(self.waypoints)) :
+	//				#We have reached the end of the path
+	//				return self.waypoints[-1]
+	//				#Not the most efficient but looksahead to next segment first.If not there, looks at current.Then increments waypoint index to look two ahead
+	//				intersectionPoint = self._getPathCross(self.waypoints[self.waypointIndex + 1], self.waypoints[self.waypointIndex + 2], currentPoint)
+	//				if (intersectionPoint is None) :
+	//
+	//					intersectionPoint = self._getPathCross(self.waypoints[self.waypointIndex], self.waypoints[self.waypointIndex + 1], currentPoint)
+	//				else:
+	//	self.waypointIndex += 1
+	//# if (self.waypointIndex > len(self.waypoints)-3):
+	//#     #We have reached the end of the path
+	//		#     return self.waypoints[-1]
+	//
+	//		return intersectionPoint
 
 	ChVector<> intersectionPoint = NULL;
 	while (intersectionPoint == NULL)
@@ -152,25 +152,30 @@ ChVector<> Course::getLookaheadPoint(ChVector<> currentPosition, double lookahea
 			this->waypointIndex += 1;
 		}
 	}
-return intersectionPoint;
+	return intersectionPoint;
 }
 
-double Course::distanceFromTrajectory(ChVector<> currentPosition)
+
+
+
+ChVector<> Course::getClosestPoint(ChVector<> currentPosition)
 {
 	double closestDistance = 1000000;
+	ChVector<> closestPoint;
 	for (int i = 0; i < this->waypoints.size() - 2; i++) {
-		ChVector<> closestPoint = getClosestPointOnSegment(currentPosition, waypoints.at(i), waypoints.at(i+1));
-		double distanceToClosestPoint = (closestPoint - currentPosition).Length();
+		ChVector<> closestPointOnSeg = getClosestPointOnSegment(currentPosition, waypoints.at(i), waypoints.at(i + 1));
+		double distanceToClosestPoint = (closestPointOnSeg - currentPosition).Length();
 		if (distanceToClosestPoint < closestDistance) {
 			closestDistance = distanceToClosestPoint;
+			closestPoint = closestPointOnSeg;
 		}
 	}
-	return closestDistance;
+	return closestPoint;
 }
 
 ChVector<> Course::getClosestPointOnSegment(ChVector<> currentPosition, ChVector<> segmentStart, ChVector<> segmentEnd)
 {
-//https://stackoverflow.com/questions/64663170/how-to-find-nearest-point-in-segment-in-a-3d-space
+	//https://stackoverflow.com/questions/64663170/how-to-find-nearest-point-in-segment-in-a-3d-space
 	ChVector<> v = segmentEnd - segmentStart;
 	ChVector<> w = currentPosition - segmentStart;
 	double c1 = w.Dot(v);
@@ -184,6 +189,39 @@ ChVector<> Course::getClosestPointOnSegment(ChVector<> currentPosition, ChVector
 	double b = c1 / c2;
 	ChVector<> Pb = segmentStart + b * v;
 	return Pb;
+}
+
+bool Course::isPointOnSegment(ChVector<> currentPosition, ChVector<> segmentStart, ChVector<> segmentEnd)
+{
+	ChVector<> closestPoint = getClosestPointOnSegment(currentPosition, segmentStart, segmentEnd);
+	double distanceToClosestPoint = (closestPoint - currentPosition).Length();
+	if (distanceToClosestPoint < 10) {
+		return true;
+	}
+	else {
+		return false;
+	}
+};
+
+double Course::getPercentComplete(ChVector<> closestPoint)
+{
+	double distanceOnCourse = 0;
+	double totalDistance = 0;
+	bool foundClosestPoint = false;
+	for (int i = 0; i < this->waypoints.size() - 2; i++) {
+		totalDistance += (this->waypoints.at(i) - this->waypoints.at(i + 1)).Length();
+		if (!foundClosestPoint) {
+			if (isPointOnSegment(closestPoint, this->waypoints.at(i), this->waypoints.at(i + 1))) {
+				distanceOnCourse += (closestPoint - this->waypoints.at(i)).Length();
+				foundClosestPoint = true;
+			}
+			else {
+				distanceOnCourse += (this->waypoints.at(i) - this->waypoints.at(i + 1)).Length();
+			}
+		}
+	}
+
+	return distanceOnCourse / totalDistance;
 }
 
 
