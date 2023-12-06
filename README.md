@@ -1,16 +1,12 @@
 # RocketSim
-This is the supporting code for an ongoing research project / independent study into different control systems and their effects on the stability of a thrust vector controlled rocket simulation.
-I will attempt to keep any relavant citations up to date in this repository, but consider everything to be in draft state and therefore some work / inspiration may be uncited.
+This is the supporting code for a research project I performed in Fall of 2023 for my Computational Engineering Degree at Juniata College. It simulates a Single-Engine Thrust vector controlled rocket along with 4 control systems: PID, MPC, Feed Forward, and LQR. The goal was to compare the performance of each control system for self guidance of the simple rocket model.
 
-I also note that I use Github Copilot to assist in the writing of some of the code.
+## Installation
+The project requires a number of dependencies: 
+- [Chrono](https://projectchrono.org/) - A physics engine used to simulate the rocket
 
+You need to build project chrono and follow the instructions to understand how to link it to your program. Then this porject should be loadable as a Visual Studio 2022 Solution. You may need to change folders and such to get it to load dependencies correctly.
 
-## Citations
-GitHub. “Pid-Autotune/Autotune.Py at Master · Hirschmann/Pid-Autotune.” Accessed May 5, 2023. https://github.com/hirschmann/pid-autotune.
-Hammad, Mohanad M., Ahmed K. Elshenawy, and M.I. El Singaby. “Trajectory Following and Stabilization Control of Fully Actuated AUV Using Inverse Kinematics and Self-Tuning Fuzzy PID.” Edited by Xiaosong Hu. PLOS ONE 12, no. 7 (July 6, 2017): e0179611. https://doi.org/10.1371/journal.pone.0179611.
-Jarderot, Markus. “Answer to ‘Intersection between a Line and a Sphere.’” Stack Overflow, May 4, 2011. https://stackoverflow.com/a/5883559.
-Müller, Gustavo. “Optimal PID Tuning for Cascade Loops.” Accessed May 5, 2023. https://blog.incatools.com/optimal-pid-tuning-cascade-loops.
-Park, Sanghyuk, John Deyst, and Jonathan How. “A New Nonlinear Guidance Logic for Trajectory Tracking.” In AIAA Guidance, Navigation, and Control Conference and Exhibit. American Institute of Aeronautics and Astronautics. Accessed May 5, 2023. https://doi.org/10.2514/6.2004-4900.
-“Project Chrono - An Open-Source Physics Engine.” Accessed May 5, 2023. https://projectchrono.org/.
-Sahbon, Nezar, Mariusz Jacewicz, Piotr Lichota, and Katarzyna Strzelecka. “Path-Following Control for Thrust-Vectored Hypersonic Aircraft.” Energies 16, no. 5 (January 2023): 2501. https://doi.org/10.3390/en16052501.
+## Running
+The program has 3 run modes: Default, CLI, and CSV. I primarily used and developed for the CSV mode which utilizes the runs.csv file to dictate the parameters of the simulation. The CLI mode is used for one off runs. The default mode is used for running the simulation with a single set of parameters(useful to test builds). To run the csv pass the -f paramter followed by the path to the csv file. Results are automatically stored to the results.csv file for general results and into specific csv files for each run/stage. 
 

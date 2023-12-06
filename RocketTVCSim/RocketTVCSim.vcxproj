@@ -282,6 +282,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include="..\README.md" />
     <None Include="ClassDiagram.cd" />
     <None Include="points.csv" />
     <None Include="points2.csv" />

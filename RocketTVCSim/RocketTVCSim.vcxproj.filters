@@ -14,6 +14,7 @@
     <None Include="points2.csv" />
     <None Include="Runs.csv" />
     <None Include="ClassDiagram.cd" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Control\Thrust\PID\PIDParams.cpp" />
