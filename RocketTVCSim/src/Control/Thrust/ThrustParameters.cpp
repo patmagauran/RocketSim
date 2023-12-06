@@ -18,5 +18,5 @@ ChVector<> pitchYawToCartesian(double pitch, double yaw) {
 
 ChVector<> ThrustParameters::convertToForceVector()
 {
-return pitchYawToCartesian(-pitchAngle, yawAngle) * force;
+return pitchYawToCartesian(-pitchAngle, -yawAngle) * force;
 }

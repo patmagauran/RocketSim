@@ -197,9 +197,9 @@ void RocketModel::logRocketData()
 	DataLog::logData("rocket_theta", this->rocket_lower->GetRot().Q_to_NasaAngles().x());
 	DataLog::logData("rocket_phi", this->rocket_lower->GetRot().Q_to_NasaAngles().y());
 	DataLog::logData("rocket_psi", this->rocket_lower->GetRot().Q_to_NasaAngles().z());
-	DataLog::logData("rocket_wx", this->rocket_lower->GetWvel_loc().x());
+	DataLog::logData("rocket_pitch_rate", this->rocket_lower->GetWvel_loc().x());
 	DataLog::logData("rocket_wy", this->rocket_lower->GetWvel_loc().y());
-	DataLog::logData("rocket_wz", this->rocket_lower->GetWvel_loc().z());
+	DataLog::logData("rocket_yaw_rate", this->rocket_lower->GetWvel_loc().z());
 	DataLog::logData("rocket_alphx", this->rocket_lower->GetWacc_loc().x());
 	DataLog::logData("rocket_alphy", this->rocket_lower->GetWacc_loc().y());
 	DataLog::logData("rocket_alphz", this->rocket_lower->GetWacc_loc().z());

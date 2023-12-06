@@ -2,6 +2,7 @@
 #include "../../Trajectory/TrajectoryCommand.h"
 #include "../ThrustParameters.h"
 #include "../../../Model/ControlState.h"
+#include "../../../Util/DataLog/DataLog.h"
 PIDControlSystem::PIDControlSystem(PIDParams paramsThrustAngleFromRate, PIDParams paramsRateFromAngle) :
     paramsThrustAngleFromRate(paramsThrustAngleFromRate), paramsRateFromAngle(paramsRateFromAngle),
     yawRateFromAnglePID(paramsRateFromAngle.getKd(), paramsRateFromAngle.getKi(), paramsRateFromAngle.getKp(), paramsRateFromAngle.getSampleTime(), paramsRateFromAngle.getMaxOutput()),
@@ -51,7 +52,11 @@ double PIDControlSystem::getYawRateFromAngleDeviation(double target, double curr
 double PIDControlSystem::getYawThrustAngleFromRateDeviation(double target, double current, double currentTime)
 {
     yawThrustAngleFromRatePID.setSetpoint(target);
-    return yawThrustAngleFromRatePID.update(current, currentTime);
+    double yawThrustAngle= yawThrustAngleFromRatePID.update(current, currentTime);
+    DataLog::logData("targetYawRate", target);
+    DataLog::logData("yawThrustAngle", yawThrustAngle);
+
+    return yawThrustAngle;
 }
 
 double PIDControlSystem::getPitchRateFromAngleDeviation(double target, double current, double currentTime)
@@ -63,12 +68,15 @@ double PIDControlSystem::getPitchRateFromAngleDeviation(double target, double cu
 double PIDControlSystem::getPitchThrustAngleFromRateDeviation(double target, double current, double currentTime)
 {
     pitchThrustAngleFromRatePID.setSetpoint(target);
-    return pitchThrustAngleFromRatePID.update(current, currentTime);
+    double pitchThrustAngle= pitchThrustAngleFromRatePID.update(current, currentTime);
+    DataLog::logData("targetPitchRate", target);
+    DataLog::logData("pitchThrustAngle", pitchThrustAngle);
+    return pitchThrustAngle;
 }
 
 ThrustParameters PIDControlSystem::computeThrustParameters(ControlState currentState, TrajectoryCommand command, double currentTime)
 {
-    double yawAngleO = getYawRateFromAngleDeviation(command.yawAngle, currentState.yawAngle, currentTime);
+    double yawAngleO = getYawRateFromAngleDeviation(-command.yawAngle, currentState.yawAngle, currentTime);
 
     double yawThrustAng = getYawThrustAngleFromRateDeviation(yawAngleO, currentState.wvelz, currentTime);
 

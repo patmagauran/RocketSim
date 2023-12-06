@@ -145,11 +145,14 @@ SimResults Simulator::runSimulation(bool autoTune)
 			DataLog::logData("course_deviation", distance);
 			DataLog::pushTimestamp(sys.GetChTime());
 			double rotationalVelocity = rocket.getRocketUpper()->GetRot_dt().Length();
-			if (distance > 50 || rotationalVelocity > 1) {
-				results.resultType = RESULT_TYPE_FAIL;
+			if (distance > 50) {
+				results.resultType = RESULT_TYPE_FAIL_DIST;
 				break;
 			}
-
+			if (rotationalVelocity > 2) {
+				results.resultType = RESULT_TYPE_FAIL_ROT;
+				break;
+			}
 
 			//Advance Motion Controller
 			motionCommand = motionController->getNextMotionCommand(this->rocket.getGLocation(), this->rocket, sys.GetChTime());
